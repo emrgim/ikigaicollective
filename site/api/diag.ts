@@ -1,6 +1,7 @@
 import { alert, g, meetLink, tab } from './_lib/google.js';
 import { signUp } from './invite.js';
 import { savePartner } from './partner.js';
+import { GET as studio } from './studio.js';
 import { GET as cron } from './cron/substack.js';
 
 // TEMPORARY end-to-end harness, guarded by CRON_SECRET and refused in production. Delete after use.
@@ -46,6 +47,11 @@ export async function GET(req: Request) {
     const body = await (await cron(req)).json(); // same Authorization header: authed + token => live mode, but nothing new to commit
     const perm = await (await fetch(`https://api.github.com/repos/${repo}`, { headers: { authorization: `Bearer ${process.env.GITHUB_CONTENT_TOKEN}`, 'user-agent': 'ikigai-diag' } })).json();
     return { cron: body, tokenCanPush: perm.permissions?.push ?? perm.message };
+  });
+  await step('9_discord', async () => {
+    const set = Object.fromEntries(['DISCORD_BOT_TOKEN', 'DISCORD_GUILD_ID', 'DISCORD_LOOP_CHANNEL_ID', 'DISCORD_WEBSITE_TAG_ID'].map((k) => [k, !!process.env[k]]));
+    const res = await studio();
+    return { envPresent: set, status: res.status, body: await res.json() };
   });
   return out(r);
 }
