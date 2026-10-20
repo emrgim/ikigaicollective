@@ -35,7 +35,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
 <Base overlayNav>
   <!-- 1 Hero: static dawn gradient; the shader replaces it in Phase 4 -->
   <section aria-labelledby="hero-h" class="relative flex min-h-[940px] flex-col overflow-hidden pt-[150px]">
-    <div aria-hidden="true" class="absolute inset-0" style="background: radial-gradient(ellipse 85% 58% at 50% 112%, var(--copper-900) 0%, var(--copper-700) 10%, var(--copper-500) 22%, var(--copper-300) 36%, var(--copper-100) 52%, transparent 72%)"></div>
+    <div aria-hidden="true" data-hero-glow class="absolute inset-0" style="background: radial-gradient(ellipse 85% 58% at 50% 112%, var(--copper-900) 0%, var(--copper-700) 10%, var(--copper-500) 22%, var(--copper-300) 36%, var(--copper-100) 52%, transparent 72%)"></div>
     <div class="relative flex flex-col items-center gap-2.5 px-6 pt-12 text-center">
       <span class="text-[14px] tracking-[0.32em] text-copper">AI-POWERED</span>
       <h1 id="hero-h" class="t-hero">Life design<br /><span class="em">through</span><br />experimentation.</h1>
@@ -245,5 +245,11 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
     import '../scripts/spiral-archive';
     import '../scripts/copy';
     import '../scripts/forms';
+    import { canMotion } from '../lib/motion';
+    // The shader is a separate lazy chunk: only fetched when motion is allowed, after the page is idle.
+    if (canMotion()) {
+      const go = () => import('../scripts/hero-shader');
+      'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 800);
+    }
   </script>
 </Base>
