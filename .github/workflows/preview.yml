@@ -1,0 +1,28 @@
+# Preview deploys of site/ to Vercel via the CLI. Used because the Vercel GitHub app
+# cannot import organisation repos on Hobby. Needs repo secrets:
+# VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID. Project root directory must be `site`.
+name: site preview
+on:
+  push:
+    branches: [site-v2]
+    paths: ['site/**', '.github/workflows/preview.yml']
+  workflow_dispatch:
+concurrency:
+  group: site-preview-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm install --global vercel@latest
+      - run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - id: deploy
+        run: echo "url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> "$GITHUB_OUTPUT"
+      - run: echo "Preview ${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
