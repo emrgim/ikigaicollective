@@ -19,7 +19,7 @@ async function accessToken() {
   return cached.token;
 }
 
-async function g(url: string, init: RequestInit = {}) {
+export async function g(url: string, init: RequestInit = {}) {
   const res = await fetch(url, { ...init, headers: { authorization: `Bearer ${await accessToken()}`, 'content-type': 'application/json', ...init.headers } });
   if (!res.ok) throw new Error(`google ${res.status} ${url.split('?')[0]}: ${(await res.text()).slice(0, 200)}`);
   return res.json();
