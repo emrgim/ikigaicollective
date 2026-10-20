@@ -1,6 +1,7 @@
 name: Import Substack notes
 on:
-  schedule: [{ cron: '17 5 * * *' }]
+  # schedule paused: Substack's Cloudflare returns 403 to GitHub runners. Re-enable once the fetch path is decided.
+  # schedule: [{ cron: '17 5 * * *' }]
   workflow_dispatch:
 permissions:
   contents: write
