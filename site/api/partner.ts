@@ -1,5 +1,5 @@
-import { appendRow, configured, sendMail } from './_lib/google';
-import { EMAIL, json, read } from './_lib/form';
+import { appendRow, configured, sendMail } from './_lib/google.js';
+import { EMAIL, json, read } from './_lib/form.js';
 
 export async function POST(req: Request) {
   const f = await read(req, { org: 160, kind: 40, email: 254, message: 4000 });

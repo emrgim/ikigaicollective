@@ -1,5 +1,5 @@
-import crafts from './_lib/crafts.json';
-import { json } from './_lib/form';
+import crafts from './_lib/crafts.js';
+import { json } from './_lib/form.js';
 
 // Studio feed: public threads in the #the-loop forum that carry the website tag. Names are never exposed, only a craft.
 const STAGES = ['Design', 'Implement', 'Measure', 'Iterate', 'needs-input', 'shipped'];
@@ -34,7 +34,7 @@ export async function GET() {
       .slice(0, 3);
     const threads = await Promise.all(mine.map(async (t) => {
       const m = await d(`/guilds/${guild}/members/${t.owner_id}`).catch(() => ({ roles: [] }));
-      const craft = (m.roles as string[]).map((r) => (crafts as Record<string, string>)[roleName.get(r) ?? '']).find(Boolean) ?? 'A member';
+      const craft = (m.roles as string[]).map((r) => crafts[roleName.get(r) ?? '']).find(Boolean) ?? 'A member';
       return { title: t.name, stage: t.applied_tags.map((i: string) => stageOf.get(i)).find(Boolean) ?? 'Design', created: t.thread_metadata.create_timestamp, url: `https://discord.com/channels/${guild}/${t.id}`, craft };
     }));
     return ok(threads);

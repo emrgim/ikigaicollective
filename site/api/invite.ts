@@ -1,5 +1,5 @@
-import { addGuest, appendRow, configured, hasEmail } from './_lib/google';
-import { EMAIL, json, read } from './_lib/form';
+import { addGuest, appendRow, configured, hasEmail } from './_lib/google.js';
+import { EMAIL, json, read } from './_lib/form.js';
 
 export async function POST(req: Request) {
   const f = await read(req, { email: 254, name: 80, source: 120 });
