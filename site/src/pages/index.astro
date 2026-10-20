@@ -138,7 +138,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       <h2 id="ar-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">{words(notes.length)} weeks.<br /><span class="em">{copy.archiveTagline}</span></h2>
       <p class="text-[19px] leading-[1.65]">Every Lab Night adds a turn. Pick a point to open that week's note. The dotted turns are the weeks not yet lived.</p>
       <dl class="flex flex-wrap gap-x-10 gap-y-6 border-t border-line pt-[22px]">
-        {[[notes.length, 'Lab Notes'], [stats.weeksMissed, 'weeks missed'], [stats.continents, 'continents'], [stats.members, 'members']].map(([v, l]) => (
+        {[[notes.length, 'Lab Notes'], [notes[0].short, 'since'], [stats.continents, 'continents'], [stats.members, 'members']].map(([v, l]) => (
           <div><dd class="num order-first text-[40px]">{v}</dd><dt class="text-[14px] text-muted">{l}</dt></div>
         ))}
       </dl>

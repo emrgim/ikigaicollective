@@ -25,14 +25,11 @@ const excerpt = (body) => {
 };
 
 const redirects = [];
-let dashes = 0;
 for (const f of files) {
   const stem = f.replace(/\.md$/, '');
   const slug = stem.replace(/^\d{4}-\d{2}-\d{2}-/, '');
   let { meta, body } = parse(fs.readFileSync(path.join(repo, 'src', f), 'utf8'));
-  // Site rule: no em dashes in copy. Replace a spaced dash with a colon.
-  dashes += (body.match(/ — /g) || []).length;
-  body = body.replace(/ — /g, ': ').replace(/—/g, ', ');
+  // Lab Notes stay verbatim, em dashes included (the no em dash rule covers new site copy only).
   const cover = `${stem}.jpg`;
   fs.copyFileSync(path.join(repo, 'img', cover), path.join(out, 'src/assets/covers', `${slug}.jpg`));
   fs.copyFileSync(path.join(repo, 'img', cover), path.join(out, 'public/lab-notes/img', cover)); // keeps old og:image URLs alive
@@ -48,4 +45,4 @@ redirects.push(
 );
 fs.writeFileSync(path.join(out, 'vercel.json'), JSON.stringify({ cleanUrls: true, trailingSlash: false, redirects }, null, 2) + '\n');
 for (const a of ['cover.jpg', 'ikigaicollective-logo.jpg']) fs.copyFileSync(path.join(repo, '..', a), path.join(out, 'public', a));
-console.log(`${files.length} notes, ${redirects.length} redirects, ${dashes} em dashes replaced`);
+console.log(`${files.length} notes, ${redirects.length} redirects`);

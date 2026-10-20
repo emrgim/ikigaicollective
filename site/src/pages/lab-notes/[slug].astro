@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Button from '../../components/Button.astro';
 import { getNotes, gradient } from '../../lib/notes';
@@ -10,10 +11,11 @@ export async function getStaticPaths() {
 }
 const { n, prev, next } = Astro.props;
 const { Content } = await render(n.entry);
+const og = n.cover ? await getImage({ src: n.cover, format: 'jpg', width: 1200 }) : null;
 const words = n.title.split(' ');
 const last = words.pop();
 ---
-<Base title={n.title} description={n.excerpt}>
+<Base title={n.title} description={n.excerpt} image={og ? new URL(og.src, Astro.site).href : undefined}>
   <header class="wrap flex flex-col gap-7 pt-[72px]">
     <a href="/lab-notes" class="hit w-fit text-[14px] tracking-[0.2em] no-underline text-cu-700">LAB NOTES</a>
     <span class="text-[15px] text-muted"><span class="text-copper">Week {n.week}</span> · {n.long}</span>

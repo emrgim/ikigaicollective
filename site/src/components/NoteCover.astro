@@ -1,11 +1,11 @@
 ---
 import { Image } from 'astro:assets';
 import { gradient, type Note } from '../lib/notes';
-// The repo covers carry the title in the image, so cards give them an empty alt (the title sits beside them).
-interface Props { note: Note; widths?: number[]; sizes?: string; class?: string; eager?: boolean }
-const { note, widths = [320, 640], sizes = '(min-width: 1024px) 300px, 90vw', class: cls = '', eager } = Astro.props;
+// Gradient by default. Pass `real` for the repo cover (featured note only): it carries the title in the image, so its alt is empty.
+interface Props { note: Note; real?: boolean; widths?: number[]; sizes?: string; class?: string; eager?: boolean }
+const { note, real, widths = [320, 640], sizes = '(min-width: 1024px) 300px, 90vw', class: cls = '', eager } = Astro.props;
 ---
-{note.cover ? (
+{real && note.cover ? (
   <Image src={note.cover} alt="" widths={widths} sizes={sizes} format="webp" quality={70} class={`block aspect-video w-full object-cover ${cls}`} loading={eager ? 'eager' : 'lazy'} />
 ) : (
   <span aria-hidden="true" class={`block aspect-video w-full ${cls}`} style={`background:${gradient(note.index)}`}></span>

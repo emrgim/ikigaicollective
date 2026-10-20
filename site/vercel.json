@@ -113,6 +113,26 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-09-17-ten-thousand-agents.html",
+      "destination": "/lab-notes/ten-thousand-agents",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-09-24-one-chopstick.html",
+      "destination": "/lab-notes/one-chopstick",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-10-01-between-ice-and-gas.html",
+      "destination": "/lab-notes/between-ice-and-gas",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-10-08-sundoku.html",
+      "destination": "/lab-notes/sundoku",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/index.html",
       "destination": "/lab-notes",
       "permanent": true

@@ -28,7 +28,7 @@ const all = [...notes].reverse();
   <section aria-label="Latest note">
     <div class="wrap pb-[100px]">
       <a href={`/lab-notes/${latest.slug}`} class="flex flex-wrap border border-line bg-card no-underline">
-        <span class="block flex-[1_1_620px]"><NoteCover note={latest} widths={[620, 1240]} sizes="(min-width: 1024px) 620px, 90vw" eager /></span>
+        <span class="block flex-[1_1_620px]"><NoteCover note={latest} real widths={[620, 1240]} sizes="(min-width: 1024px) 620px, 90vw" eager /></span>
         <span class="flex flex-[1_1_360px] flex-col justify-center gap-4 p-8 md:p-12">
           <span class="text-[14px] text-muted"><span class="text-copper">Latest · Week {latest.week}</span> · {latest.long}</span>
           <span class="font-display text-[clamp(40px,5vw,56px)] leading-[1.05]">{latest.title}</span>
