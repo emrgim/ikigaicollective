@@ -3,7 +3,8 @@ import { canMotion } from '../lib/motion';
 // Hero dawn light: a slow fragment shader on a canvas laid over the CSS gradient, which stays underneath as the fallback.
 // Same ellipse and copper ramp as the CSS version; it breathes over 9s and rises a little as you scroll.
 const host = document.querySelector<HTMLElement>('[data-hero-glow]');
-const gl0 = host && canMotion() ? document.createElement('canvas') : null;
+// Desktop-class devices only (wide viewport, fine pointer): phones keep the CSS gradient, which looks the same and costs nothing.
+const gl0 = host && canMotion() && matchMedia('(min-width: 768px) and (pointer: fine)').matches ? document.createElement('canvas') : null;
 const gl = gl0?.getContext('webgl', { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: 'low-power' });
 
 if (host && gl0 && gl) {
