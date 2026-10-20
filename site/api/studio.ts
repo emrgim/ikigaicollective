@@ -2,7 +2,9 @@ import crafts from './_lib/crafts.js';
 import { json } from './_lib/form.js';
 
 // Studio feed: public threads in the #the-loop forum that carry the website tag. Names are never exposed, only a craft.
-const STAGES = ['Design', 'Implement', 'Measure', 'Iterate', 'needs-input', 'shipped'];
+const STAGES = ['design', 'implement', 'measure', 'iterate', 'needs-input', 'shipped'];
+// Forum tags carry emoji prefixes ("🔨 Implement"): compare on the letters only.
+const norm = (name: string) => name.replace(/^[^a-z]+/i, '').trim().toLowerCase();
 const API = 'https://discord.com/api/v10';
 const h = { 'cache-control': 'public, s-maxage=3600, stale-while-revalidate=86400' };
 
@@ -26,7 +28,7 @@ export async function GET() {
     const [ch, active, archived, roles] = await Promise.all([
       d(`/channels/${channel}`), d(`/guilds/${guild}/threads/active`), d(`/channels/${channel}/threads/archived/public?limit=50`), d(`/guilds/${guild}/roles`),
     ]);
-    const stageOf = new Map<string, string>(ch.available_tags.filter((t: { name: string }) => STAGES.includes(t.name)).map((t: { id: string; name: string }) => [t.id, t.name]));
+    const stageOf = new Map<string, string>(ch.available_tags.filter((t: { name: string }) => STAGES.includes(norm(t.name))).map((t: { id: string; name: string }) => [t.id, norm(t.name)]));
     const roleName = new Map<string, string>(roles.map((r: { id: string; name: string }) => [r.id, r.name]));
     const mine = [...active.threads.filter((t: { parent_id: string }) => t.parent_id === channel), ...archived.threads]
       .filter((t) => t.applied_tags?.includes(tag))
@@ -35,7 +37,7 @@ export async function GET() {
     const threads = await Promise.all(mine.map(async (t) => {
       const m = await d(`/guilds/${guild}/members/${t.owner_id}`).catch(() => ({ roles: [] }));
       const craft = (m.roles as string[]).map((r) => crafts[roleName.get(r) ?? '']).find(Boolean) ?? 'A member';
-      return { title: t.name, stage: t.applied_tags.map((i: string) => stageOf.get(i)).find(Boolean) ?? 'Design', created: t.thread_metadata.create_timestamp, url: `https://discord.com/channels/${guild}/${t.id}`, craft };
+      return { title: t.name, stage: t.applied_tags.map((i: string) => stageOf.get(i)).find(Boolean) ?? 'design', created: t.thread_metadata.create_timestamp, url: `https://discord.com/channels/${guild}/${t.id}`, craft };
     }));
     return ok(threads);
   } catch (e) {

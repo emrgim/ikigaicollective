@@ -6,8 +6,8 @@ export async function GET(req: Request) {
   const out: Record<string, unknown> = {};
   try {
     const cal = encodeURIComponent(process.env.GOOGLE_CALENDAR_ID ?? 'primary');
-    const ev = await g(`https://www.googleapis.com/calendar/v3/calendars/${cal}/events?q=Lab%20Night&maxResults=20&singleEvents=false&showDeleted=false`);
-    out.calendar = (ev.items ?? []).map((e: any) => ({ id: e.id, title: e.summary, recurring: !!e.recurrence, start: e.start?.dateTime ?? e.start?.date, meet: [e.hangoutLink, ...(e.conferenceData?.entryPoints ?? []).map((p: any) => p.uri)].filter(Boolean), guestsCanSeeOtherGuests: e.guestsCanSeeOtherGuests, attendees: (e.attendees ?? []).length }));
+    const ev = await g(`https://www.googleapis.com/calendar/v3/calendars/${cal}/events?q=Lab%20Night&maxResults=40&singleEvents=false&showDeleted=false`);
+    out.calendar = (ev.items ?? []).filter((e: any) => e.recurrence).map((e: any) => ({ id: e.id, title: e.summary, recurring: !!e.recurrence, start: e.start?.dateTime ?? e.start?.date, location: e.location, conferenceSolution: e.conferenceData?.conferenceSolution?.name, linksInDescription: (String(e.description ?? '').match(/https?:\/\/[^\s<>"')]+/g) ?? []), meet: [e.hangoutLink, ...(e.conferenceData?.entryPoints ?? []).map((p: any) => p.uri)].filter(Boolean), guestsCanSeeOtherGuests: e.guestsCanSeeOtherGuests, attendees: (e.attendees ?? []).length }));
   } catch (e) { out.calendar = String((e as Error).message); }
   const { DISCORD_BOT_TOKEN: t, DISCORD_GUILD_ID: guild, DISCORD_LOOP_CHANNEL_ID: ch } = process.env;
   const d = async (path: string) => { const r = await fetch('https://discord.com/api/v10' + path, { headers: { authorization: `Bot ${t}` } }); if (!r.ok) throw new Error(`discord ${r.status} ${path}`); return r.json(); };
