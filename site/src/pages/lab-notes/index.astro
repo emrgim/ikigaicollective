@@ -38,9 +38,9 @@ const all = [...notes].reverse();
 
   <section aria-label="All notes" style="background:var(--night-2)">
     <div class="wrap pb-[140px] pt-[100px]" id="all-notes" data-view="grid">
-      <div data-pane="grid" class="flex flex-wrap gap-7">
+      <div data-pane="grid" class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-7">
         {all.map((n) => (
-          <a href={`/lab-notes/${n.slug}`} class="flex max-w-[400px] flex-[1_1_260px] flex-col gap-3 no-underline">
+          <a href={`/lab-notes/${n.slug}`} class="flex flex-col gap-3 no-underline">
             <span aria-hidden="true" class="block aspect-video border border-line" style={`background:${cover(n.week - 1)}`}></span>
             <span class="text-[13px] text-muted"><span class="text-copper">Week {n.week}</span> · {n.short}</span>
             <span class="font-display text-[22px] leading-[1.25]">{n.title}</span>

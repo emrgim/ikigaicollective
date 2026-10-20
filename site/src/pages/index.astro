@@ -92,7 +92,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
   <!-- 4 The loop -->
   <Section bg="var(--night-2)" labelledby="loop-h" inner="flex flex-wrap items-center gap-[72px]">
     <div aria-hidden="true" class="relative flex min-h-[460px] flex-[1_1_440px] items-center justify-center">
-      <div class="absolute size-[min(440px,100%)] rounded-full border border-dashed border-cu-300"></div>
+      <div class="absolute aspect-square w-[min(440px,100%)] rounded-full border border-dashed border-cu-300"></div>
       <Mark size={360} strokeWidth={1.8} class="relative max-w-[80%] text-copper" dot={{ r: 2.6, fill: 'var(--copper-900)' }} />
     </div>
     <div class="flex flex-[1_1_440px] flex-col gap-9">
@@ -130,8 +130,8 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
   </Section>
 
   <!-- 6 Spiral archive -->
-  <Section bg="var(--night-1)" labelledby="ar-h" pad="120px" inner="flex flex-wrap items-center gap-8">
-    <div class="flex flex-[1_1_380px] flex-col gap-[26px]">
+  <Section bg="var(--night-1)" labelledby="ar-h" pad="120px" inner="flex flex-col items-center gap-8 lg:flex-row">
+    <div class="flex w-full flex-col gap-[26px] lg:flex-[1_1_380px]">
       <span class="eyebrow">THE SPIRAL ARCHIVE</span>
       <h2 id="ar-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">Twenty-six weeks.<br /><span class="em">{copy.archiveTagline}</span></h2>
       <p class="text-[19px] leading-[1.65]">Every Lab Night adds a turn. Pick a point to open that week's note. The dotted turns are the weeks not yet lived.</p>
@@ -142,7 +142,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       </dl>
       <a href="/lab-notes" class="link-u self-start text-[16px]">Browse every note</a>
     </div>
-    <div class="relative aspect-square w-[800px] max-w-full flex-none overflow-hidden" id="spiral">
+    <div class="relative aspect-square w-full max-w-[720px] overflow-hidden lg:flex-[0_1_720px]" id="spiral">
       <div aria-hidden="true" class="absolute inset-0 rounded-full" style="background: radial-gradient(circle, var(--copper-100) 0%, transparent 62%)"></div>
       <svg aria-hidden="true" viewBox="0 0 800 800" class="absolute inset-0 size-full">
         <path d={path(t0, tEnd)} fill="none" stroke="var(--copper-400)" stroke-width="1.6" stroke-linecap="round" />
