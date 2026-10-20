@@ -1,0 +1,13 @@
+---
+// Geometry copied from brand/output-set (master, and small for under 32px). Never redraw.
+interface Props { size?: number; class?: string }
+const { size = 28, class: cls } = Astro.props;
+const small = size < 32;
+---
+<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" class={cls}>
+  <g fill="none" stroke="currentColor" stroke-width={small ? 4 : 5} stroke-linecap="round">
+    <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39 A15 15 0 0 1 47 39" />
+    <path d={small ? 'M47 39 L47 26' : 'M47 39 L47 25'} />
+  </g>
+  <circle cx="47" cy={small ? 13 : 13.5} r={small ? 4.2 : 4.6} fill="currentColor" />
+</svg>

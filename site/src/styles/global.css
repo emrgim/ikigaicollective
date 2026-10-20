@@ -1,0 +1,236 @@
+@import 'tailwindcss';
+@plugin 'daisyui' {
+  themes: false;
+}
+
+/* Colour tokens: values from brand/tokens/ikigai-tokens.css. Do not add colours. */
+:root,
+[data-theme='ikigai-night'] {
+  --bg: #0a0a0a;
+  --card: #141210;
+  --border: #2a2622;
+  --fg: #e8e6e3;
+  --muted: #8a8078;
+  --accent: #c4956a;
+  --success: #6a8f5e;
+  --warning: #c9922f;
+  --danger: #c2604f;
+  --info: #5f86a6;
+  --copper-100: #2c1e11;
+  --copper-200: #49321d;
+  --copper-300: #664629;
+  --copper-400: #8b5f37;
+  --copper-500: #af7845;
+  --copper-600: #c29266;
+  --copper-700: #cea783;
+  --copper-800: #d9bba0;
+  --copper-900: #e5d0bd;
+  --ink: #14110e;
+  --paper: #f2f0ec;
+  /* Near-black steps between the night ground and the card, blended from tokens. */
+  --night-1: color-mix(in srgb, var(--bg) 85%, var(--card));
+  --night-2: color-mix(in srgb, var(--bg) 60%, var(--card));
+  --night-3: color-mix(in srgb, var(--bg) 30%, var(--card));
+}
+
+[data-theme='ikigai-dawn'] {
+  --bg: #f2f0ec;
+  --card: #ffffff;
+  --border: #ddd8d1;
+  --fg: #14110e;
+  --muted: #6b6560;
+  --accent: #855c3c;
+  --success: #57764d;
+  --warning: #8d6721;
+  --danger: #b34f3e;
+  --info: #4f718e;
+}
+
+@plugin 'daisyui/theme' {
+  name: 'ikigai-night';
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #0a0a0a;
+  --color-base-200: #141210;
+  --color-base-300: #2a2622;
+  --color-base-content: #e8e6e3;
+  --color-primary: #e8e6e3;
+  --color-primary-content: #0a0a0a;
+  --color-secondary: #c4956a;
+  --color-secondary-content: #0a0a0a;
+  --color-accent: #c4956a;
+  --color-accent-content: #0a0a0a;
+  --color-neutral: #2a2622;
+  --color-neutral-content: #e8e6e3;
+  --color-info: #5f86a6;
+  --color-info-content: #0a0a0a;
+  --color-success: #6a8f5e;
+  --color-success-content: #0a0a0a;
+  --color-warning: #c9922f;
+  --color-warning-content: #0a0a0a;
+  --color-error: #c2604f;
+  --color-error-content: #0a0a0a;
+  --radius-selector: 0.125rem;
+  --radius-field: 0.125rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin 'daisyui/theme' {
+  name: 'ikigai-dawn';
+  color-scheme: light;
+  --color-base-100: #f2f0ec;
+  --color-base-200: #ffffff;
+  --color-base-300: #ddd8d1;
+  --color-base-content: #14110e;
+  --color-primary: #14110e;
+  --color-primary-content: #f2f0ec;
+  --color-secondary: #855c3c;
+  --color-secondary-content: #f2f0ec;
+  --color-accent: #855c3c;
+  --color-accent-content: #f2f0ec;
+  --color-neutral: #ddd8d1;
+  --color-neutral-content: #14110e;
+  --color-info: #4f718e;
+  --color-info-content: #f2f0ec;
+  --color-success: #57764d;
+  --color-success-content: #f2f0ec;
+  --color-warning: #8d6721;
+  --color-warning-content: #f2f0ec;
+  --color-error: #b34f3e;
+  --color-error-content: #f2f0ec;
+  --radius-selector: 0.125rem;
+  --radius-field: 0.125rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme inline {
+  --font-display: Charter, 'Bitstream Charter', Georgia, serif;
+  --font-body: Georgia, serif;
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-line: var(--border);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-copper: var(--accent);
+  --color-cu-100: var(--copper-100);
+  --color-cu-200: var(--copper-200);
+  --color-cu-300: var(--copper-300);
+  --color-cu-400: var(--copper-400);
+  --color-cu-500: var(--copper-500);
+  --color-cu-600: var(--copper-600);
+  --color-cu-700: var(--copper-700);
+  --color-cu-800: var(--copper-800);
+  --color-cu-900: var(--copper-900);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+}
+
+/* Self-hosted Bitstream Charter, subset to Latin. Licence: /fonts/LICENSE-Charter.txt */
+@font-face {
+  font-family: 'Bitstream Charter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/charter-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Bitstream Charter';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/charter-italic.woff2') format('woff2');
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Section label: Georgia 13px, uppercase, 0.3em, copper. */
+  .label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+  }
+  /* Second half of a headline: italic, light copper. */
+  .em {
+    font-style: italic;
+    color: var(--copper-700);
+  }
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.05;
+    font-size: clamp(40px, 5vw, 72px);
+  }
+  .display-hero {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1;
+    font-size: clamp(56px, 9vw, 132px);
+  }
+  .section {
+    padding: 140px 64px;
+  }
+  @media (max-width: 767px) {
+    .section {
+      padding: 80px 24px;
+    }
+  }
+  /* Button shapes. Colours come from the daisyUI theme. */
+  .btn {
+    font-family: Georgia, serif;
+    font-weight: 400;
+    min-height: 44px;
+    padding: 16px 28px;
+    height: auto;
+    font-size: 16px;
+    text-transform: none;
+    box-shadow: none;
+  }
+  .btn-sm {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

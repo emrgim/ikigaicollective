@@ -1,0 +1,40 @@
+---
+import Mark from './Mark.astro';
+import { SITE } from '../config';
+const col1 = [['/how-it-works', 'How it works'], ['/lab-night', 'Lab Night'], ['/lab-notes', 'Lab Notes']];
+const col2 = [['/horizon', 'Horizon'], ['/partners', 'Partners'], ['/join', 'Join']];
+const col3 = [
+  [SITE.discordUrl, 'Discord'],
+  [SITE.substackUrl, 'Substack'],
+  [SITE.githubUrl, 'GitHub'],
+  [SITE.linkedinUrl, 'LinkedIn'],
+].filter(([href]) => href);
+const cols = [col1, col2, col3];
+---
+<footer data-theme="ikigai-dawn" class="border-t border-line bg-bg text-fg">
+  <div class="mx-auto flex max-w-[1280px] flex-wrap justify-between gap-x-16 gap-y-8 px-6 pb-10 pt-14 md:px-16">
+    <div class="flex flex-[1_1_280px] flex-col gap-3.5">
+      <div class="flex items-center gap-3">
+        <Mark size={28} />
+        <span class="font-display text-[14px] tracking-[0.24em]">IKIGAI COLLECTIVE</span>
+      </div>
+      <span class="italic text-copper">Curiosity · Agency · Compassion</span>
+      <span class="text-[14px] text-muted">Lab Night every Thursday, 21:00 Rome time.</span>
+    </div>
+    <nav aria-label="Footer" class="flex flex-[2_1_520px] flex-wrap gap-x-12 gap-y-3 text-[15px]">
+      {cols.map((col) => (
+        <div class="flex flex-col gap-2.5">
+          {col.map(([href, label]) => (
+            <a href={href} class="py-1 no-underline text-fg hover:text-copper" rel={href.startsWith('http') ? 'noopener' : undefined}>{label}</a>
+          ))}
+        </div>
+      ))}
+    </nav>
+  </div>
+  <div class="mx-auto flex max-w-[1280px] flex-wrap gap-x-6 gap-y-2 px-6 pb-10 text-[13px] text-muted md:px-16">
+    <span>© 2026 Ikigai Collective</span>
+    <span>Content CC BY-SA 4.0 · Code MIT</span>
+    <a href="/terms" class="text-muted hover:text-copper">Terms</a>
+    <a href="/privacy" class="text-muted hover:text-copper">Privacy</a>
+  </div>
+</footer>

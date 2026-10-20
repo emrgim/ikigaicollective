@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32" role="img" aria-label="Ikigai Collective">
+  <title>Ikigai Collective</title>
+  <rect width="64" height="64" fill="#0a0a0a"/>
+  <g fill="none" stroke="#c4956a" stroke-width="4" stroke-linecap="round">
+    <path d="M30 36 A7 7 0 0 1 44 36 A11 11 0 0 1 22 36 A15 15 0 0 1 52 36"/>
+    <path d="M52 36 L52 21"/>
+  </g>
+  <circle cx="52" cy="10.5" r="4.2" fill="#c4956a"/>
+</svg>
