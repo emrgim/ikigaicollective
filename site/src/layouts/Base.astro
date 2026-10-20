@@ -3,9 +3,11 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { IS_LIVE } from '../lib/env';
+import { SITE } from '../config';
 
 interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string; canonical?: string; type?: 'website' | 'article'; jsonld?: object | object[]; noindex?: boolean }
 const { overlayNav = false, image, canonical, type = 'website', jsonld, noindex = false, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
+const banner = !IS_LIVE && SITE.previewFeedbackUrl;
 const origin = 'https://ikigaicollective.org';
 const path = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/\/$/, '') || '/';
 const self = origin + (path === '/' ? '' : path);
@@ -55,7 +57,12 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective | Life 
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-fg focus:px-4 focus:py-2 focus:text-bg">Skip to content</a>
-    <div class={overlayNav ? 'absolute inset-x-0 top-0 z-30' : 'relative z-30'}><Nav /></div>
+    {banner && (
+      <div role="note" class="relative z-40 flex h-10 items-center justify-center bg-copper px-4 text-center text-[14px] text-bg">
+        <span class="truncate">Preview · <a href={SITE.previewFeedbackUrl} class="font-bold text-bg underline" target="_blank" rel="noopener">tell us what you think</a></span>
+      </div>
+    )}
+    <div class={overlayNav ? 'absolute inset-x-0 z-30' : 'relative z-30'} style={overlayNav ? `top:${banner ? '2.5rem' : '0'}` : undefined}><Nav /></div>
     <main id="main"><slot /></main>
     <div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
     <Footer />

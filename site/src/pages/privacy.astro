@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { SITE } from '../config';
 ---
 <Base title="Privacy Policy" description="Privacy policy of ikigaicollective.org.">
   <div class="legal mx-auto max-w-[720px] px-6 pb-24 pt-16 md:px-8">
@@ -10,7 +11,7 @@ import Base from '../layouts/Base.astro';
 <p>The Ikigai Collective is a volunteer-run community. This site sets no cookies and shows no ads. It collects two kinds of data: anonymous visit statistics, and the details you type into the Lab Night invite form or the partner form. This page says exactly what, where it goes, and how to have it removed.</p>
 
 <h2>Anonymous statistics</h2>
-<p>We use <a href="https://umami.is/privacy">Umami Cloud</a> to count visits and a few actions (for example, that someone opened the invite form, or read a Lab Note to the end). Umami is cookieless: it stores nothing in your browser and does not follow you across sites. It records the page, the referring site or campaign tag, your country, browser and device type, and a short-lived anonymous identifier that cannot be traced back to you. It does not store your IP address. These numbers tell us whether the site is working; they are not sold or shared.</p>
+<p>We use <a href="https://umami.is/privacy">Umami Cloud</a> to count visits and a few actions (for example, that someone opened the invite form, or read a Lab Note to the end). Umami's tracker uses no cookies. It collects page views, referrers, your browser, operating system and device type, and your approximate location. These numbers tell us whether the site is working; they are not sold or shared.</p>
 
 <h2>The Lab Night invite form</h2>
 <p>If you ask for the invite, we collect your <strong>email address</strong> and, if you give it, your <strong>first name</strong>. We use them for one thing: sending you the weekly Lab Night calendar invitation.</p>
@@ -47,13 +48,14 @@ import Base from '../layouts/Base.astro';
 <p>We publish weekly Lab Notes, a public record of our sessions. Our editorial rule: members are not named and personally or commercially sensitive details are not published without that member's consent. If something in a published note concerns you and you want it changed, anonymized, or removed, contact us and we will do it.</p>
 
 <h2>How to be removed, and your other rights</h2>
-<p>To be taken off the Lab Night invite list, to have your row deleted from our sheet, or to have a partner enquiry erased, reply to any Lab Night invitation email or message an admin on the Discord (details below) and say which you want. We will remove you from the calendar event and delete your record, and confirm when it is done. The same route covers access to what we hold about you, and corrections. For data held by Discord, Substack, Google, Vercel or Cloudflare themselves, contact that service.</p>
+<p>To be taken off the Lab Night invite list, to have your row deleted from our sheet, or to have a partner enquiry erased, write to the privacy contact below, reply to any Lab Night invitation email, or message an admin on the Discord and say which you want. We will remove you from the calendar event and delete your record, and confirm when it is done. The same route covers access to what we hold about you, and corrections. For data held by Discord, Substack, Google, Vercel or Cloudflare themselves, contact that service.</p>
 
 <h2>Children</h2>
 <p>This site and community are intended for adults. We do not knowingly collect information from children.</p>
 
 <h2>Contact</h2>
-<p>The fastest route is the <a href="https://discord.gg/4rM6FqjVDE">Discord server</a> (message an admin), a reply to any Lab Night invitation email, or an issue on <a href="https://github.com/ikigaicollective">GitHub</a>.</p>
+<p>Privacy requests go to {SITE.privacyEmail ? <a href={`mailto:${SITE.privacyEmail}`}>{SITE.privacyEmail}</a> : <strong>[privacy contact email to be confirmed]</strong>}.</p>
+<p>The fastest route for anything else is the <a href="https://discord.gg/4rM6FqjVDE">Discord server</a> (message an admin), a reply to any Lab Night invitation email, or an issue on <a href="https://github.com/ikigaicollective">GitHub</a>.</p>
 
 <h2>Changes</h2>
 <p>If our practices change, this page changes first, with an updated date at the top. The history is public in the <a href="https://github.com/ikigaicollective/ikigaicollective">site's repository</a>.</p>

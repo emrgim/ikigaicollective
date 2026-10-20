@@ -3,6 +3,10 @@ import { FORMS_LIVE } from '../lib/env';
 
 // Invite and partner forms. They post JSON to the form's action. Until the endpoints exist (Phase 5)
 // a 404 gets an honest "not open yet" message instead of a fake success.
+const PREVIEW = {
+  invite: 'This is a preview, so no invite was sent. Sign-up opens when the site launches. Until then, join the Discord and come on Thursday.',
+  partner: 'This is a preview, so nothing was sent. Partner enquiries open when the site launches. Until then, say hello in the Discord.',
+};
 const FALLBACK = 'Sign-up opens with the live site. For now, join the Discord and say hello.';
 
 document.querySelectorAll<HTMLFormElement>('form[data-invite-form], form[data-partner-form]').forEach((form) => {
@@ -33,13 +37,20 @@ document.querySelectorAll<HTMLFormElement>('form[data-invite-form], form[data-pa
     submit.textContent = 'Sending...';
     note.hidden = true;
     try {
-      // Test mode (neither production nor PUBLIC_FORMS_LIVE=1): behave like a success, send and store nothing.
-      const res = !FORMS_LIVE ? { ok: true, status: 200 } : await fetch(form.action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+      // Preview (neither production nor PUBLIC_FORMS_LIVE=1): send and store nothing, and say so instead of faking a success.
+      if (!FORMS_LIVE) {
+        submit.disabled = false;
+        submit.textContent = label;
+        note.textContent = PREVIEW[kind];
+        note.hidden = false;
+        announce(PREVIEW[kind]);
+        return;
+      }
+      const res = await fetch(form.action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
       if (res.status === 404 || res.status === 503) throw Object.assign(new Error('not-open'), { soft: true });
       if (!res.ok) throw new Error(String(res.status));
       track(`${kind}_success`);
       if (success) { fields.hidden = true; success.hidden = false; success.focus?.(); } else { submit.textContent = 'Invite sent'; }
-      if (!FORMS_LIVE) { note.textContent = 'Test mode: nothing was sent or stored.'; note.hidden = false; }
       announce(success?.textContent ?? 'Done');
       form.dispatchEvent(new CustomEvent(`ik:${kind}-success`, { bubbles: true }));
     } catch (err) {

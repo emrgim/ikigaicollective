@@ -6,7 +6,7 @@ import TurndownService from 'turndown';
 const td = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', emDelimiter: '*', linkStyle: 'inlined' });
 td.remove((n) => n.nodeType === 1 && (['SCRIPT', 'STYLE', 'SVG', 'CANVAS', 'FORM', 'BUTTON', 'NOSCRIPT', 'TEMPLATE'].includes(n.nodeName.toUpperCase()) || n.getAttribute('aria-hidden') === 'true' || n.hasAttribute('hidden')));
 
-const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (e.name === '_astro' ? [] : walk(path.join(dir, e.name))) : [path.join(dir, e.name)]));
+const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? (e.name === '_astro' || e.name === 'preview' ? [] : walk(path.join(dir, e.name))) : [path.join(dir, e.name)]));
 
 export function buildMarkdown(dist) {
   let n = 0;
