@@ -146,8 +146,8 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
     <SpiralArchive notes={notes} />
   </Section>
 
-  <!-- 7 Inside the studio: placeholders until the Discord feed (Phase 5) -->
-  <Section bg="var(--copper-100)" labelledby="st-h" inner="flex flex-col gap-11">
+  <!-- 7 Inside the studio: static placeholders, replaced by /api/studio (src/scripts/studio.ts) -->
+  <Section bg="var(--copper-100)" labelledby="st-h" id="studio" inner="flex flex-col gap-11">
     <div class="flex flex-wrap items-end justify-between gap-6">
       <div class="flex flex-col gap-[18px]">
         <span class="eyebrow text-cu-800">INSIDE THE STUDIO</span>
@@ -155,7 +155,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       </div>
       <span class="flex items-center gap-2.5 text-[15px] text-cu-800"><span aria-hidden="true" class="size-2 rounded-full bg-[var(--success)]"></span>Live from #the-loop</span>
     </div>
-    <div class="flex flex-wrap gap-6">
+    <div class="flex flex-wrap gap-6" data-studio>
       {stage.map((s, i) => (
         <a href={SITE.discordUrl} class="flex min-h-[260px] flex-[1_1_320px] flex-col gap-[18px] border border-cu-200 p-8 no-underline" style="background:var(--brown-deep)">
           <span class={`self-start rounded px-3 py-1.5 text-[13px] tracking-[0.06em] ${s === 'Shipped' ? 'bg-copper text-bg' : 'border border-copper text-cu-700'}`}>{s}</span>
@@ -251,5 +251,8 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       const go = () => import('../scripts/hero-shader');
       'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 800);
     }
+  </script>
+  <script>
+    import '../scripts/studio';
   </script>
 </Base>
