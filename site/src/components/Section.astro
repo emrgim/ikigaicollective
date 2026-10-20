@@ -1,0 +1,13 @@
+---
+// One full-width band with the shared 1280px / 64px container inside.
+interface Props {
+  bg?: string; color?: string; pad?: string; id?: string; labelledby?: string; label?: string;
+  class?: string; inner?: string; max?: string; theme?: string;
+}
+const { bg = 'var(--bg)', color, pad = '140px', id, labelledby, label, class: cls = '', inner = '', max, theme } = Astro.props;
+---
+<section data-theme={theme} id={id} aria-labelledby={labelledby} aria-label={label} class={cls} style={`background:${bg};${color ? `color:${color};` : ''}`}>
+  <div class={`wrap section-y ${inner}`} style={`--py:${pad};${max ? `max-width:${max};` : ''}`}>
+    <slot />
+  </div>
+</section>

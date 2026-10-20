@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import { notes, cover } from '../../data/notes-seed';
+
+export function getStaticPaths() {
+  return notes.map((n, i) => ({ params: { slug: n.slug }, props: { n, prev: notes[i - 1], next: notes[i + 1] } }));
+}
+const { n, prev, next } = Astro.props;
+// Phase 1 only has the Week 22 body from the mockup; Phase 2 imports real notes.
+const sample = n.slug === 'gods-of-sand';
+const words = n.title.split(' ');
+const last = words.pop();
+---
+<Base title={n.title} description={`Lab Note, week ${n.week}: ${n.title}.`}>
+  <header class="wrap flex flex-col gap-7 pt-[72px]">
+    <a href="/lab-notes" class="text-[14px] tracking-[0.2em] no-underline text-cu-700">LAB NOTES</a>
+    <span class="text-[15px] text-muted"><span class="text-copper">Week {n.week}</span> · {n.date}</span>
+    <h1 class="t-page">{words.join(' ')} <span class="em">{last}</span></h1>
+    <div aria-hidden="true" class="mt-6 aspect-[21/9] w-full border border-line" style={`background:${sample ? 'radial-gradient(ellipse at 64% 46%, var(--copper-900) 0%, var(--copper-600) 12%, var(--copper-300) 34%, var(--brown-deep) 64%, var(--bg) 90%)' : cover(n.week - 1)}`}></div>
+  </header>
+
+  <article class="mx-auto flex max-w-[700px] flex-col gap-7 px-6 pb-10 pt-20 text-[clamp(18px,2.2vw,21px)] leading-[1.75] md:px-8 md:pt-[88px]">
+    {sample ? (<>
+      <p><span class="float-left pr-3 pt-2 font-display text-[88px] leading-[0.8] text-copper">T</span>he founder arrived relaxed and said why. There had been a storm that afternoon where he is working by the sea, and he was in the water when it broke. The rain smoothed the waves as it intensified, he was far enough out that the shore was a distance away, and the people on the beach began to turn around and worry about him, so he swam back in order not to trouble anyone with a rescue nobody needed.</p>
+      <p>There are no photographs of any of it. He had not taken his phone to the beach. The co-host said that photographs are not always required, that some memories live in your head, and the founder agreed and then took the thought somewhere more interesting. He is planning to generate images of things he has seen and could not record, and eventually videos, and the examples he gave were better than the principle.</p>
+      <blockquote class="my-6 border-y border-cu-200 py-8 text-center font-display text-[clamp(26px,3.4vw,36px)] italic leading-[1.3] text-cu-900">He had just told a joke, in silence, to a table that answered in noise.</blockquote>
+      <p>Digital recording in the moment is no longer necessary, he said, because the tools can evoke reality as we experienced it or as we imagine it, and that makes it easy and fun to share.</p>
+    </>) : null}
+    <p class="text-[17px] italic text-muted">[The rest of the note, imported from Substack.]</p>
+  </article>
+
+  <section aria-labelledby="cta" style="background: linear-gradient(180deg, var(--bg) 0%, var(--copper-200) 22%, var(--copper-900) 58%, var(--paper) 100%)">
+    <div data-theme="ikigai-dawn" class="contents">
+      <div class="mx-auto flex max-w-[1100px] flex-col gap-10 px-6 pb-[140px] pt-[120px] text-ink md:px-16">
+        <div class="flex flex-wrap items-center gap-x-12 gap-y-7 bg-bg p-8 text-fg shadow-[0_30px_80px_rgba(10,10,10,0.35)] md:p-12">
+          <div class="flex flex-[1_1_460px] flex-col gap-3">
+            <h2 id="cta" class="font-display text-[clamp(30px,3.6vw,40px)] font-normal leading-[1.1]">This happened on a Thursday.<br /><span class="italic text-copper">The next one is yours.</span></h2>
+            <p class="text-[17px] leading-[1.55]">Lab Night · <span data-ln-date>Thursday</span> · 21:00 Rome<span data-ln-local="sep"></span></p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <Button href="/lab-night" variant="ink" class="text-center">Get the invite</Button>
+            <button type="button" data-share class="btn btn-line-ink min-h-12">Share this note</button>
+          </div>
+        </div>
+        <nav aria-label="More notes" class="flex flex-wrap justify-between gap-6">
+          {prev ? (
+            <a href={`/lab-notes/${prev.slug}`} class="flex flex-col gap-1.5 no-underline"><span class="text-[13px] tracking-[0.2em] text-cu-100">PREVIOUS · WEEK {prev.week}</span><span class="font-display text-[26px]">{prev.title}</span></a>
+          ) : <span></span>}
+          {next ? (
+            <a href={`/lab-notes/${next.slug}`} class="flex flex-col gap-1.5 text-right no-underline"><span class="text-[13px] tracking-[0.2em] text-cu-100">NEXT · WEEK {next.week}</span><span class="font-display text-[26px]">{next.title}</span></a>
+          ) : <span></span>}
+        </nav>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
+import { notes, cover } from '../../data/notes-seed';
+import { SITE } from '../../config';
+
+const latest = notes[notes.length - 1];
+const all = [...notes].reverse();
+---
+<Base title="Lab Notes" description="Weekly notes from every Lab Night since the first. What was tried, what worked, what didn't.">
+  <section aria-labelledby="h1">
+    <div class="wrap flex flex-wrap items-end justify-between gap-8 pb-16 pt-[90px]">
+      <div class="flex flex-[1_1_560px] flex-col gap-5">
+        <span class="eyebrow">LAB NOTES · SINCE 22 APRIL 2026</span>
+        <h1 id="h1" class="t-page-m">The open<br /><span class="em">lab notebook</span></h1>
+        <p class="max-w-[560px] text-[20px] leading-[1.6]">Weekly notes from every Lab Night since the first. What was tried, what worked, what didn't.</p>
+      </div>
+      <div role="group" aria-label="View" class="flex border border-cu-200" id="view-toggle">
+        <button type="button" aria-pressed="true" data-view="grid" class="btn btn-sm btn-primary rounded-none border-0">Covers</button>
+        <button type="button" aria-pressed="false" data-view="list" class="btn btn-sm btn-ghost rounded-none border-0">Index</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Latest note">
+    <div class="wrap pb-[100px]">
+      <a href={`/lab-notes/${latest.slug}`} class="flex flex-wrap border border-line bg-card no-underline">
+        <span aria-hidden="true" class="block aspect-video flex-[1_1_620px]" style="background: radial-gradient(circle at 66% 44%, var(--copper-900) 0%, var(--copper-500) 16%, var(--copper-200) 42%, var(--card) 78%)"></span>
+        <span class="flex flex-[1_1_360px] flex-col justify-center gap-4 p-8 md:p-12">
+          <span class="text-[14px] text-muted"><span class="text-copper">Latest · Week {latest.week}</span> · {latest.date}</span>
+          <span class="font-display text-[clamp(40px,5vw,56px)] leading-[1.05]">{latest.title}</span>
+          <span class="link-u self-start text-[16px]">Read the note</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-label="All notes" style="background:var(--night-2)">
+    <div class="wrap pb-[140px] pt-[100px]" id="all-notes" data-view="grid">
+      <div data-pane="grid" class="flex flex-wrap gap-7">
+        {all.map((n) => (
+          <a href={`/lab-notes/${n.slug}`} class="flex max-w-[400px] flex-[1_1_260px] flex-col gap-3 no-underline">
+            <span aria-hidden="true" class="block aspect-video border border-line" style={`background:${cover(n.week - 1)}`}></span>
+            <span class="text-[13px] text-muted"><span class="text-copper">Week {n.week}</span> · {n.short}</span>
+            <span class="font-display text-[22px] leading-[1.25]">{n.title}</span>
+          </a>
+        ))}
+      </div>
+      <div data-pane="list" hidden class="flex flex-col">
+        {all.map((n) => (
+          <a href={`/lab-notes/${n.slug}`} class="flex flex-wrap items-baseline gap-x-8 gap-y-2 border-t border-line py-5 no-underline">
+            <span class="w-[90px] flex-none text-[14px] text-copper">Week {n.week}</span>
+            <span class="flex-[1_1_420px] font-display text-[26px]">{n.title}</span>
+            <span class="flex-none text-[14px] text-muted">{n.short}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Section theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-200) 0%, var(--copper-400) 60%, var(--copper-900) 100%)" labelledby="sub" pad="120px" inner="flex flex-wrap items-center justify-between gap-8">
+    <h2 id="sub" class="flex-[1_1_520px] font-display text-[clamp(32px,4.2vw,48px)] font-normal leading-[1.1]" style="color:var(--paper)">Get each note in your inbox,<br /><span class="italic">every week.</span></h2>
+    <div class="flex flex-wrap gap-3.5">
+      {SITE.substackUrl && <Button href={SITE.substackUrl} variant="ink" external>Subscribe on Substack</Button>}
+      <Button href="/lab-night" variant="paper">Come to the next one</Button>
+    </div>
+  </Section>
+</Base>

@@ -1,0 +1,15 @@
+---
+interface Item { q: string; a: string; link?: { href: string; label: string } }
+interface Props { items: Item[]; qSize?: string }
+const { items, qSize = '25px' } = Astro.props;
+---
+<div class="flex flex-col">
+  {items.map((it, i) => (
+    <details class={`border-t border-ink py-[22px] ${i === items.length - 1 ? 'border-b' : ''}`}>
+      <summary class="-my-2 cursor-pointer py-2 font-display" style={`font-size:${qSize}`}>{it.q}</summary>
+      <p class="mt-3.5 text-[18px] leading-[1.65]">
+        {it.a}{it.link && <> <a href={it.link.href} class="text-ink underline">{it.link.label}</a></>}
+      </p>
+    </details>
+  ))}
+</div>

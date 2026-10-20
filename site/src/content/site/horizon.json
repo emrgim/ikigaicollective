@@ -1,0 +1,22 @@
+{
+  "now": {
+    "title": "The studio",
+    "items": [
+      "A weekly Lab Night, unbroken since April 2026",
+      "Open Lab Notes from every session",
+      "A studio on Discord where members post work in progress",
+      "Three values as the only membership requirement"
+    ],
+    "summary": "A weekly Lab Night, open Lab Notes, a studio on Discord, three values."
+  },
+  "next": {
+    "title": "[Title]",
+    "items": ["[What is planned for the coming months, in David's words]", "[A second planned step]", "[Partnerships, once real]"],
+    "summary": "[What is planned, in David's words]"
+  },
+  "horizon": {
+    "title": "[Title]",
+    "text": "[The long ambition, in David's words]",
+    "summary": "[The ambition, in David's words]"
+  }
+}

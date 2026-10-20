@@ -1,0 +1,20 @@
+{
+  "_note": "Placeholder lines David must approve before launch (brief section 13). Edit here, not in components.",
+  "ikigai": {
+    "love": ["WHAT YOU LOVE", "Where your attention goes when nobody is asking. With what you are good at, it becomes passion; with what the world needs, mission."],
+    "good": ["WHAT YOU ARE GOOD AT", "Your capability. With what you love, it becomes passion; with what you can be paid for, profession."],
+    "need": ["WHAT THE WORLD NEEDS", "The need outside yourself. With what you love, it becomes mission; with what you can be paid for, vocation."],
+    "paid": ["WHAT YOU CAN BE PAID FOR", "Economic viability. With what you are good at, it becomes profession; with what the world needs, vocation."],
+    "core": ["WHERE ALL FOUR MEET", "The intersection of what you are good at, what you love, what the world needs, and what you can be paid for. We look for it through experiments."]
+  },
+  "archiveTagline": "One line, still drawing.",
+  "joinHeadline": { "plain": "Come and build", "em": "toward meaning." },
+  "invitation": "I'm part of Ikigai Collective, a studio for people using AI to design their lives. Lab Night is Thursday. Come: ikigaicollective.org/join",
+  "partnerPrinciples": [
+    "Members come first. If they wouldn't notice it, we don't do it.",
+    "No one buys our voice. No paid placement in Lab Night, Lab Notes or the Discord.",
+    "Feedback on your tools stays honest and public.",
+    "No member data is shared. Members choose.",
+    "Your agents are welcome, under their own names."
+  ]
+}

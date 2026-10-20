@@ -9,7 +9,7 @@ const active = (href: string) => path === href || path.startsWith(href + '/');
   <input id="nav-drawer" type="checkbox" class="drawer-toggle" tabindex="-1" aria-hidden="true" />
   <div class="drawer-content min-w-0">
     <header class="wrap flex items-center justify-between gap-x-8 py-6">
-      <a href="/" class="flex items-center gap-3 no-underline text-copper" aria-label="Ikigai Collective, home">
+      <a href="/" class="hit flex items-center gap-3 no-underline text-copper" aria-label="Ikigai Collective, home">
         <Mark size={32} variant="small" />
         <span class="font-display text-[14px] tracking-[0.24em] text-fg">IKIGAI COLLECTIVE</span>
       </a>
@@ -18,7 +18,7 @@ const active = (href: string) => path === href || path.startsWith(href + '/');
           <a
             href={l.href}
             aria-current={active(l.href) ? 'page' : undefined}
-            class={`border-b pb-1 pt-2.5 no-underline text-fg hover:text-cu-900 ${active(l.href) ? 'border-copper' : 'border-transparent'}`}
+            class={`hit border-b pb-1 pt-2.5 no-underline text-fg hover:text-cu-900 ${active(l.href) ? 'border-copper' : 'border-transparent'}`}
           >{l.label}</a>
         ))}
       </nav>
@@ -43,7 +43,7 @@ const active = (href: string) => path === href || path.startsWith(href + '/');
         class="flex max-w-full items-center gap-3 rounded-[22px] border border-cu-200 bg-card/75 px-[18px] py-2.5 text-[14px] no-underline text-fg hover:text-cu-900"
       >
         <span class="size-2 shrink-0 rounded-full bg-copper shadow-[0_0_10px_var(--accent)]" aria-hidden="true"></span>
-        <span>Next Lab Night · <span id="nav-pill-date">Thursday</span> · 21:00 Rome<span id="nav-pill-local" class="text-cu-700"></span></span>
+        <span>Next Lab Night · <span data-ln-date>Thursday</span> · 21:00 Rome<span data-ln-local="sep" class="text-cu-700"></span></span>
       </a>
     </div>
   </div>
@@ -68,8 +68,6 @@ const active = (href: string) => path === href || path.startsWith(href + '/');
 </div>
 
 <script>
-  import { nextLabNight, pillText } from '../lib/labnight';
-  
   // Drawer: toggle by keyboard, move focus into the menu, make the page inert while open.
   const box = document.getElementById('nav-drawer') as HTMLInputElement;
   const open = document.getElementById('nav-open')!;
@@ -89,10 +87,4 @@ const active = (href: string) => path === href || path.startsWith(href + '/');
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && box.checked) set(false, true);
   });
-
-  // Pill: recompute the next session and show the visitor's local time.
-  const start = nextLabNight();
-  const { date, local } = pillText(start);
-  document.getElementById('nav-pill-date')!.textContent = date;
-  document.getElementById('nav-pill-local')!.textContent = ` · ${local} your time`;
 </script>

@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import { spiral } from '../lib/spiral';
+import horizon from '../content/site/horizon.json';
+
+const { pt, path } = spiral(230, 230, 6, 13);
+const tNow = 10.5, tNext = 13.0, tFar = 16.6;
+const now = pt(tNow);
+---
+<Base title="Horizon" description="Where Ikigai Collective is going. The line so far is solid; the turns ahead are dotted." overlayNav>
+  <section aria-labelledby="h1" class="relative overflow-hidden pt-[150px]">
+    <div aria-hidden="true" class="absolute inset-0" style="background: radial-gradient(ellipse 90% 50% at 50% 120%, var(--copper-700) 0%, var(--copper-400) 16%, var(--copper-100) 40%, transparent 64%)"></div>
+    <div class="wrap relative flex flex-wrap items-center gap-12 pb-[120px] pt-20 max-md:pb-16">
+      <div class="flex flex-[1_1_520px] flex-col gap-6">
+        <span class="eyebrow">THE HORIZON</span>
+        <h1 id="h1" class="t-page-m">Where this<br /><span class="em">is going</span></h1>
+        <p class="max-w-[560px] text-[21px] leading-[1.6]">The line so far is solid. The turns ahead are dotted, because they have not been drawn yet.</p>
+      </div>
+      <div aria-hidden="true" class="aspect-square w-[460px] max-w-full flex-none">
+        <svg viewBox="0 0 460 460" class="size-full">
+          <path d={path(0.6, tNow)} fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" />
+          <path d={path(tNow, tNext)} fill="none" stroke="var(--copper-700)" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6" />
+          <path d={path(tNext, tFar)} fill="none" stroke="var(--copper-400)" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 8" />
+          <circle cx={now[0].toFixed(1)} cy={now[1].toFixed(1)} r="7" fill="var(--copper-900)" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <Section bg="var(--card)" label="Now, next, horizon" pad="120px" inner="flex flex-col">
+    <div class="flex flex-wrap gap-x-16 gap-y-6 border-t-2 border-copper py-12">
+      <div class="flex flex-[0_0_240px] flex-col gap-2"><span class="eyebrow">NOW</span><span class="font-display text-[40px]">{horizon.now.title}</span></div>
+      <ul class="m-0 flex flex-[1_1_480px] list-none flex-col gap-3.5 p-0 text-[19px] leading-[1.5]">{horizon.now.items.map((t) => <li>{t}</li>)}</ul>
+    </div>
+    <div class="flex flex-wrap gap-x-16 gap-y-6 border-t-2 border-dashed border-cu-700 py-12">
+      <div class="flex flex-[0_0_240px] flex-col gap-2"><span class="eyebrow text-cu-700">NEXT</span><span class="font-display text-[40px]">{horizon.next.title}</span></div>
+      <ul class="m-0 flex flex-[1_1_480px] list-none flex-col gap-3.5 p-0 text-[19px] leading-[1.5] text-cu-700">{horizon.next.items.map((t) => <li>{t}</li>)}</ul>
+    </div>
+    <div class="flex flex-wrap gap-x-16 gap-y-6 border-b border-t-2 border-dotted border-b-line border-t-cu-400 py-12">
+      <div class="flex flex-[0_0_240px] flex-col gap-2"><span class="eyebrow text-cu-500">HORIZON</span><span class="font-display text-[40px]">{horizon.horizon.title}</span></div>
+      <p class="m-0 flex-[1_1_480px] font-display text-[28px] leading-[1.4] text-cu-700">{horizon.horizon.text}</p>
+    </div>
+  </Section>
+
+  <Section bg="var(--copper-200)" labelledby="h3" inner="flex flex-col gap-7">
+    <span class="eyebrow text-cu-900">AN IDEA FROM LAB NIGHT · WEEK 21</span>
+    <h2 id="h3" class="t-q max-w-[1100px] !text-[clamp(34px,5vw,72px)] !leading-[1.1]">Not a unicorn. <span class="em text-cu-900">A millicorn.</span></h2>
+    <p class="max-w-[760px] text-[20px] leading-[1.6]">A project worth around a million, self-funded, grown organically with agentic AI, solving a local problem well. Then multiply by eight billion people.</p>
+    <a href="/lab-notes/the-millicorn" class="self-start border-b border-cu-900 pb-0.5 text-[16px] text-paper no-underline">Read The Millicorn</a>
+  </Section>
+
+  <Section theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-900) 65%, var(--paper) 100%)" color="var(--ink)" labelledby="h4" pad="150px" inner="flex flex-wrap items-center justify-between gap-8">
+    <h2 id="h4" class="flex-[1_1_560px] font-display text-[clamp(38px,5vw,72px)] font-normal leading-[1.05]">Help draw<br /><span class="italic text-cu-200">the next turn.</span></h2>
+    <div class="flex flex-wrap gap-3.5">
+      <Button href="/join" variant="ink" class="px-[30px] text-[17px]">Join</Button>
+      <Button href="/partners" variant="line-ink" class="px-[30px] text-[17px]">Partner with us</Button>
+    </div>
+  </Section>
+</Base>

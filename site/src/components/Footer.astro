@@ -25,7 +25,7 @@ const cols = [col1, col2, col3];
       {cols.map((col) => (
         <div class="flex flex-col gap-2.5">
           {col.map(([href, label]) => (
-            <a href={href} class="py-1 no-underline text-fg hover:text-copper" rel={href.startsWith('http') ? 'noopener' : undefined}>{label}</a>
+            <a href={href} class="hit py-1 no-underline text-fg hover:text-copper" rel={href.startsWith('http') ? 'noopener' : undefined}>{label}</a>
           ))}
         </div>
       ))}
@@ -34,7 +34,7 @@ const cols = [col1, col2, col3];
   <div class="wrap flex flex-wrap gap-x-6 gap-y-2 pb-10 text-[13px] text-muted">
     <span>© 2026 Ikigai Collective</span>
     <span>Content CC BY-SA 4.0 · Code MIT</span>
-    <a href="/terms" class="text-muted hover:text-copper">Terms</a>
-    <a href="/privacy" class="text-muted hover:text-copper">Privacy</a>
+    <a href="/terms" class="hit text-muted hover:text-copper">Terms</a>
+    <a href="/privacy" class="hit text-muted hover:text-copper">Privacy</a>
   </div>
 </footer>

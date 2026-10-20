@@ -1,10 +1,264 @@
 ---
+import { getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import Mark from '../components/Mark.astro';
+import Faq from '../components/Faq.astro';
+import InviteForm from '../components/InviteForm.astro';
+import DiscordIcon from '../components/DiscordIcon.astro';
+import { SITE } from '../config';
+import { notes, cover } from '../data/notes-seed';
+import { spiral } from '../lib/spiral';
+import stats from '../content/site/stats.json';
+import faq from '../content/site/faq.json';
+import horizon from '../content/site/horizon.json';
+import copy from '../content/site/copy.json';
+
+const question = (await getEntry('site', 'question'))!.data;
+const latest = notes[notes.length - 1];
+
+// Ikigai diagram: static "all four meet" state. Interaction is Phase 3.
+const pct = (v: number, of = 560) => `${((v / of) * 100).toFixed(2)}%`;
+const circles = [[130, 0], [0, 130], [260, 130], [130, 260]];
+const labels = [
+  ['What you love', 205, 46, 150], ['What you are good at', 22, 256, 120],
+  ['What the world needs', 418, 256, 120], ['What you can be paid for', 205, 470, 150],
+];
+
+// Spiral archive: one point per note, oldest at the centre.
+const { pt, path } = spiral(400, 400, 12, 22);
+const t0 = 1.4, step = 0.6, tEnd = t0 + step * (notes.length - 1);
+const dots = notes.map((n, i) => ({ n, i, p: pt(t0 + step * i) }));
+const sp = pt(tEnd);
+let cardX = sp[0] + 22; if (cardX + 250 > 790) cardX = sp[0] - 272;
+let cardY = Math.max(10, sp[1] - 90); if (cardY + 240 > 790) cardY = 550;
+
+const stage = ['Implement', 'Measure', 'Shipped'];
+const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5 days ago', 'An entrepreneur · 1 week ago'];
 ---
-<Base>
-  <section class="section min-h-[60vh]">
-    <p class="label">Phase 0 preview</p>
-    <h1 class="display mt-6 break-words">Life design <span class="em">through experimentation.</span></h1>
-    <p class="mt-8 max-w-xl text-[19px] text-muted">Foundation only: navigation, footer, tokens and fonts. Pages arrive in Phase 1.</p>
+<Base overlayNav>
+  <!-- 1 Hero: static dawn gradient; the shader replaces it in Phase 4 -->
+  <section aria-labelledby="hero-h" class="relative flex min-h-[940px] flex-col overflow-hidden pt-[150px]">
+    <div aria-hidden="true" class="absolute inset-0" style="background: radial-gradient(ellipse 85% 58% at 50% 112%, var(--copper-900) 0%, var(--copper-700) 10%, var(--copper-500) 22%, var(--copper-300) 36%, var(--copper-100) 52%, transparent 72%)"></div>
+    <div class="relative flex flex-col items-center gap-2.5 px-6 pt-12 text-center">
+      <span class="text-[14px] tracking-[0.32em] text-copper">AI-POWERED</span>
+      <h1 id="hero-h" class="t-hero">Life design<br /><span class="em">through</span><br />experimentation.</h1>
+    </div>
+    <div aria-hidden="true" class="relative mt-2 size-[210px] self-center">
+      <Mark size={210} strokeWidth={3.2} class="text-cu-900" dot={{ fill: 'var(--paper)' }} />
+      <div class="absolute left-[140px] top-[29px] size-7 rounded-full" style="box-shadow: 0 0 60px 26px color-mix(in srgb, var(--copper-900) 55%, transparent)"></div>
+    </div>
+    <div class="relative flex flex-wrap justify-center gap-4 px-6 pb-16 pt-3">
+      <Button href="/lab-night" variant="ink">Come to Lab Night</Button>
+      <Button href={`/lab-notes/${latest.slug}`} variant="paper">Read the latest note</Button>
+    </div>
   </section>
+
+  <!-- 2 Why now -->
+  <Section bg="var(--bg)" labelledby="why-h" pad="160px" inner="flex flex-col gap-10">
+    <span class="eyebrow">WHY NOW</span>
+    <h2 id="why-h" class="t-xl max-w-[1150px]">Eight billion people are heading toward this, <span class="em">and most of us were never taught how.</span></h2>
+    <div class="flex flex-wrap gap-x-20 gap-y-6 border-t border-line pt-8">
+      <p class="flex-[1_1_420px] text-[20px] leading-[1.65]">Technology has reduced the distance from idea to action to zero. What once took years of specialised knowledge can now be prototyped in hours.</p>
+      <span class="flex-none text-[15px] italic text-muted">David Orban, founder</span>
+    </div>
+  </Section>
+
+  <!-- 3 Ikigai diagram (static all-lit state) -->
+  <Section bg="var(--night-1)" labelledby="ik-h" inner="flex flex-wrap items-center gap-16">
+    <div class="flex flex-[1_1_380px] flex-col gap-[22px]" aria-live="polite" id="ik-text">
+      <span class="eyebrow">THE DESTINATION</span>
+      <h2 id="ik-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">Ikigai</h2>
+      <span class="text-[14px] tracking-[0.18em] text-cu-700" data-ik-label>{copy.ikigai.core[0]}</span>
+      <p class="max-w-[480px] text-[21px] leading-[1.6]" data-ik-text>{copy.ikigai.core[1]}</p>
+      <span class="text-[14px] text-muted">Tap a circle.</span>
+    </div>
+    <div id="ik-diagram" class="relative aspect-square w-[560px] max-w-full flex-none [container-type:inline-size] [--lit:30%] max-sm:[--lit:14%]">
+      {circles.map(([x, y], i) => (
+        <div aria-hidden="true" class="absolute rounded-full border border-cu-700" data-ik-circle={['love', 'good', 'need', 'paid'][i]}
+          style={`left:${pct(x)};top:${pct(y)};width:${pct(300)};height:${pct(300)};background:color-mix(in srgb, var(--copper-900) var(--lit, 30%), transparent);mix-blend-mode:screen`}></div>
+      ))}
+      <div aria-hidden="true" class="absolute rounded-full" style={`left:${pct(250)};top:${pct(250)};width:${pct(60)};height:${pct(60)};box-shadow:0 0 12.5cqw 6cqw color-mix(in srgb, var(--paper) 55%, transparent)`}></div>
+      {labels.map(([t, x, y, w], i) => (
+        <button type="button" data-ik={['love', 'good', 'need', 'paid'][i]} class="absolute min-h-11 cursor-pointer border-0 bg-transparent px-1 text-[13px] leading-[1.25] text-fg sm:text-[16px]"
+          style={`left:${pct(x as number)};top:${pct(y as number)};width:${pct(w as number)}`}>{t}</button>
+      ))}
+      <button type="button" data-ik="core" aria-pressed="true" class="absolute min-h-11 cursor-pointer rounded-[22px] border border-cu-900 bg-cu-900 text-[15px] tracking-[0.06em] text-bg"
+        style={`left:${pct(236)};top:${pct(258)};width:${pct(88)}`}>Ikigai</button>
+    </div>
+  </Section>
+
+  <!-- 4 The loop -->
+  <Section bg="var(--night-2)" labelledby="loop-h" inner="flex flex-wrap items-center gap-[72px]">
+    <div aria-hidden="true" class="relative flex min-h-[460px] flex-[1_1_440px] items-center justify-center">
+      <div class="absolute size-[min(440px,100%)] rounded-full border border-dashed border-cu-300"></div>
+      <Mark size={360} strokeWidth={1.8} class="relative max-w-[80%] text-copper" dot={{ r: 2.6, fill: 'var(--copper-900)' }} />
+    </div>
+    <div class="flex flex-[1_1_440px] flex-col gap-9">
+      <span class="eyebrow">THE WAY THERE</span>
+      <h2 id="loop-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">Three values.<br /><span class="em">One loop.</span></h2>
+      <div class="flex flex-col gap-1.5">
+        <span class="font-display text-[28px]">Curiosity <span class="text-[16px] italic text-muted">the intake</span></span>
+        <p class="text-[18px] leading-[1.6]">"The appetite for new ideas to digest and draw energy from."</p>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <span class="font-display text-[28px]">Agency <span class="text-[16px] italic text-muted">closes the loop</span></span>
+        <p class="text-[18px] leading-[1.6]">Turns that digestion into action, and curiosity observes the consequences to shape the next pass.</p>
+      </div>
+      <div class="flex flex-col gap-1.5 border-t border-dashed border-cu-300 pt-7">
+        <span class="font-display text-[28px]">Compassion <span class="text-[16px] italic text-muted">governs the loop</span></span>
+        <p class="text-[18px] leading-[1.6]">"Modulates the loop so that it is not followed blindly."</p>
+      </div>
+      <a href="/how-it-works" class="link-u self-start text-[16px]">How it works</a>
+    </div>
+  </Section>
+
+  <!-- 5 The method -->
+  <Section bg="var(--card)" labelledby="m-h" inner="flex flex-col gap-12">
+    <span class="eyebrow">THE METHOD</span>
+    <h2 id="m-h" class="t-lg">How an experiment runs</h2>
+    <div class="flex flex-wrap gap-0.5 border border-line bg-line">
+      {[['01', 'Design', 'A hypothesis about what might work for you.', 'var(--copper-400)'], ['02', 'Implement', 'With AI tools that compress months into days.', 'var(--copper-500)'], ['03', 'Measure', 'The outcomes, honestly.', 'var(--copper-600)'], ['04', 'Iterate', 'Same direction, slightly different, or completely new.', 'var(--copper-700)']].map(([n, t, d, c]) => (
+        <div class="flex min-h-[320px] flex-[1_1_260px] flex-col gap-4 bg-card px-8 py-10">
+          <span class="num text-[88px]" style={`color:${c}`}>{n}</span>
+          <h3 class="t-card">{t}</h3>
+          <p class="text-[17px] leading-[1.6]">{d}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- 6 Spiral archive -->
+  <Section bg="var(--night-1)" labelledby="ar-h" pad="120px" inner="flex flex-wrap items-center gap-8">
+    <div class="flex flex-[1_1_380px] flex-col gap-[26px]">
+      <span class="eyebrow">THE SPIRAL ARCHIVE</span>
+      <h2 id="ar-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">Twenty-six weeks.<br /><span class="em">{copy.archiveTagline}</span></h2>
+      <p class="text-[19px] leading-[1.65]">Every Lab Night adds a turn. Pick a point to open that week's note. The dotted turns are the weeks not yet lived.</p>
+      <dl class="flex flex-wrap gap-x-10 gap-y-6 border-t border-line pt-[22px]">
+        {[[notes.length, 'Lab Notes'], [stats.weeksMissed, 'weeks missed'], [stats.continents, 'continents'], [stats.members, 'members']].map(([v, l]) => (
+          <div><dd class="num order-first text-[40px]">{v}</dd><dt class="text-[14px] text-muted">{l}</dt></div>
+        ))}
+      </dl>
+      <a href="/lab-notes" class="link-u self-start text-[16px]">Browse every note</a>
+    </div>
+    <div class="relative aspect-square w-[800px] max-w-full flex-none overflow-hidden" id="spiral">
+      <div aria-hidden="true" class="absolute inset-0 rounded-full" style="background: radial-gradient(circle, var(--copper-100) 0%, transparent 62%)"></div>
+      <svg aria-hidden="true" viewBox="0 0 800 800" class="absolute inset-0 size-full">
+        <path d={path(t0, tEnd)} fill="none" stroke="var(--copper-400)" stroke-width="1.6" stroke-linecap="round" />
+        <path d={path(tEnd, tEnd + 1.9)} fill="none" stroke="var(--copper-300)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 7" />
+      </svg>
+      {dots.map(({ n, i, p }) => {
+        const last = i === notes.length - 1;
+        return (
+          <a href={`/lab-notes/${n.slug}`} aria-label={`Week ${n.week}: ${n.title}`} class="absolute flex size-7 items-center justify-center"
+            style={`left:${((p[0] - 14) / 8).toFixed(2)}%;top:${((p[1] - 14) / 8).toFixed(2)}%`}>
+            <span class="block rounded-full" style={`width:${last ? 16 : 8}px;height:${last ? 16 : 8}px;background:${last ? 'var(--copper-900)' : 'var(--accent)'};box-shadow:${last ? '0 0 18px 6px color-mix(in srgb, var(--copper-900) 55%, transparent)' : 'none'}`}></span>
+          </a>
+        );
+      })}
+      <a href={`/lab-notes/${latest.slug}`} class="absolute hidden w-[250px] flex-col border border-cu-200 bg-card text-fg no-underline md:flex"
+        style={`left:${(cardX / 8).toFixed(2)}%;top:${(cardY / 8).toFixed(2)}%`}>
+        <span aria-hidden="true" class="block h-[140px] w-full" style="background: radial-gradient(circle at 70% 40%, var(--copper-500) 0%, var(--copper-200) 38%, var(--card) 72%)"></span>
+        <span class="flex flex-col gap-1.5 px-4 pb-4 pt-3.5">
+          <span class="text-[13px] text-muted"><span class="text-copper">Week {latest.week}</span> · {latest.short}</span>
+          <span class="font-display text-[21px] leading-[1.25]">{latest.title}</span>
+        </span>
+      </a>
+    </div>
+  </Section>
+
+  <!-- 7 Inside the studio: placeholders until the Discord feed (Phase 5) -->
+  <Section bg="var(--copper-100)" labelledby="st-h" inner="flex flex-col gap-11">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="flex flex-col gap-[18px]">
+        <span class="eyebrow text-cu-800">INSIDE THE STUDIO</span>
+        <h2 id="st-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">Work in progress,<br /><span class="italic text-cu-800">shown honestly.</span></h2>
+      </div>
+      <span class="flex items-center gap-2.5 text-[15px] text-cu-800"><span aria-hidden="true" class="size-2 rounded-full bg-[var(--success)]"></span>Live from #the-loop</span>
+    </div>
+    <div class="flex flex-wrap gap-6">
+      {stage.map((s, i) => (
+        <a href={SITE.discordUrl} class="flex min-h-[260px] flex-[1_1_320px] flex-col gap-[18px] border border-cu-200 p-8 no-underline" style="background:var(--brown-deep)">
+          <span class={`self-start rounded px-3 py-1.5 text-[13px] tracking-[0.06em] ${s === 'Shipped' ? 'bg-copper text-bg' : 'border border-copper text-cu-700'}`}>{s}</span>
+          <span class="font-display text-[26px] leading-[1.3]">[Member thread title]</span>
+          <span class="mt-auto text-[15px] text-cu-800">{studioTimes[i]}</span>
+        </a>
+      ))}
+    </div>
+    <Button href={SITE.discordUrl} external class="self-start"><DiscordIcon />See the work in the Discord</Button>
+  </Section>
+
+  <!-- 8 This week's question -->
+  <Section bg="var(--copper-200)" labelledby="q-h" pad="150px" inner="flex flex-col gap-8">
+    <h2 id="q-h" class="eyebrow text-cu-900">THIS WEEK'S QUESTION</h2>
+    <p class="t-q max-w-[1100px]">{question.before} <span class="em text-cu-900">{question.em}</span> {question.after}</p>
+    <a href="/lab-night" class="self-start border-b border-cu-900 pb-0.5 text-[17px] text-paper no-underline">Bring your answer on Thursday</a>
+  </Section>
+
+  <!-- 9 Lab Night + invite -->
+  <Section bg="var(--copper-300)" labelledby="ln-h" inner="flex flex-wrap items-center gap-16">
+    <div class="flex flex-[1_1_460px] flex-col gap-7">
+      <span class="eyebrow text-paper">LAB NIGHT</span>
+      <h2 id="ln-h" class="font-display text-[clamp(40px,5vw,60px)] font-normal leading-[1.05]">Every Thursday.<br /><span class="italic text-paper">One hour.</span></h2>
+      <p class="text-[22px] italic leading-[1.5]">"Bring a project, or just your curiosity."</p>
+      <div class="flex flex-col text-[18px] leading-[1.5]">
+        <div class="border-t border-cu-500 py-4"><span class="text-paper">First half</span> · an opening reflection, then open discussion</div>
+        <div class="border-t border-cu-500 py-4"><span class="text-paper">Second half</span> · demos, builds and requests for feedback</div>
+        <div class="border-y border-cu-500 py-4">21:00 Rome<span data-ln-local="sep"></span> · Google Meet</div>
+      </div>
+    </div>
+    <InviteForm id="home-invite" intro="Sign up once. A weekly calendar invite does the remembering. Other guests never see your email." foot="Protected by an invisible spam check. No newsletter, no sharing." success="Done. Check your inbox for the calendar invite. See you on Thursday." />
+  </Section>
+
+  <!-- 10 Horizon -->
+  <Section bg="var(--copper-500)" color="var(--bg)" labelledby="hz-h" inner="flex flex-col gap-11">
+    <span class="eyebrow text-bg">THE HORIZON</span>
+    <h2 id="hz-h" class="font-display text-[clamp(40px,5vw,60px)] font-normal leading-[1.05]">Where this <span class="italic">is going</span></h2>
+    <div class="flex flex-wrap gap-6">
+      {[['NOW', 'solid', horizon.now.summary], ['NEXT', 'dashed', horizon.next.summary], ['HORIZON', 'dotted', horizon.horizon.summary]].map(([l, b, t]) => (
+        <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-3.5 border-2 p-8" style={`border-style:${b};border-color:var(--bg)`}>
+          <span class="text-[13px] tracking-[0.24em]">{l}</span>
+          <p class="font-display text-[24px] leading-[1.4]">{t}</p>
+        </div>
+      ))}
+    </div>
+    <div class="flex flex-wrap gap-x-10 gap-y-4 text-[17px]">
+      <a href="/horizon" class="underline">Read the full horizon</a>
+      <a href="/partners" class="underline">Building something that belongs here? Partner with us</a>
+    </div>
+  </Section>
+
+  <!-- 11 FAQ -->
+  <Section bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-700) 100%)" color="var(--ink)" labelledby="faq-h" inner="flex flex-wrap gap-x-20 gap-y-12">
+    <div class="flex flex-[1_1_320px] flex-col gap-5">
+      <span class="eyebrow text-ink">QUESTIONS</span>
+      <h2 id="faq-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.05]">Before you<br /><span class="italic text-cu-100">walk in</span></h2>
+      <p class="text-[18px] leading-[1.6]">Something else on your mind? Ask in #introductions, or just come on Thursday.</p>
+    </div>
+    <div class="flex-[2_1_560px]"><Faq items={faq} /></div>
+  </Section>
+
+  <!-- 12 Dawn and join -->
+  <Section theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-900) 0%, var(--paper) 100%)" color="var(--ink)" labelledby="jn-h" pad="150px 120px" inner="flex flex-col gap-12">
+    <div class="flex flex-wrap items-center gap-10">
+      <Mark size={150} strokeWidth={4} class="text-ink" dot={{ x: 56, y: 5, r: 4.6, fill: 'var(--accent)' }} />
+      <h2 id="jn-h" class="flex-[1_1_520px] font-display text-[clamp(40px,5.4vw,80px)] font-normal leading-[1.05]">{copy.joinHeadline.plain}<br /><span class="italic text-copper">{copy.joinHeadline.em}</span></h2>
+    </div>
+    <ol class="flex list-none flex-wrap gap-6 p-0">
+      {[['1', 'Get the Lab Night invite', '/lab-night'], ['2', 'Join the Discord', SITE.discordUrl], ['3', 'Introduce yourself in #introductions', '']].map(([n, t, h]) => (
+        <li class="flex flex-[1_1_280px] flex-col gap-2 border-t-2 border-ink pt-[18px]">
+          <span class="num text-[40px] text-copper">{n}</span>
+          {h ? <a href={h} class="text-[20px] text-ink">{t}</a> : <span class="text-[20px]">{t}</span>}
+        </li>
+      ))}
+    </ol>
+    <div class="flex flex-wrap items-center gap-x-10 gap-y-5 bg-ink px-6 py-9 text-paper md:px-10">
+      <div class="flex flex-[1_1_520px] flex-col gap-2.5">
+        <h3 class="font-display text-[28px] font-normal">Know someone who should be here?</h3>
+        <p class="text-[17px] leading-[1.55] text-cu-800">"{copy.invitation}"</p>
+      </div>
+      <button type="button" data-copy={copy.invitation} class="btn btn-copper min-h-12">Copy the invitation</button>
+    </div>
+  </Section>
 </Base>

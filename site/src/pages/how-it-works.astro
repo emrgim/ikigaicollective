@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+
+const values = [
+  { k: 'c', name: 'Curiosity', role: 'THE INTAKE', quote: '"A memetic hunger: the appetite for new ideas to digest and draw energy from."', note: 'Curiosity generates questions and the desire to understand. It is how the loop takes things in.' },
+  { k: 'a', name: 'Agency', role: 'CLOSES THE LOOP', quote: '"Turns that digestion into action, and in doing so closes a loop."', note: 'Curiosity then observes the consequences of the action and shapes the next pass with what the last one taught. A spiral, not a ring.' },
+  { k: 'm', name: 'Compassion', role: 'GOVERNS THE LOOP, FROM OUTSIDE', quote: '"Modulates the loop so that it is not followed blindly."', note: 'Iteration guarantees failures, and they hurt. Compassion holds in view where we and others started, and what the effort forward is costing.' },
+];
+const method = [
+  ['01', 'Design', 'An experiment: a hypothesis about what might work for you.', 'var(--copper-400)'],
+  ['02', 'Implement', 'Using AI tools that compress months of work into days.', 'var(--copper-500)'],
+  ['03', 'Measure', 'The outcomes, honestly. Failures included; they are not shameful.', 'var(--copper-600)'],
+  ['04', 'Iterate', 'Same direction, slightly different, or completely new.', 'var(--copper-700)'],
+];
+const principles = [
+  ['Everything is code', 'Marketing language is code. Sales is code. Product management is code.'],
+  ['Flat by design', 'No hierarchy, no assigned tasks. Come with your own ideas, experiments and initiative.'],
+  ['Open by default', 'Projects, profiles and lab notes live publicly, by choice.'],
+  ['Skepticism is healthy', 'AI is powerful and exploitable. The wetware is still necessary. Human connection is the check.'],
+  ['Degrees of freedom', 'More cognitive, physical and economic freedom, while staying true to your values.'],
+];
+const first = values[0];
+---
+<Base title="How it works" description="We operate like an artist studio. Members share techniques and run experiments, but nobody assigns tasks.">
+  <section aria-labelledby="h1">
+    <div class="wrap flex flex-col gap-7 pb-[140px] pt-[100px] max-md:pb-20 max-md:pt-16">
+      <span class="eyebrow">HOW IT WORKS</span>
+      <h1 id="h1" class="font-display text-[clamp(42px,8vw,120px)] font-normal leading-none">We operate like<br /><span class="em">an artist studio.</span></h1>
+      <p class="max-w-[760px] text-[22px] leading-[1.6]">Members share techniques, inspire each other and run experiments, but nobody assigns tasks. The organisation is flat, participation is voluntary, and every member defines their own path.</p>
+    </div>
+  </section>
+
+  <Section bg="var(--night-1)" labelledby="h2" inner="flex flex-col items-center gap-8 text-center">
+    <span class="eyebrow">NOT A MISSION STATEMENT</span>
+    <h2 id="h2" class="t-xl max-w-[1100px]">You don't build <span class="italic">from</span> meaning.<br />You build <span class="em">toward</span> it.</h2>
+    <p class="max-w-[640px] text-[19px] leading-[1.6]">"Meaning is not on the chart, because meaning is the output; we achieve it through agency."</p>
+  </Section>
+
+  <Section bg="var(--night-2)" labelledby="h3" inner="flex flex-wrap items-center gap-[72px]">
+    <div class="flex flex-[1_1_440px] flex-col gap-7" id="values">
+      <span class="eyebrow">THE ONLY MEMBERSHIP REQUIREMENT</span>
+      <h2 id="h3" class="t-lg">Three values.<br /><span class="em">One loop.</span></h2>
+      <div role="group" aria-label="Values" class="flex flex-wrap gap-2.5">
+        {values.map((v, i) => (
+          <button type="button" data-value={v.k} aria-pressed={i === 0 ? 'true' : 'false'}
+            class={`btn btn-sm min-h-11 border-copper ${v.k === 'm' ? 'border-dashed' : ''}`}>{v.name}</button>
+        ))}
+      </div>
+      <div aria-live="polite" class="flex min-h-[200px] flex-col gap-3">
+        <span class="text-[14px] tracking-[0.2em] text-cu-700" data-v-role>{first.role}</span>
+        <p class="font-display text-[clamp(22px,2.6vw,28px)] leading-[1.4]" data-v-quote>{first.quote}</p>
+        <p class="text-[17px] leading-[1.6]" data-v-note>{first.note}</p>
+      </div>
+    </div>
+    <div aria-hidden="true" class="relative flex min-h-[480px] flex-[1_1_440px] items-center justify-center" id="values-art">
+      <div class="absolute size-[min(460px,100%)] rounded-full border border-dashed border-cu-200" data-ring></div>
+      <svg width="380" height="380" viewBox="0 0 64 64" class="relative max-w-[80%]">
+        <g fill="none" stroke-linecap="round">
+          <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39" stroke="var(--copper-900)" stroke-width="2" data-inner />
+          <path d="M17 39 A15 15 0 0 1 47 39 L47 25" stroke="var(--copper-300)" stroke-width="2" data-outer />
+        </g>
+        <circle cx="47" cy="13.5" r="2.8" fill="var(--copper-900)" />
+      </svg>
+    </div>
+  </Section>
+
+  <Section bg="var(--card)" labelledby="h4" inner="flex flex-col gap-12">
+    <span class="eyebrow">THE METHOD</span>
+    <h2 id="h4" class="t-lg">Every member's journey<br /><span class="em">is itself an experiment.</span></h2>
+    <ol class="m-0 flex list-none flex-col p-0">
+      {method.map(([n, t, d, c], i) => (
+        <li class={`flex flex-wrap items-baseline gap-x-12 gap-y-3 border-t border-line py-9 ${i === 3 ? 'border-b' : ''}`}>
+          <span class="num w-[120px] flex-none text-[64px]" style={`color:${c}`}>{n}</span>
+          <span class="w-[260px] flex-none font-display text-[34px]">{t}</span>
+          <span class="flex-[1_1_360px] text-[19px] leading-[1.6]">{d}</span>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <Section bg="var(--copper-100)" labelledby="h5" inner="flex flex-col gap-12">
+    <span class="eyebrow text-cu-800">PRINCIPLES</span>
+    <h2 id="h5" class="t-lg">Five things we hold to</h2>
+    <div class="flex flex-wrap gap-0.5 border border-cu-200 bg-cu-200">
+      {principles.map(([t, d]) => (
+        <div class="flex flex-[1_1_360px] flex-col gap-3 bg-cu-100 p-9"><h3 class="font-display text-[28px] font-normal">{t}</h3><p class="text-[17px] leading-[1.6]">{d}</p></div>
+      ))}
+    </div>
+  </Section>
+
+  <Section theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-900) 70%, var(--paper) 100%)" color="var(--ink)" labelledby="h6" pad="150px" inner="flex flex-wrap items-center justify-between gap-8">
+    <h2 id="h6" class="flex-[1_1_560px] font-display text-[clamp(38px,5vw,72px)] font-normal leading-[1.05]">See it working,<br /><span class="italic text-cu-200">on a Thursday.</span></h2>
+    <Button href="/lab-night" variant="ink" class="px-8 text-[17px]">Come to Lab Night</Button>
+  </Section>
+</Base>

@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import copy from '../content/site/copy.json';
+
+const ways = [
+  ['COMMUNITIES', 'Host a Lab Night together', 'Your members, a theme, a co-host.', 'Our members, the format, a Lab Note of the night.'],
+  ['AI TOOLS', 'Put your tool in real hands', 'Credits or early access for members.', 'Real use, honest public feedback, a write-up.'],
+  ['INSTITUTIONS', 'Bring the method to your people', 'People between things, looking for their next step.', 'A weekly lab format and an open method.'],
+];
+const pilot = [
+  'One shared activity, agreed up front',
+  'One public output: a Lab Note, a recap, an open experiment',
+  'Your own invite link, so we both see what it brought',
+  'A review at week eight: continue, change or stop',
+];
+---
+<Base title="Partners" description="Participants in the studio, not sponsors of it. We work with communities, AI tool makers and institutions when it gives members something they can use.">
+  <section aria-labelledby="h1">
+    <div class="wrap flex flex-col gap-7 pb-[140px] pt-[100px] max-md:pb-20 max-md:pt-16">
+      <span class="eyebrow">PARTNERS</span>
+      <h1 id="h1" class="max-w-[1150px] font-display text-[clamp(38px,7vw,104px)] font-normal leading-[1.02]">Participants in the studio,<br /><span class="em">not sponsors of it.</span></h1>
+      <p class="max-w-[720px] text-[21px] leading-[1.6]">We work with communities, AI tool makers and institutions when it gives members something they can use, and shows in public what the Collective does.</p>
+      <Button href="#talk" class="self-start">Start a conversation</Button>
+    </div>
+  </section>
+
+  <Section bg="var(--night-2)" labelledby="h2" inner="flex flex-col gap-12">
+    <h2 id="h2" class="t-lg">Three ways to work together</h2>
+    <div class="flex flex-wrap gap-6">
+      {ways.map(([l, t, you, we]) => (
+        <div class="flex flex-[1_1_320px] flex-col gap-[18px] border border-line bg-card p-9">
+          <span class="text-[13px] tracking-[0.24em] text-copper">{l}</span>
+          <h3 class="t-card">{t}</h3>
+          <div class="border-t border-line pt-3.5 text-[16px] leading-[1.6]"><span class="text-muted">You bring</span><br />{you}</div>
+          <div class="text-[16px] leading-[1.6]"><span class="text-muted">We bring</span><br />{we}</div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <Section bg="var(--copper-100)" labelledby="h3" inner="flex flex-col gap-12">
+    <span class="eyebrow text-cu-800">HOW A PILOT WORKS</span>
+    <h2 id="h3" class="t-lg">Eight weeks.<br /><span class="italic text-cu-800">Small and reversible.</span></h2>
+    <ol class="m-0 flex list-none flex-wrap gap-6 p-0">
+      {pilot.map((t, i) => (
+        <li class="flex flex-[1_1_240px] flex-col gap-2.5 border-t border-copper pt-5"><span class="num text-[44px] text-copper">{i + 1}</span><span class="text-[18px] leading-[1.55]">{t}</span></li>
+      ))}
+    </ol>
+  </Section>
+
+  <Section bg="var(--copper-200)" labelledby="h4" inner="flex flex-wrap gap-16">
+    <div class="flex flex-[1_1_380px] flex-col gap-5">
+      <span class="eyebrow text-cu-900">OUR PRINCIPLES</span>
+      <h2 id="h4" class="t-md">What we will<br /><span class="italic text-cu-900">and won't do</span></h2>
+    </div>
+    <ul class="m-0 flex flex-[1_1_560px] list-none flex-col p-0 text-[19px] leading-[1.55]">
+      {copy.partnerPrinciples.map((t, i, a) => (
+        <li class={`border-t border-cu-400 py-[18px] ${i === a.length - 1 ? 'border-b' : ''}`}>{t}</li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section id="talk" theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-900) 60%, var(--paper) 100%)" color="var(--ink)" labelledby="h5" inner="flex flex-wrap items-start gap-16">
+    <div class="flex flex-[1_1_420px] flex-col gap-[22px]">
+      <h2 id="h5" class="t-lg">Our first partners<br /><span class="italic text-cu-200">will appear here.</span></h2>
+      <p class="text-[19px] leading-[1.6]">We would rather show three real partners than a wall of logos. If you are building something that belongs here, tell us.</p>
+    </div>
+    <form aria-labelledby="fh" data-partner-form method="post" action="/api/partner" class="flex flex-[1_1_420px] flex-col gap-3 bg-ink p-8 text-paper md:p-11" data-theme="ikigai-night">
+      <h3 id="fh" class="mb-1.5 font-display text-[30px] font-normal">Start a conversation</h3>
+      <div class="flex flex-col gap-2.5" data-partner-fields>
+        <label for="org" class="text-[15px]">Organisation</label>
+        <input id="org" name="org" type="text" required class="field" style="border-color:var(--muted);color:var(--paper)" />
+        <label for="kind" class="text-[15px]">You are a</label>
+        <select id="kind" name="kind" class="field" style="border-color:var(--muted);color:var(--paper)"><option>Community</option><option>AI tool</option><option>Institution</option></select>
+        <label for="pem" class="text-[15px]">Email</label>
+        <input id="pem" name="email" type="email" required class="field" style="border-color:var(--muted);color:var(--paper)" />
+        <label for="msg" class="text-[15px]">What would you like to try together?</label>
+        <textarea id="msg" name="message" rows="4" class="field" style="border-color:var(--muted);color:var(--paper)"></textarea>
+        <button type="submit" class="btn btn-copper mt-2 min-h-[52px] w-full text-[17px]">Send</button>
+      </div>
+      <p data-partner-success hidden role="status" class="border border-[var(--success)] p-4 text-[17px] leading-[1.5] text-[var(--success)]">Thank you. We'll be in touch.</p>
+    </form>
+  </Section>
+</Base>

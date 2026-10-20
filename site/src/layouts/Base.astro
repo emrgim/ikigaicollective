@@ -3,8 +3,8 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
-interface Props { title?: string; description?: string }
-const { title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
+interface Props { title?: string; description?: string; overlayNav?: boolean }
+const { overlayNav = false, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
 const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
 ---
 <!doctype html>
@@ -20,8 +20,12 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-fg focus:px-4 focus:py-2 focus:text-bg">Skip to content</a>
-    <Nav />
+    <div class={overlayNav ? 'absolute inset-x-0 top-0 z-30' : 'relative z-30'}><Nav /></div>
     <main id="main"><slot /></main>
     <Footer />
+    <script>
+      import { initLabNight } from '../lib/labnight-dom';
+      initLabNight();
+    </script>
   </body>
 </html>

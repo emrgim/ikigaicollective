@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import DiscordIcon from '../components/DiscordIcon.astro';
+import { SITE } from '../config';
+import copy from '../content/site/copy.json';
+---
+<Base title="Join" description="Three steps, free. Get the Lab Night invite, join the Discord, introduce yourself.">
+  <div style="background: linear-gradient(180deg, var(--bg) 0%, var(--bg) 18%, var(--copper-100) 45%, var(--copper-500) 72%, var(--copper-900) 90%, var(--paper) 100%)">
+    <section aria-labelledby="h1">
+      <div class="wrap flex flex-col gap-6 pb-20 pt-[100px] max-md:pt-16">
+        <span class="eyebrow">JOIN · THREE STEPS · FREE</span>
+        <h1 id="h1" class="t-page">Come in.<br /><span class="em">Bring your curiosity.</span></h1>
+        <p class="max-w-[640px] text-[21px] leading-[1.6]">The only membership requirement is adopting the three values: curiosity, agency and compassion.</p>
+      </div>
+    </section>
+
+    <section aria-label="Steps">
+      <div class="wrap pb-[120px] pt-10"><ol id="join-steps" class="m-0 flex list-none flex-col gap-5 p-0">
+        {[
+          { n: 1, h: 'Get the Lab Night invite', p: 'A weekly calendar invite. Other guests never see your email.', form: true },
+          { n: 2, h: 'Join the Discord', p: 'Where the studio lives between Thursdays. Start in #the-loop to see what members are working on.' },
+          { n: 3, h: 'Introduce yourself', p: '"Hi, I\'m [name]. I\'m working on [project]. I\'m curious about [question]."', quote: true },
+        ].map((s) => (
+          <li class="flex flex-wrap items-center gap-x-12 gap-y-6 border border-cu-200 p-8 md:p-10" style="background:color-mix(in srgb, var(--card) 85%, transparent)" data-step={s.n}>
+            <div aria-hidden="true" class="num flex size-[72px] flex-none items-center justify-center rounded-full border border-copper text-[30px]" data-mark>{s.n}</div>
+            <div class="flex flex-[1_1_360px] flex-col gap-2">
+              <h2 class="font-display text-[32px] font-normal">{s.h}</h2>
+              <p class={`text-[17px] leading-[1.55] ${s.quote ? 'text-cu-800' : ''}`}>{s.p}</p>
+            </div>
+            {s.form && (
+              <form data-invite-form method="post" action="/api/invite" class="flex flex-[1_1_380px] flex-wrap items-end gap-2.5">
+                <div class="flex flex-[1_1_220px] flex-col gap-2"><label for="join-em" class="text-[14px]">Email</label><input id="join-em" name="email" type="email" required placeholder="you@example.com" class="field" style="border-color:var(--muted)" /></div>
+                <button type="submit" class="btn btn-primary min-h-[52px]">Send me the invite</button>
+              </form>
+            )}
+            {s.n === 2 && <Button href={SITE.discordUrl} external class="min-h-[52px]"><DiscordIcon />Open the Discord</Button>}
+            {s.n === 3 && <button type="button" data-copy="Hi, I'm [name]. I'm working on [project]. I'm curious about [question]." class="btn btn-line-light min-h-[52px]">Copy the prompt</button>}
+          </li>
+        ))}
+        <li data-done hidden class="bg-paper px-8 py-6 text-[18px] text-ink" role="status">You're in. See you on Thursday.</li>
+      </ol></div>
+    </section>
+
+    <section aria-labelledby="h3" style="color:var(--ink)">
+      <div class="wrap flex flex-col gap-8 pb-[140px] pt-20">
+        <h2 id="h3" class="t-q !text-[clamp(36px,5vw,72px)] !leading-[1.05]">The Collective grows<br /><span class="italic text-cu-200">through invitation.</span></h2>
+        <div class="flex flex-wrap items-center gap-x-10 gap-y-5 bg-ink px-6 py-9 text-paper md:px-10">
+          <p class="m-0 flex-[1_1_520px] text-[18px] leading-[1.55] text-cu-800">"{copy.invitation}"</p>
+          <button type="button" data-copy={copy.invitation} class="btn btn-copper min-h-12">Copy the invitation</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
