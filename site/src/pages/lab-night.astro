@@ -4,9 +4,11 @@ import Section from '../components/Section.astro';
 import Button from '../components/Button.astro';
 import Faq from '../components/Faq.astro';
 import InviteForm from '../components/InviteForm.astro';
-import { notes, cover } from '../data/notes-seed';
+import NoteCover from '../components/NoteCover.astro';
+import { getNotes } from '../lib/notes';
 
-const recent = notes.find((n) => n.slug === 'the-millicorn')!;
+const notes = await getNotes();
+const recent = notes[notes.length - 1];
 const faq = [
   { q: 'Do I need a project?', a: 'No. Bring a project, or just your curiosity.' },
   { q: 'Does it cost anything?', a: 'No. Participation is open and voluntary.' },
@@ -57,11 +59,11 @@ const hour = [
   </Section>
 
   <Section bg="var(--copper-100)" labelledby="h3" inner="flex flex-wrap items-center gap-14">
-    <div aria-hidden="true" class="aspect-video flex-[1_1_480px] border border-cu-200" style={`background:${cover(recent.week - 1)}`}></div>
+    <div class="flex-[1_1_480px] border border-cu-200"><NoteCover note={recent} widths={[480, 960]} sizes="(min-width: 1024px) 560px, 90vw" eager /></div>
     <div class="flex flex-[1_1_420px] flex-col gap-5">
       <span class="eyebrow text-cu-800">FROM A RECENT LAB NIGHT</span>
       <h2 id="h3" class="t-md">{recent.title}</h2>
-      <p class="text-[19px] leading-[1.6]">Week {recent.week} · {recent.short}. An opening reflection on small, self-funded projects built with agentic AI, followed by members' demos.</p>
+      <p class="text-[19px] leading-[1.6]">Week {recent.week} · {recent.short}. {recent.excerpt}</p>
       <a href={`/lab-notes/${recent.slug}`} class="link-u self-start text-[16px]">Read the Lab Note</a>
     </div>
   </Section>

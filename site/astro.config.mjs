@@ -4,5 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://ikigaicollective.org',
+  trailingSlash: 'never',
+  build: { format: 'file' },
   vite: { plugins: [tailwindcss()] },
 });

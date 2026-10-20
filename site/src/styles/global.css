@@ -188,6 +188,13 @@
     color: var(--accent);
   }
   /* Second half of a headline: italic, light copper. */
+  /* Lab Note body: drop cap, pull quotes, links. */
+  .note-body > * + * { margin-top: 28px; }
+  .note-body > p:first-of-type::first-letter { float: left; font-family: var(--font-display); font-size: 88px; line-height: 0.8; padding: 8px 12px 0 0; color: var(--accent); }
+  .note-body strong { color: var(--accent); font-weight: 400; }
+  .note-body a { color: var(--copper-700); text-decoration: underline; text-underline-offset: 3px; }
+  .note-body blockquote { margin-block: 40px; padding-block: 32px; border-block: 1px solid var(--copper-200); text-align: center; font-family: var(--font-display); font-style: italic; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.3; color: var(--copper-900); }
+  .note-body blockquote p { margin: 0; }
   .legal h1 { font-family: var(--font-display); font-size: 2rem; font-weight: 400; letter-spacing: 0.02em; margin-bottom: 0.5rem; }
   .legal h2 { font-size: 1.1rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin: 2.5rem 0 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
   .legal p, .legal li { margin-bottom: 1.2rem; }

@@ -8,7 +8,8 @@ import Faq from '../components/Faq.astro';
 import InviteForm from '../components/InviteForm.astro';
 import DiscordIcon from '../components/DiscordIcon.astro';
 import { SITE } from '../config';
-import { notes, cover } from '../data/notes-seed';
+import NoteCover from '../components/NoteCover.astro';
+import { getNotes, words } from '../lib/notes';
 import { spiral } from '../lib/spiral';
 import stats from '../content/site/stats.json';
 import faq from '../content/site/faq.json';
@@ -16,6 +17,7 @@ import horizon from '../content/site/horizon.json';
 import copy from '../content/site/copy.json';
 
 const question = (await getEntry('site', 'question'))!.data;
+const notes = await getNotes();
 const latest = notes[notes.length - 1];
 
 // Ikigai diagram: static "all four meet" state. Interaction is Phase 3.
@@ -133,7 +135,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
   <Section bg="var(--night-1)" labelledby="ar-h" pad="120px" inner="flex flex-col items-center gap-8 lg:flex-row">
     <div class="flex w-full flex-col gap-[26px] lg:flex-[1_1_380px]">
       <span class="eyebrow">THE SPIRAL ARCHIVE</span>
-      <h2 id="ar-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">Twenty-six weeks.<br /><span class="em">{copy.archiveTagline}</span></h2>
+      <h2 id="ar-h" class="font-display text-[clamp(40px,5vw,56px)] font-normal leading-[1.08]">{words(notes.length)} weeks.<br /><span class="em">{copy.archiveTagline}</span></h2>
       <p class="text-[19px] leading-[1.65]">Every Lab Night adds a turn. Pick a point to open that week's note. The dotted turns are the weeks not yet lived.</p>
       <dl class="flex flex-wrap gap-x-10 gap-y-6 border-t border-line pt-[22px]">
         {[[notes.length, 'Lab Notes'], [stats.weeksMissed, 'weeks missed'], [stats.continents, 'continents'], [stats.members, 'members']].map(([v, l]) => (
@@ -159,7 +161,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       })}
       <a href={`/lab-notes/${latest.slug}`} class="absolute hidden w-[250px] flex-col border border-cu-200 bg-card text-fg no-underline md:flex"
         style={`left:${(cardX / 8).toFixed(2)}%;top:${(cardY / 8).toFixed(2)}%`}>
-        <span aria-hidden="true" class="block h-[140px] w-full" style="background: radial-gradient(circle at 70% 40%, var(--copper-500) 0%, var(--copper-200) 38%, var(--card) 72%)"></span>
+        <NoteCover note={latest} widths={[250, 500]} sizes="250px" class="!aspect-[250/140]" />
         <span class="flex flex-col gap-1.5 px-4 pb-4 pt-3.5">
           <span class="text-[13px] text-muted"><span class="text-copper">Week {latest.week}</span> · {latest.short}</span>
           <span class="font-display text-[21px] leading-[1.25]">{latest.title}</span>

@@ -2,9 +2,11 @@
 import Base from '../../layouts/Base.astro';
 import Section from '../../components/Section.astro';
 import Button from '../../components/Button.astro';
-import { notes, cover } from '../../data/notes-seed';
+import NoteCover from '../../components/NoteCover.astro';
+import { getNotes } from '../../lib/notes';
 import { SITE } from '../../config';
 
+const notes = await getNotes();
 const latest = notes[notes.length - 1];
 const all = [...notes].reverse();
 ---
@@ -12,7 +14,7 @@ const all = [...notes].reverse();
   <section aria-labelledby="h1">
     <div class="wrap flex flex-wrap items-end justify-between gap-8 pb-16 pt-[90px]">
       <div class="flex flex-[1_1_560px] flex-col gap-5">
-        <span class="eyebrow">LAB NOTES · SINCE 22 APRIL 2026</span>
+        <span class="eyebrow">LAB NOTES · SINCE {notes[0].long.toUpperCase()}</span>
         <h1 id="h1" class="t-page-m">The open<br /><span class="em">lab notebook</span></h1>
         <p class="max-w-[560px] text-[20px] leading-[1.6]">Weekly notes from every Lab Night since the first. What was tried, what worked, what didn't.</p>
       </div>
@@ -26,9 +28,9 @@ const all = [...notes].reverse();
   <section aria-label="Latest note">
     <div class="wrap pb-[100px]">
       <a href={`/lab-notes/${latest.slug}`} class="flex flex-wrap border border-line bg-card no-underline">
-        <span aria-hidden="true" class="block aspect-video flex-[1_1_620px]" style="background: radial-gradient(circle at 66% 44%, var(--copper-900) 0%, var(--copper-500) 16%, var(--copper-200) 42%, var(--card) 78%)"></span>
+        <span class="block flex-[1_1_620px]"><NoteCover note={latest} widths={[620, 1240]} sizes="(min-width: 1024px) 620px, 90vw" eager /></span>
         <span class="flex flex-[1_1_360px] flex-col justify-center gap-4 p-8 md:p-12">
-          <span class="text-[14px] text-muted"><span class="text-copper">Latest · Week {latest.week}</span> · {latest.date}</span>
+          <span class="text-[14px] text-muted"><span class="text-copper">Latest · Week {latest.week}</span> · {latest.long}</span>
           <span class="font-display text-[clamp(40px,5vw,56px)] leading-[1.05]">{latest.title}</span>
           <span class="link-u self-start text-[16px]">Read the note</span>
         </span>
@@ -41,7 +43,7 @@ const all = [...notes].reverse();
       <div data-pane="grid" class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-7">
         {all.map((n) => (
           <a href={`/lab-notes/${n.slug}`} class="flex flex-col gap-3 no-underline">
-            <span aria-hidden="true" class="block aspect-video border border-line" style={`background:${cover(n.week - 1)}`}></span>
+            <NoteCover note={n} class="border border-line" />
             <span class="text-[13px] text-muted"><span class="text-copper">Week {n.week}</span> · {n.short}</span>
             <span class="font-display text-[22px] leading-[1.25]">{n.title}</span>
           </a>
