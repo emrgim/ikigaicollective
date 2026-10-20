@@ -10,7 +10,10 @@ const write = process.argv.includes('--write');
 const notesDir = 'src/content/notes';
 const covers = 'src/assets/covers';
 
-const xml = new XMLParser({ cdataPropName: '__cdata', ignoreAttributes: false, attributeNamePrefix: '@' }).parse(await (await fetch(FEED)).text());
+const res = await fetch(FEED, { headers: { 'user-agent': 'Mozilla/5.0 (compatible; IkigaiSiteImporter/1.0; +https://ikigaicollective.org)', accept: 'application/rss+xml, application/xml' } });
+const raw = await res.text();
+if (!res.ok || !raw.includes('<rss')) { console.error(`Feed fetch failed: HTTP ${res.status}, ${raw.slice(0, 120).replace(/\s+/g, ' ')}`); process.exit(1); }
+const xml = new XMLParser({ cdataPropName: '__cdata', ignoreAttributes: false, attributeNamePrefix: '@' }).parse(raw);
 const items = [xml.rss.channel.item ?? []].flat();
 const text = (v) => (typeof v === 'string' ? v : v?.__cdata ?? '');
 
