@@ -42,3 +42,13 @@ export function pillText(start: number, locale = 'en-GB', tz?: string) {
   const local = new Intl.DateTimeFormat(locale, { timeZone: tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(start);
   return { date, local };
 }
+
+export type Phase = 'idle' | 'tonight' | 'live';
+const HOUR = 3_600_000;
+/** idle: any other time. tonight: from 18:00 Rome on the day, until start. live: 21:00 to 22:00 Rome. */
+export function labNightPhase(now = Date.now()): { phase: Phase; start: number; msToStart: number } {
+  const start = nextLabNight(now);
+  const msToStart = start - now;
+  const phase: Phase = msToStart <= 0 ? 'live' : msToStart <= 3 * HOUR ? 'tonight' : 'idle';
+  return { phase, start, msToStart };
+}

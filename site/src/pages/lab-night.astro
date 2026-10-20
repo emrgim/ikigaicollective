@@ -6,6 +6,7 @@ import Faq from '../components/Faq.astro';
 import InviteForm from '../components/InviteForm.astro';
 import NoteCover from '../components/NoteCover.astro';
 import { getNotes } from '../lib/notes';
+import { SITE } from '../config';
 
 const notes = await getNotes();
 const recent = notes[notes.length - 1];
@@ -32,12 +33,17 @@ const hour = [
         <Button href="#invite" class="self-start">Get the invite</Button>
       </div>
       <div class="flex flex-[0_1_420px] flex-col gap-3.5 border border-cu-200 bg-card/80 p-8">
-        <span class="text-[13px] tracking-[0.24em] text-muted">NEXT SESSION</span>
-        <span class="font-display text-[30px]" data-ln-date>Thursday</span>
-        <div data-ln-count hidden class="flex gap-[18px] tabular-nums">
+        <span class="text-[13px] tracking-[0.24em] text-muted"><span data-ln-show="idle">NEXT SESSION</span><span data-ln-show="tonight" hidden>TONIGHT</span><span data-ln-show="live" hidden>LIVE NOW</span></span>
+        <span class="font-display text-[30px]" data-ln-date data-ln-show="idle tonight">Thursday</span>
+        <div data-ln-count data-ln-show="idle" hidden class="flex gap-[18px] tabular-nums">
           {[['d', 'days'], ['h', 'hours'], ['m', 'minutes']].map(([k, l]) => (
             <div><div class="num text-[52px] text-cu-900" {...{ [`data-ln-${k}`]: '' }}>00</div><div class="text-[13px] text-muted">{l}</div></div>
           ))}
+        </div>
+        <div data-ln-show="tonight" hidden><div class="num text-[52px] tabular-nums text-cu-900" data-ln-timer>--:--:--</div><div class="text-[13px] text-muted">until we start</div></div>
+        <div data-ln-show="live" hidden class="flex flex-col items-start gap-4">
+          <span class="flex items-center gap-2.5 font-display text-[30px]"><span class="pill-dot size-2.5 rounded-full bg-copper shadow-[0_0_10px_var(--accent)]" aria-hidden="true"></span>Lab Night is live now</span>
+          {SITE.meetUrl && <Button href={SITE.meetUrl} external>Join now</Button>}
         </div>
         <span class="border-t border-line pt-3.5 text-[16px]">21:00 Rome<span data-ln-local="sep" class="text-cu-800"></span> · Google Meet</span>
       </div>

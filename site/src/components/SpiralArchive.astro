@@ -51,7 +51,7 @@ let cy = Math.max(10, sp[1] - 90); if (cy + 240 > 790) cy = 550;
 
   <!-- Timeline, below 640px -->
   <div data-sp-group="timeline" class="sm:hidden [@media(pointer:coarse)]:!block">
-    <ol aria-label={`Lab Notes timeline, ${notes.length} weeks`} class="sp-tl-row flex w-full snap-x snap-mandatory overflow-x-auto pb-2">
+    <ol data-lenis-prevent-wheel aria-label={`Lab Notes timeline, ${notes.length} weeks`} class="sp-tl-row flex w-full snap-x snap-mandatory overflow-x-auto pb-2">
       {notes.map((n) => (
         <li class="shrink-0 snap-center">
           <a href={`/lab-notes/${n.slug}`} {...data(n)} aria-current={n.index === latest.index ? 'true' : undefined} data-latest={n.index === latest.index ? '' : undefined}

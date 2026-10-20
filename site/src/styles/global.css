@@ -335,3 +335,13 @@
 .sp-tl::before { content: ''; position: absolute; left: 0; right: 0; top: 24px; height: 1px; background: var(--copper-400); }
 .sp-tl { padding-inline: 4px; }
 .sp-tl-row { scrollbar-width: thin; }
+
+/* Live dot: the only looping motion besides the hero glow. Pulses only while a session is live. */
+@keyframes ik-pulse { 50% { box-shadow: 0 0 20px 5px var(--accent); } }
+.motion[data-ln-phase='live'] .pill-dot { animation: ik-pulse 2.4s ease-in-out infinite; }
+
+/* Lenis (smooth scroll) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }

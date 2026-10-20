@@ -1,14 +1,14 @@
 ---
 interface Props {
   href?: string; variant?: 'primary' | 'ink' | 'line-ink' | 'line-light' | 'copper' | 'paper'; small?: boolean;
-  class?: string; type?: 'button' | 'submit'; id?: string; external?: boolean;
+  class?: string; type?: 'button' | 'submit'; id?: string; external?: boolean; [attr: `data-${string}`]: string | boolean | undefined; hidden?: boolean;
 }
-const { href, variant = 'primary', small, class: cls = '', type = 'button', id, external } = Astro.props;
+const { href, variant = 'primary', small, class: cls = '', type = 'button', id, external, ...rest } = Astro.props;
 const v = { primary: 'btn-primary', ink: 'btn-ink', 'line-ink': 'btn-line-ink', 'line-light': 'btn-line-light', copper: 'btn-copper', paper: 'btn-paper' }[variant];
 const classes = `btn ${v} ${small ? 'btn-sm' : ''} ${cls}`;
 ---
 {href ? (
-  <a href={href} class={classes} id={id} rel={external ? 'noopener' : undefined}><slot /></a>
+  <a href={href} class={classes} id={id} rel={external ? 'noopener' : undefined} target={external ? '_blank' : undefined} {...rest}><slot /></a>
 ) : (
-  <button type={type} class={classes} id={id}><slot /></button>
+  <button type={type} class={classes} id={id} {...rest}><slot /></button>
 )}

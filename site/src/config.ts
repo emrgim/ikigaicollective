@@ -3,6 +3,8 @@ export const SITE = {
   name: 'Ikigai Collective',
   // Empty until confirmed; the footer hides the link while empty.
   substackUrl: import.meta.env.SUBSTACK_URL ?? 'https://ikigaicollective.substack.com/',
+  // Live Lab Night mode. Set PUBLIC_MEET_URL in the environment; empty hides the Join now button.
+  meetUrl: import.meta.env.PUBLIC_MEET_URL ?? '',
   discordUrl: 'https://discord.gg/4rM6FqjVDE',
   githubUrl: 'https://github.com/ikigaicollective',
   linkedinUrl: 'https://www.linkedin.com/company/joinikigai',
