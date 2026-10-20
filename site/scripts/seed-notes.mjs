@@ -25,9 +25,15 @@ const excerpt = (body) => {
 };
 
 const redirects = [];
+// Substack is the source of truth: these repo notes were replaced by the Substack posts of the same Lab Night (different title/slug).
+const RENAMED = { '2026-10-01-between-ice-and-gas': 'between-frozen-and-gaseous', '2026-10-08-sundoku': 'tsundoku' };
 for (const f of files) {
   const stem = f.replace(/\.md$/, '');
   const slug = stem.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+  if (RENAMED[stem]) {
+    for (const source of [`/lab-notes/${stem}.html`, `/lab-notes/${stem}`, `/lab-notes/${slug}`]) redirects.push({ source, destination: `/lab-notes/${RENAMED[stem]}`, permanent: true });
+    continue;
+  }
   let { meta, body } = parse(fs.readFileSync(path.join(repo, 'src', f), 'utf8'));
   // Lab Notes stay verbatim, em dashes included (the no em dash rule covers new site copy only).
   const cover = `${stem}.jpg`;

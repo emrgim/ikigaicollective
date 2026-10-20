@@ -15,7 +15,7 @@ const og = n.cover ? await getImage({ src: n.cover, format: 'jpg', width: 1200 }
 const words = n.title.split(' ');
 const last = words.pop();
 ---
-<Base title={n.title} description={n.excerpt} image={og ? new URL(og.src, Astro.site).href : undefined}>
+<Base title={n.title} description={n.excerpt} canonical={n.canonical} image={og ? new URL(og.src, Astro.site).href : undefined}>
   <header class="wrap flex flex-col gap-7 pt-[72px]">
     <a href="/lab-notes" class="hit w-fit text-[14px] tracking-[0.2em] no-underline text-cu-700">LAB NOTES</a>
     <span class="text-[15px] text-muted"><span class="text-copper">Week {n.week}</span> · {n.long}</span>

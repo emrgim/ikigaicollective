@@ -22,19 +22,37 @@ async function g(url: string, init: RequestInit = {}) {
   return res.json();
 }
 
-// Add a guest to the Lab Night event. Reads the event, patches ONLY `attendees`, then checks guests still cannot see each other.
+const meetOf = (ev: any): string[] => [ev.hangoutLink, ...(ev.conferenceData?.entryPoints ?? []).map((e: any) => e.uri), ev.location].filter(Boolean).map((u: string) => u.replace(/\/$/, ''));
+
+/** Mail the owner when the Lab Night event looks wrong. Never throws. */
+export async function alert(subject: string, text: string) {
+  console.error('ALERT', subject, text);
+  const to = env('ALERT_EMAIL') ?? env('PARTNER_INBOX');
+  if (to) await sendMail(to, `[ikigaicollective.org] ${subject}`, text).catch(() => {});
+}
+
+// Add a guest to the Lab Night event. Patches ONLY `attendees` (no conferenceDataVersion, so Meet/location/description cannot change).
+// Before and after: the event's Meet link must equal PUBLIC_MEET_URL and guestsCanSeeOtherGuests must be false. Otherwise roll back and alert.
 export async function addGuest(email: string) {
   const cal = encodeURIComponent(env('GOOGLE_CALENDAR_ID') ?? 'primary');
   const id = encodeURIComponent(env('LAB_NIGHT_EVENT_ID')!);
   const base = `https://www.googleapis.com/calendar/v3/calendars/${cal}/events/${id}`;
+  const meet = env('PUBLIC_MEET_URL')?.replace(/\/$/, '');
+  if (!meet) throw new Error('PUBLIC_MEET_URL is not set; refusing to touch the event');
+  const bad = (ev: any) => (ev.guestsCanSeeOtherGuests !== false ? 'guestsCanSeeOtherGuests is not false' : !meetOf(ev).includes(meet) ? `Meet link is not ${meet} (found: ${meetOf(ev).join(', ') || 'none'})` : '');
+
   const ev = await g(base);
+  const before = bad(ev);
+  if (before) { await alert('Lab Night event is wrong, sign-ups paused', `${before}\nEvent ${ev.id}. No guest was added.`); throw new Error(before); }
   const attendees: { email: string }[] = ev.attendees ?? [];
   if (attendees.some((a) => a.email.toLowerCase() === email)) return { added: false };
+
   const out = await g(`${base}?sendUpdates=all`, { method: 'PATCH', body: JSON.stringify({ attendees: [...attendees, { email }] }) });
-  if (out.guestsCanSeeOtherGuests !== false) {
-    // Roll back rather than leave other guests' emails visible.
-    await g(`${base}?sendUpdates=none`, { method: 'PATCH', body: JSON.stringify({ attendees }) });
-    throw new Error('guestsCanSeeOtherGuests is not false on the Lab Night event; guest removed again');
+  const after = bad(out);
+  if (after) {
+    await g(`${base}?sendUpdates=none`, { method: 'PATCH', body: JSON.stringify({ attendees }) }).catch(() => {});
+    await alert('Lab Night event changed after a sign-up, rolled back', `${after}\nEvent ${out.id}. The guest list was restored; check the event by hand (the Meet link must stay David's).`);
+    throw new Error(after);
   }
   return { added: true };
 }

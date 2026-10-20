@@ -21,6 +21,7 @@ td.addRule('figure', { filter: 'figure', replacement: (c) => `\n\n${c.trim()}\n\
 
 const all = fs.readdirSync(notesDir).map((f) => fs.readFileSync(path.join(notesDir, f), 'utf8'));
 const known = new Set(all.map((s) => s.match(/^canonical: "?(.+?)"?$/m)?.[1]).filter(Boolean));
+const days = all.map((s) => ({ t: +new Date(s.match(/^date: (\S+)/m)?.[1]), slug: s.match(/^slug: "?([^"\n]+)"?/m)?.[1] }));
 let week = Math.max(...all.map((s) => +s.match(/^week: (\d+)/m)?.[1] || 0));
 const q = JSON.stringify;
 
@@ -28,10 +29,15 @@ for (const it of items.reverse()) {
   const link = text(it.link);
   const slug = link.split('/p/')[1];
   if (!slug || known.has(link) || fs.existsSync(path.join(notesDir, `${slug}.md`))) continue;
-  const body = td.turndown(text(it['content:encoded'])).replace(/\n{3,}/g, '\n\n');
+  // Same Lab Night already on the site (any source) if its date is within 2 days: never import a second copy.
+  const when = +new Date(text(it.pubDate));
+  const twin = days.find((d) => Math.abs(d.t - when) <= 2 * 864e5);
+  if (twin) { console.log(`skip ${slug}: within 2 days of existing note ${twin.slug}`); continue; }
+  const body = td.turndown(text(it['content:encoded'])).replace(/\n{3,}/g, '\n\n').replace(/^\s*\[\s*!\[[^\]]*\]\([^)]*\)\s*\]\([^)]*\)\s*/, ''); // leading hero image duplicates the cover
   const excerpt = text(it.description) || body.split('\n\n')[0].slice(0, 190);
   const date = new Date(text(it.pubDate)).toISOString().slice(0, 10);
   const img = it.enclosure?.['@url'];
+  days.push({ t: when, slug });
   week += 1; // ponytail: next number in sequence; edit by hand when a post is not a Lab Night note
   console.log(`${write ? 'import' : 'would import'}: ${slug} (${date}, week ${week}, cover ${img ? 'yes' : 'no'}, ${body.length} chars)`);
   if (!write) continue;

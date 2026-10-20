@@ -1,4 +1,4 @@
-// Analytics hook. Phase 5 listens for `ik:event` and forwards to the chosen provider; until then it is a no-op.
+// Analytics hook: scripts/analytics.ts listens for `ik:event` and forwards to Umami (production only).
 export const track = (name: string, props: Record<string, unknown> = {}) =>
   window.dispatchEvent(new CustomEvent('ik:event', { detail: { name, ...props } }));
 

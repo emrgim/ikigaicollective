@@ -4,8 +4,8 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { IS_LIVE } from '../lib/env';
 
-interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string }
-const { overlayNav = false, image, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
+interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string; canonical?: string }
+const { overlayNav = false, image, canonical, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
 const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
 ---
 <!doctype html>
@@ -26,6 +26,7 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{full}</title>
     <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
     {!IS_LIVE && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href="/fonts/charter-regular.woff2" as="font" type="font/woff2" crossorigin />
@@ -33,6 +34,7 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
     <meta property="og:description" content={description} />
     {image && <meta property="og:image" content={image} />}
     <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    {IS_LIVE && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="5c467d4a-bf8a-42c0-a76b-a14753c54749" data-domains="ikigaicollective.org"></script>}
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
@@ -44,6 +46,9 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
     <script>
       import { initLabNight } from '../lib/labnight-dom';
       initLabNight();
+    </script>
+    <script>
+      import '../scripts/analytics';
     </script>
     <script>
       import '../scripts/motion';

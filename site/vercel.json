@@ -243,22 +243,32 @@
     },
     {
       "source": "/lab-notes/2026-10-01-between-ice-and-gas.html",
-      "destination": "/lab-notes/between-ice-and-gas",
+      "destination": "/lab-notes/between-frozen-and-gaseous",
       "permanent": true
     },
     {
       "source": "/lab-notes/2026-10-01-between-ice-and-gas",
-      "destination": "/lab-notes/between-ice-and-gas",
+      "destination": "/lab-notes/between-frozen-and-gaseous",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/between-ice-and-gas",
+      "destination": "/lab-notes/between-frozen-and-gaseous",
       "permanent": true
     },
     {
       "source": "/lab-notes/2026-10-08-sundoku.html",
-      "destination": "/lab-notes/sundoku",
+      "destination": "/lab-notes/tsundoku",
       "permanent": true
     },
     {
       "source": "/lab-notes/2026-10-08-sundoku",
-      "destination": "/lab-notes/sundoku",
+      "destination": "/lab-notes/tsundoku",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/sundoku",
+      "destination": "/lab-notes/tsundoku",
       "permanent": true
     },
     {
