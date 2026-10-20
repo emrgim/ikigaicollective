@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 Object.assign(process.env, { GOOGLE_CLIENT_ID: 'x', GOOGLE_CLIENT_SECRET: 'x', GOOGLE_REFRESH_TOKEN: 'x', LAB_NIGHT_EVENT_ID_PREVIEW: 'ev', SHEET_ID: 's', PUBLIC_MEET_URL: 'https://meet.google.com/yxb-oakp-fov' });
 const { addGuest } = await import('../api/_lib/google.ts');
 
-const good = { id: 'ev', guestsCanSeeOtherGuests: false, hangoutLink: 'https://meet.google.com/yxb-oakp-fov', attendees: [{ email: 'a@x.org' }] };
+const good = { id: 'ev', guestsCanSeeOtherGuests: false, location: 'https://meet.google.com/yxb-oakp-fov', description: 'Join: https://meet.google.com/yxb-oakp-fov', attendees: [{ email: 'a@x.org' }] };
 const run = async (get, patched) => {
   const calls = [];
   globalThis.fetch = async (url, init = {}) => {
@@ -20,13 +20,24 @@ let r = await run(good, { ...good, attendees: [...good.attendees, { email: 'new@
 assert.equal(r.res.added, true);
 assert.ok(r.calls.includes('PATCH event attendees'), 'patches attendees only');
 
-r = await run({ ...good, hangoutLink: 'https://meet.google.com/zzz-zzzz-zzz' }, good);
-assert.ok(r.res instanceof Error && !r.calls.some((c) => c.startsWith('PATCH event')), 'wrong Meet link before: no patch');
+r = await run({ ...good, location: 'Discord', description: 'no link' }, good);
+assert.ok(r.res instanceof Error && !r.calls.some((c) => c.startsWith('PATCH event')), 'no Meet link before: no patch');
 assert.ok(r.calls.includes('POST sheet Alerts-test'), 'alert row written');
 
 r = await run(good, { ...good, guestsCanSeeOtherGuests: true });
 assert.ok(r.res instanceof Error && r.calls.filter((c) => c.startsWith('PATCH event')).length === 2, 'changed after patch: rolled back');
 assert.ok(r.calls.includes('POST sheet Alerts-test'));
+
+r = await run(good, { ...good, location: 'https://meet.google.com/zzz-zzzz-zzz' });
+assert.ok(r.res instanceof Error && r.calls.filter((c) => c.startsWith('PATCH event')).length === 2, 'link changed after patch: rolled back');
+
+r = await run(good, { ...good, conferenceData: { x: 1 } });
+assert.ok(r.res instanceof Error, 'conferenceData appeared: rolled back');
+
+process.env.PUBLIC_SITE_ENV = 'production'; process.env.LAB_NIGHT_EVENT_ID = 'ev'; process.env.PUBLIC_MEET_URL = 'https://meet.google.com/other-link';
+r = await run(good, good);
+assert.ok(r.res instanceof Error && !r.calls.some((c) => c.startsWith('PATCH event')), 'production: link must equal PUBLIC_MEET_URL');
+delete process.env.PUBLIC_SITE_ENV;
 
 r = await run({ ...good, attendees: [{ email: 'NEW@x.org' }] }, good);
 assert.equal(r.res.added, false);

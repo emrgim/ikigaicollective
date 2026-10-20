@@ -25,7 +25,9 @@ export async function g(url: string, init: RequestInit = {}) {
   return res.json();
 }
 
-const meetOf = (ev: any): string[] => [ev.hangoutLink, ...(ev.conferenceData?.entryPoints ?? []).map((e: any) => e.uri), ev.location].filter(Boolean).map((u: string) => u.replace(/\/$/, ''));
+// David's Meet link lives in the event location (fallback: description), not in conferenceData.
+const MEET = /https:\/\/meet\.google\.com\/[a-z0-9-]+/i;
+export const meetLink = (ev: any): string | undefined => (String(ev.location ?? '').match(MEET) ?? String(ev.description ?? '').match(MEET))?.[0].toLowerCase();
 
 /** Log to the Alerts tab (the sheet's own "notify me right away" rule emails the owner). Never throws. */
 export async function alert(subject: string, text: string) {
@@ -33,24 +35,25 @@ export async function alert(subject: string, text: string) {
   await appendRow(tab('Alerts'), [new Date().toISOString(), subject, text]).catch(() => {});
 }
 
-// Add a guest to the Lab Night event. Patches ONLY `attendees` (no conferenceDataVersion, so Meet/location/description cannot change).
-// Before and after: the event's Meet link must equal PUBLIC_MEET_URL and guestsCanSeeOtherGuests must be false. Otherwise roll back and alert.
+// Add a guest to the Lab Night event. Patches ONLY `attendees` (no conferenceDataVersion, so conferenceData/location/description cannot change).
+// Before the patch the Meet link must exist (and in production equal PUBLIC_MEET_URL) and guests must be hidden.
+// After it the link, location, description and conferenceData must be identical and guests still hidden. Otherwise roll back and alert.
 export async function addGuest(email: string) {
   const cal = encodeURIComponent(env('GOOGLE_CALENDAR_ID') ?? 'primary');
   const id = encodeURIComponent((live() ? env('LAB_NIGHT_EVENT_ID') : env('LAB_NIGHT_EVENT_ID_PREVIEW'))!);
   const base = `https://www.googleapis.com/calendar/v3/calendars/${cal}/events/${id}`;
-  const meet = env('PUBLIC_MEET_URL')?.replace(/\/$/, '');
-  if (!meet) throw new Error('PUBLIC_MEET_URL is not set; refusing to touch the event');
-  const bad = (ev: any) => (ev.guestsCanSeeOtherGuests !== false ? 'guestsCanSeeOtherGuests is not false' : !meetOf(ev).includes(meet) ? `Meet link is not ${meet} (found: ${meetOf(ev).join(', ') || 'none'})` : '');
+  const expected = env('PUBLIC_MEET_URL')?.replace(/\/$/, '').toLowerCase();
 
   const ev = await g(base);
-  const before = bad(ev);
+  const link = meetLink(ev);
+  const before = ev.guestsCanSeeOtherGuests !== false ? 'guestsCanSeeOtherGuests is not false' : !link ? 'no Meet link found in the event location or description' : live() && link !== expected ? `Meet link ${link} is not PUBLIC_MEET_URL (${expected})` : '';
   if (before) { await alert('Lab Night event is wrong, sign-ups paused', `${before}\nEvent ${ev.id}. No guest was added.`); throw new Error(before); }
   const attendees: { email: string }[] = ev.attendees ?? [];
   if (attendees.some((a) => a.email.toLowerCase() === email)) return { added: false };
 
   const out = await g(`${base}?sendUpdates=all`, { method: 'PATCH', body: JSON.stringify({ attendees: [...attendees, { email }] }) });
-  const after = bad(out);
+  const same = (k: string) => JSON.stringify(out[k] ?? null) === JSON.stringify(ev[k] ?? null);
+  const after = out.guestsCanSeeOtherGuests !== false ? 'guestsCanSeeOtherGuests is not false' : meetLink(out) !== link ? `Meet link changed to ${meetLink(out)}` : !['location', 'description', 'conferenceData'].every(same) ? 'location, description or conferenceData changed' : '';
   if (after) {
     await g(`${base}?sendUpdates=none`, { method: 'PATCH', body: JSON.stringify({ attendees }) }).catch(() => {});
     await alert('Lab Night event changed after a sign-up, rolled back', `${after}\nEvent ${out.id}. The guest list was restored; check the event by hand (the Meet link must stay David's).`);
