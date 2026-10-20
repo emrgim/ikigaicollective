@@ -51,7 +51,8 @@ export async function GET(req: Request) {
   await step('9_discord', async () => {
     const set = Object.fromEntries(['DISCORD_BOT_TOKEN', 'DISCORD_GUILD_ID', 'DISCORD_LOOP_CHANNEL_ID', 'DISCORD_WEBSITE_TAG_ID'].map((k) => [k, !!process.env[k]]));
     const res = await studio();
-    return { envPresent: set, status: res.status, body: await res.json() };
+    const names = Object.keys(process.env).filter((k) => /LAB|DISCORD|FORMS|MEET|SITE|TURN|GITHUB|GOOGLE|SHEET|CRON|VERCEL_ENV|VERCEL_GIT_COMMIT_SHA/.test(k)).sort(); // names only, never values
+    return { vercelEnv: process.env.VERCEL_ENV, commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7), envNames: names, envPresent: set, status: res.status, body: await res.json() };
   });
   return out(r);
 }
