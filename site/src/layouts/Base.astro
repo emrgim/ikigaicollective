@@ -11,6 +11,17 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
 <html lang="en" data-theme="ikigai-night">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      // Decide motion before first paint. No class = fully static page (also what no-JS visitors get).
+      try {
+        var d = document.documentElement; d.classList.add('js');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('rm');
+        else {
+          d.classList.add('motion');
+          if (!sessionStorage.getItem('ik-draw')) { d.classList.add('draw-mark'); sessionStorage.setItem('ik-draw', '1'); }
+        }
+      } catch (e) {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{full}</title>
     <meta name="description" content={description} />
@@ -31,6 +42,9 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
     <script>
       import { initLabNight } from '../lib/labnight-dom';
       initLabNight();
+    </script>
+    <script>
+      import '../scripts/motion';
     </script>
   </body>
 </html>

@@ -4,10 +4,12 @@ interface Props {
   bg?: string; color?: string; pad?: string; id?: string; labelledby?: string; label?: string;
   class?: string; inner?: string; max?: string; theme?: string;
 }
+// Start/end colours of the band, read by the Night to Dawn seams.
+const tokens = (b: string) => b.match(/var\(--[a-z0-9-]+\)|#[0-9a-f]{3,8}/gi) ?? [];
 const { bg = 'var(--bg)', color, pad = '140px', id, labelledby, label, class: cls = '', inner = '', max, theme } = Astro.props;
 ---
-<section data-theme={theme} id={id} aria-labelledby={labelledby} aria-label={label} class={cls} style={`background:${bg};${color ? `color:${color};` : ''}`}>
-  <div class={`wrap section-y ${inner}`} style={`--py:${pad};${max ? `max-width:${max};` : ''}`}>
+<section data-bg-start={tokens(bg)[0]} data-bg-end={tokens(bg).at(-1)} data-theme={theme} id={id} aria-labelledby={labelledby} aria-label={label} class={`relative ${cls}`} style={`background:${bg};${color ? `color:${color};` : ''}`}>
+  <div class={`wrap section-y relative ${inner}`} style={`--py:${pad};${max ? `max-width:${max};` : ''}`}>
     <slot />
   </div>
 </section>

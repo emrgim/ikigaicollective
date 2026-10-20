@@ -2,15 +2,15 @@
 // Geometry copied from brand/output-set (master, and small for under 32px). Never redraw.
 interface Props {
   size?: number; class?: string; variant?: 'master' | 'small';
-  strokeWidth?: number; dot?: { x?: number; y?: number; r?: number; fill?: string };
+  draw?: boolean; strokeWidth?: number; dot?: { x?: number; y?: number; r?: number; fill?: string };
 }
-const { size = 32, class: cls, variant, strokeWidth, dot = {} } = Astro.props;
+const { size = 32, class: cls, variant, strokeWidth, dot = {}, draw } = Astro.props;
 const small = (variant ?? (size < 32 ? 'small' : 'master')) === 'small';
 ---
-<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" class={cls}>
+<svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true" class={cls} data-draw={draw ? '' : undefined}>
   <g fill="none" stroke="currentColor" stroke-width={strokeWidth ?? (small ? 4 : 5)} stroke-linecap="round">
-    <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39 A15 15 0 0 1 47 39" />
-    <path d={small ? 'M47 39 L47 26' : 'M47 39 L47 25'} />
+    <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39 A15 15 0 0 1 47 39" pathLength="1" />
+    <path d={small ? 'M47 39 L47 26' : 'M47 39 L47 25'} pathLength="1" />
   </g>
   <circle cx={dot.x ?? 47} cy={dot.y ?? (small ? 13 : 13.5)} r={dot.r ?? (small ? 4.2 : 4.6)} fill={dot.fill ?? 'currentColor'} />
 </svg>

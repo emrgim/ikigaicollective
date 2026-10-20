@@ -3,6 +3,7 @@ import Mark from './Mark.astro';
 import { NAV_LINKS } from '../config';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = path === '/';
 const active = (href: string) => path === href || path.startsWith(href + '/');
 ---
 <div class="drawer drawer-end relative z-20">
@@ -10,7 +11,7 @@ const active = (href: string) => path === href || path.startsWith(href + '/');
   <div class="drawer-content min-w-0">
     <header class="wrap flex items-center justify-between gap-x-8 py-6">
       <a href="/" class="hit flex items-center gap-3 no-underline text-copper" aria-label="Ikigai Collective, home">
-        <Mark size={32} variant="small" />
+        <Mark size={32} variant="small" draw={!isHome} />
         <span class="font-display text-[14px] tracking-[0.24em] text-fg">IKIGAI COLLECTIVE</span>
       </a>
       <nav aria-label="Main" class="hidden gap-x-8 text-[15px] lg:flex">

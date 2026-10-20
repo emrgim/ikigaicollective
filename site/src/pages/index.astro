@@ -10,7 +10,7 @@ import DiscordIcon from '../components/DiscordIcon.astro';
 import { SITE } from '../config';
 import NoteCover from '../components/NoteCover.astro';
 import { getNotes, words } from '../lib/notes';
-import { spiral } from '../lib/spiral';
+import SpiralArchive from '../components/SpiralArchive.astro';
 import stats from '../content/site/stats.json';
 import faq from '../content/site/faq.json';
 import horizon from '../content/site/horizon.json';
@@ -29,14 +29,6 @@ const labels = [
   ['What the world needs', 418, 256, 120], ['What you can be paid for', 205, 470, 150],
 ];
 
-// Spiral archive: one point per note, oldest at the centre.
-const { pt, path } = spiral(400, 400, 12, 22);
-const t0 = 1.4, step = 0.6, tEnd = t0 + step * (notes.length - 1);
-const dots = notes.map((n, i) => ({ n, i, p: pt(t0 + step * i) }));
-const sp = pt(tEnd);
-let cardX = sp[0] + 22; if (cardX + 250 > 790) cardX = sp[0] - 272;
-let cardY = Math.max(10, sp[1] - 90); if (cardY + 240 > 790) cardY = 550;
-
 const stage = ['Implement', 'Measure', 'Shipped'];
 const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5 days ago', 'An entrepreneur · 1 week ago'];
 ---
@@ -49,8 +41,8 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       <h1 id="hero-h" class="t-hero">Life design<br /><span class="em">through</span><br />experimentation.</h1>
     </div>
     <div aria-hidden="true" class="relative mt-2 size-[210px] self-center">
-      <Mark size={210} strokeWidth={3.2} class="text-cu-900" dot={{ fill: 'var(--paper)' }} />
-      <div class="absolute left-[140px] top-[29px] size-7 rounded-full" style="box-shadow: 0 0 60px 26px color-mix(in srgb, var(--copper-900) 55%, transparent)"></div>
+      <Mark size={210} strokeWidth={3.2} class="text-cu-900" dot={{ fill: 'var(--paper)' }} draw />
+      <div data-draw-glow class="absolute left-[140px] top-[29px] size-7 rounded-full" style="box-shadow: 0 0 60px 26px color-mix(in srgb, var(--copper-900) 55%, transparent)"></div>
     </div>
     <div class="relative flex flex-wrap justify-center gap-4 px-6 pb-16 pt-3">
       <Button href="/lab-night" variant="ink">Come to Lab Night</Button>
@@ -145,30 +137,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       </dl>
       <a href="/lab-notes" class="link-u self-start text-[16px]">Browse every note</a>
     </div>
-    <div class="relative aspect-square w-full max-w-[720px] overflow-hidden lg:flex-[0_1_720px]" id="spiral">
-      <div aria-hidden="true" class="absolute inset-0 rounded-full" style="background: radial-gradient(circle, var(--copper-100) 0%, transparent 62%)"></div>
-      <svg aria-hidden="true" viewBox="0 0 800 800" class="absolute inset-0 size-full">
-        <path d={path(t0, tEnd)} fill="none" stroke="var(--copper-400)" stroke-width="1.6" stroke-linecap="round" />
-        <path d={path(tEnd, tEnd + 1.9)} fill="none" stroke="var(--copper-300)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 7" />
-      </svg>
-      {dots.map(({ n, i, p }) => {
-        const last = i === notes.length - 1;
-        return (
-          <a href={`/lab-notes/${n.slug}`} aria-label={`Week ${n.week}: ${n.title}`} class="absolute flex size-7 items-center justify-center"
-            style={`left:${((p[0] - 14) / 8).toFixed(2)}%;top:${((p[1] - 14) / 8).toFixed(2)}%`}>
-            <span class="block rounded-full" style={`width:${last ? 16 : 8}px;height:${last ? 16 : 8}px;background:${last ? 'var(--copper-900)' : 'var(--accent)'};box-shadow:${last ? '0 0 18px 6px color-mix(in srgb, var(--copper-900) 55%, transparent)' : 'none'}`}></span>
-          </a>
-        );
-      })}
-      <a href={`/lab-notes/${latest.slug}`} class="absolute hidden w-[250px] flex-col border border-cu-200 bg-card text-fg no-underline md:flex"
-        style={`left:${(cardX / 8).toFixed(2)}%;top:${(cardY / 8).toFixed(2)}%`}>
-        <NoteCover note={latest} widths={[250, 500]} sizes="250px" class="!aspect-[250/140]" />
-        <span class="flex flex-col gap-1.5 px-4 pb-4 pt-3.5">
-          <span class="text-[13px] text-muted"><span class="text-copper">Week {latest.week}</span> · {latest.short}</span>
-          <span class="font-display text-[21px] leading-[1.25]">{latest.title}</span>
-        </span>
-      </a>
-    </div>
+    <SpiralArchive notes={notes} />
   </Section>
 
   <!-- 7 Inside the studio: placeholders until the Discord feed (Phase 5) -->
@@ -267,6 +236,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
 
   <script>
     import '../scripts/ikigai';
+    import '../scripts/spiral-archive';
     import '../scripts/copy';
     import '../scripts/forms';
   </script>
