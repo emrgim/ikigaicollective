@@ -282,6 +282,32 @@
 .btn.btn-copper { --btn-bg: var(--accent); --btn-fg: var(--bg); --btn-border: var(--accent); }
 .btn.btn-paper { --btn-bg: var(--copper-900); --btn-fg: var(--ink); --btn-border: var(--ink); }
 
+/* Segmented toggles (aria-pressed). */
+.btn.seg { --btn-bg: transparent; --btn-fg: var(--fg); --btn-border: var(--accent); }
+.btn.seg[aria-pressed='true'] { --btn-bg: var(--accent); --btn-fg: var(--bg); }
+.btn.seg-light { --btn-bg: transparent; --btn-fg: var(--fg); --btn-border: transparent; border-radius: 0; }
+.btn.seg-light[aria-pressed='true'] { --btn-bg: var(--fg); --btn-fg: var(--bg); }
+
+/* Ikigai diagram states. Server renders "all four meet"; ikigai.ts flips data-lit / data-state. */
+.ik-circle { background: color-mix(in srgb, var(--copper-900) var(--lit, 30%), transparent); mix-blend-mode: screen; transition: background 0.3s; }
+.ik-circle[data-lit='off'] { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+#ik-glow { transition: opacity 0.3s; }
+#ik-diagram:not([data-state='core']):where([data-state]) #ik-glow { opacity: 0; }
+.ik-core { background: var(--night-1); color: var(--fg); }
+.ik-core[aria-pressed='true'] { background: var(--copper-900); color: var(--bg); }
+.ik-label[aria-pressed='true'] { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 6px; }
+
+/* How it works: which part of the mark is lit. Default (and no JS) is Curiosity. */
+#values-art path[data-inner] { stroke: var(--copper-300); }
+#values-art path[data-outer] { stroke: var(--copper-300); }
+#values-art [data-ring] { border-color: var(--copper-200); }
+#values-art:not([data-v]) path[data-inner], #values-art[data-v='c'] path[data-inner] { stroke: var(--copper-900); }
+#values-art[data-v='a'] path[data-outer] { stroke: var(--copper-900); }
+#values-art[data-v='m'] [data-ring] { border-color: var(--copper-900); box-shadow: 0 0 40px 4px color-mix(in srgb, var(--copper-900) 25%, transparent); }
+
+/* Join steps. */
+[data-step][data-complete='true'] [data-mark] { background: var(--accent); color: var(--bg); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;

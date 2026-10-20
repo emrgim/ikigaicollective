@@ -44,8 +44,8 @@ const first = values[0];
       <h2 id="h3" class="t-lg">Three values.<br /><span class="em">One loop.</span></h2>
       <div role="group" aria-label="Values" class="flex flex-wrap gap-2.5">
         {values.map((v, i) => (
-          <button type="button" data-value={v.k} aria-pressed={i === 0 ? 'true' : 'false'}
-            class={`btn btn-sm min-h-11 border-copper ${v.k === 'm' ? 'border-dashed' : ''}`}>{v.name}</button>
+          <button type="button" data-value={v.k} data-role={v.role} data-quote={v.quote} data-note={v.note} aria-pressed={i === 0 ? 'true' : 'false'}
+            class={`btn seg btn-sm min-h-11 ${v.k === 'm' ? 'border-dashed' : ''}`}>{v.name}</button>
         ))}
       </div>
       <div aria-live="polite" class="flex min-h-[200px] flex-col gap-3">
@@ -55,11 +55,11 @@ const first = values[0];
       </div>
     </div>
     <div aria-hidden="true" class="relative flex min-h-[480px] flex-[1_1_440px] items-center justify-center" id="values-art">
-      <div class="absolute aspect-square w-[min(460px,100%)] rounded-full border border-dashed border-cu-200" data-ring></div>
+      <div class="absolute aspect-square w-[min(460px,100%)] rounded-full border border-dashed transition-[border-color,box-shadow] duration-300" data-ring></div>
       <svg width="380" height="380" viewBox="0 0 64 64" class="relative max-w-[80%]">
         <g fill="none" stroke-linecap="round">
-          <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39" stroke="var(--copper-900)" stroke-width="2" data-inner />
-          <path d="M17 39 A15 15 0 0 1 47 39 L47 25" stroke="var(--copper-300)" stroke-width="2" data-outer />
+          <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39" stroke-width="2" data-inner />
+          <path d="M17 39 A15 15 0 0 1 47 39 L47 25" stroke-width="2" data-outer />
         </g>
         <circle cx="47" cy="13.5" r="2.8" fill="var(--copper-900)" />
       </svg>
@@ -94,4 +94,8 @@ const first = values[0];
     <h2 id="h6" class="flex-[1_1_560px] font-display text-[clamp(38px,5vw,72px)] font-normal leading-[1.05]">See it working,<br /><span class="italic text-cu-200">on a Thursday.</span></h2>
     <Button href="/lab-night" variant="ink" class="px-8 text-[17px]">Come to Lab Night</Button>
   </Section>
+
+  <script>
+    import '../scripts/values';
+  </script>
 </Base>

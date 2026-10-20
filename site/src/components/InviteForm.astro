@@ -15,6 +15,6 @@ const { name = false, intro, foot = 'Protected by an invisible spam check.', suc
     <input id={`${id}-em`} name="email" type="email" required autocomplete="email" placeholder="you@example.com" class="field" />
     <button type="submit" class="btn btn-ink mt-1.5 min-h-[52px] w-full text-[17px]">Send me the invite</button>
   </div>
-  <p data-invite-success hidden class="border border-[var(--success)] p-4 text-[17px] leading-[1.5] text-[var(--success)]" role="status">{success}</p>
+  <p data-invite-success hidden tabindex="-1" class="border border-[var(--success)] p-4 text-[17px] leading-[1.5] text-[var(--success)]" role="status">{success}</p>
   <span class="text-[13px] text-muted">{foot}</span>
 </form>

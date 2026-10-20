@@ -24,6 +24,7 @@ import copy from '../content/site/copy.json';
         ].map((s) => (
           <li class="flex flex-wrap items-center gap-x-12 gap-y-6 border border-cu-200 p-8 md:p-10" style="background:color-mix(in srgb, var(--card) 85%, transparent)" data-step={s.n}>
             <div aria-hidden="true" class="num flex size-[72px] flex-none items-center justify-center rounded-full border border-copper text-[30px]" data-mark>{s.n}</div>
+            <span class="sr-only" data-sr></span>
             <div class="flex flex-[1_1_360px] flex-col gap-2">
               <h2 class="font-display text-[32px] font-normal">{s.h}</h2>
               <p class={`text-[17px] leading-[1.55] ${s.quote ? 'text-cu-800' : ''}`}>{s.p}</p>
@@ -31,10 +32,10 @@ import copy from '../content/site/copy.json';
             {s.form && (
               <form data-invite-form method="post" action="/api/invite" class="flex flex-[1_1_380px] flex-wrap items-end gap-2.5">
                 <div class="flex flex-[1_1_220px] flex-col gap-2"><label for="join-em" class="text-[14px]">Email</label><input id="join-em" name="email" type="email" required placeholder="you@example.com" class="field" style="border-color:var(--muted)" /></div>
-                <button type="submit" class="btn btn-primary min-h-[52px]">Send me the invite</button>
+                <button type="submit" class="btn btn-primary min-h-[52px]"><span data-action-label data-label="Send me the invite" data-done-label="Invite sent">Send me the invite</span></button>
               </form>
             )}
-            {s.n === 2 && <Button href={SITE.discordUrl} external class="min-h-[52px]"><DiscordIcon />Open the Discord</Button>}
+            {s.n === 2 && <a href={SITE.discordUrl} target="_blank" rel="noopener" data-discord class="btn btn-primary min-h-[52px]"><DiscordIcon /><span data-action-label data-label="Open the Discord" data-done-label="Joined">Open the Discord</span></a>}
             {s.n === 3 && <button type="button" data-copy="Hi, I'm [name]. I'm working on [project]. I'm curious about [question]." class="btn btn-line-light min-h-[52px]">Copy the prompt</button>}
           </li>
         ))}
@@ -52,4 +53,10 @@ import copy from '../content/site/copy.json';
       </div>
     </section>
   </div>
+
+  <script>
+    import '../scripts/join';
+    import '../scripts/copy';
+    import '../scripts/forms';
+  </script>
 </Base>

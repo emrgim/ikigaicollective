@@ -18,9 +18,9 @@ const all = [...notes].reverse();
         <h1 id="h1" class="t-page-m">The open<br /><span class="em">lab notebook</span></h1>
         <p class="max-w-[560px] text-[20px] leading-[1.6]">Weekly notes from every Lab Night since the first. What was tried, what worked, what didn't.</p>
       </div>
-      <div role="group" aria-label="View" class="flex border border-cu-200" id="view-toggle">
-        <button type="button" aria-pressed="true" data-view="grid" class="btn btn-sm btn-primary rounded-none border-0">Covers</button>
-        <button type="button" aria-pressed="false" data-view="list" class="btn btn-sm btn-ghost rounded-none border-0">Index</button>
+      <div role="group" aria-label="View" class="flex border border-cu-200" id="view-toggle" hidden>
+        <button type="button" aria-pressed="true" data-view="grid" class="btn seg-light btn-sm">Covers</button>
+        <button type="button" aria-pressed="false" data-view="list" class="btn seg-light btn-sm">Index</button>
       </div>
     </div>
   </section>
@@ -39,7 +39,7 @@ const all = [...notes].reverse();
   </section>
 
   <section aria-label="All notes" style="background:var(--night-2)">
-    <div class="wrap pb-[140px] pt-[100px]" id="all-notes" data-view="grid">
+    <div class="wrap pb-[140px] pt-[100px]" id="all-notes">
       <div data-pane="grid" class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-7">
         {all.map((n) => (
           <a href={`/lab-notes/${n.slug}`} class="flex flex-col gap-3 no-underline">
@@ -68,4 +68,8 @@ const all = [...notes].reverse();
       <Button href="/lab-night" variant="paper">Come to the next one</Button>
     </div>
   </Section>
+
+  <script>
+    import '../../scripts/notes-view';
+  </script>
 </Base>

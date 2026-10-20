@@ -26,6 +26,7 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-fg focus:px-4 focus:py-2 focus:text-bg">Skip to content</a>
     <div class={overlayNav ? 'absolute inset-x-0 top-0 z-30' : 'relative z-30'}><Nav /></div>
     <main id="main"><slot /></main>
+    <div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
     <Footer />
     <script>
       import { initLabNight } from '../lib/labnight-dom';

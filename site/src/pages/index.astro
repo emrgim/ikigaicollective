@@ -22,6 +22,7 @@ const latest = notes[notes.length - 1];
 
 // Ikigai diagram: static "all four meet" state. Interaction is Phase 3.
 const pct = (v: number, of = 560) => `${((v / of) * 100).toFixed(2)}%`;
+const keys = ['love', 'good', 'need', 'paid'] as const;
 const circles = [[130, 0], [0, 130], [260, 130], [130, 260]];
 const labels = [
   ['What you love', 205, 46, 150], ['What you are good at', 22, 256, 120],
@@ -76,17 +77,17 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       <p class="max-w-[480px] text-[21px] leading-[1.6]" data-ik-text>{copy.ikigai.core[1]}</p>
       <span class="text-[14px] text-muted">Tap a circle.</span>
     </div>
-    <div id="ik-diagram" class="relative aspect-square w-[560px] max-w-full flex-none [container-type:inline-size] [--lit:30%] max-sm:[--lit:14%]">
+    <div id="ik-diagram" class="relative aspect-square w-[560px] max-w-full flex-none [container-type:inline-size] [--lit:30%] max-sm:[--lit:14%]" data-state="core">
       {circles.map(([x, y], i) => (
-        <div aria-hidden="true" class="absolute rounded-full border border-cu-700" data-ik-circle={['love', 'good', 'need', 'paid'][i]}
-          style={`left:${pct(x)};top:${pct(y)};width:${pct(300)};height:${pct(300)};background:color-mix(in srgb, var(--copper-900) var(--lit, 30%), transparent);mix-blend-mode:screen`}></div>
+        <div aria-hidden="true" class="ik-circle absolute rounded-full border border-cu-700" data-lit="on" data-ik-circle={keys[i]}
+          style={`left:${pct(x)};top:${pct(y)};width:${pct(300)};height:${pct(300)}`}></div>
       ))}
-      <div aria-hidden="true" class="absolute rounded-full" style={`left:${pct(250)};top:${pct(250)};width:${pct(60)};height:${pct(60)};box-shadow:0 0 12.5cqw 6cqw color-mix(in srgb, var(--paper) 55%, transparent)`}></div>
+      <div id="ik-glow" aria-hidden="true" class="absolute rounded-full" style={`left:${pct(250)};top:${pct(250)};width:${pct(60)};height:${pct(60)};box-shadow:0 0 12.5cqw 6cqw color-mix(in srgb, var(--paper) 55%, transparent)`}></div>
       {labels.map(([t, x, y, w], i) => (
-        <button type="button" data-ik={['love', 'good', 'need', 'paid'][i]} class="absolute min-h-11 cursor-pointer border-0 bg-transparent px-1 text-[13px] leading-[1.25] text-fg sm:text-[16px]"
+        <button type="button" data-ik={keys[i]} data-label={copy.ikigai[keys[i]][0]} data-text={copy.ikigai[keys[i]][1]} aria-pressed="false" class="ik-label absolute min-h-11 cursor-pointer border-0 bg-transparent px-1 text-[13px] leading-[1.25] text-fg sm:text-[16px]"
           style={`left:${pct(x as number)};top:${pct(y as number)};width:${pct(w as number)}`}>{t}</button>
       ))}
-      <button type="button" data-ik="core" aria-pressed="true" class="absolute min-h-11 cursor-pointer rounded-[22px] border border-cu-900 bg-cu-900 text-[15px] tracking-[0.06em] text-bg"
+      <button type="button" data-ik="core" data-label={copy.ikigai.core[0]} data-text={copy.ikigai.core[1]} aria-pressed="true" class="ik-core absolute min-h-11 cursor-pointer rounded-[22px] border border-cu-900 text-[15px] tracking-[0.06em]"
         style={`left:${pct(236)};top:${pct(258)};width:${pct(88)}`}>Ikigai</button>
     </div>
   </Section>
@@ -263,4 +264,10 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
       <button type="button" data-copy={copy.invitation} class="btn btn-copper min-h-12">Copy the invitation</button>
     </div>
   </Section>
+
+  <script>
+    import '../scripts/ikigai';
+    import '../scripts/copy';
+    import '../scripts/forms';
+  </script>
 </Base>
