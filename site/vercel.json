@@ -1,9 +1,13 @@
 {
-  "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
     {
       "source": "/lab-notes/2026-04-22-a-container-for-experiments.html",
+      "destination": "/lab-notes/a-container-for-experiments",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-04-22-a-container-for-experiments",
       "destination": "/lab-notes/a-container-for-experiments",
       "permanent": true
     },
@@ -13,7 +17,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-04-29-start-from-what-you-are-good-at",
+      "destination": "/lab-notes/start-from-what-you-are-good-at",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-05-06-the-lab-is-the-work.html",
+      "destination": "/lab-notes/the-lab-is-the-work",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-05-06-the-lab-is-the-work",
       "destination": "/lab-notes/the-lab-is-the-work",
       "permanent": true
     },
@@ -23,7 +37,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-05-14-the-freedom-and-the-burden",
+      "destination": "/lab-notes/the-freedom-and-the-burden",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-05-21-what-is-the-question.html",
+      "destination": "/lab-notes/what-is-the-question",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-05-21-what-is-the-question",
       "destination": "/lab-notes/what-is-the-question",
       "permanent": true
     },
@@ -33,7 +57,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-05-28-misurare-noi-stessi",
+      "destination": "/lab-notes/misurare-noi-stessi",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-06-04-one-human-five-ais.html",
+      "destination": "/lab-notes/one-human-five-ais",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-06-04-one-human-five-ais",
       "destination": "/lab-notes/one-human-five-ais",
       "permanent": true
     },
@@ -43,7 +77,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-06-11-first-draft-of-our-values",
+      "destination": "/lab-notes/first-draft-of-our-values",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-06-18-a-studio-of-artists.html",
+      "destination": "/lab-notes/a-studio-of-artists",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-06-18-a-studio-of-artists",
       "destination": "/lab-notes/a-studio-of-artists",
       "permanent": true
     },
@@ -53,7 +97,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-06-25-agency-not-meaning",
+      "destination": "/lab-notes/agency-not-meaning",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-07-02-curiosity-agency-compassion.html",
+      "destination": "/lab-notes/curiosity-agency-compassion",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-07-02-curiosity-agency-compassion",
       "destination": "/lab-notes/curiosity-agency-compassion",
       "permanent": true
     },
@@ -63,7 +117,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-07-04-the-doors-are-open",
+      "destination": "/lab-notes/the-doors-are-open",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-07-09-who-walked-in.html",
+      "destination": "/lab-notes/who-walked-in",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-07-09-who-walked-in",
       "destination": "/lab-notes/who-walked-in",
       "permanent": true
     },
@@ -73,7 +137,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-07-16-the-baton-passes",
+      "destination": "/lab-notes/the-baton-passes",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-07-23-luminaries.html",
+      "destination": "/lab-notes/luminaries",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-07-23-luminaries",
       "destination": "/lab-notes/luminaries",
       "permanent": true
     },
@@ -83,7 +157,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-07-30-hiding-what-you-know",
+      "destination": "/lab-notes/hiding-what-you-know",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-08-06-proof-of-continuity.html",
+      "destination": "/lab-notes/proof-of-continuity",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-08-06-proof-of-continuity",
       "destination": "/lab-notes/proof-of-continuity",
       "permanent": true
     },
@@ -93,7 +177,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-08-13-immodest-and-humble",
+      "destination": "/lab-notes/immodest-and-humble",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-08-20-nothing-new-under-the-sun.html",
+      "destination": "/lab-notes/nothing-new-under-the-sun",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-08-20-nothing-new-under-the-sun",
       "destination": "/lab-notes/nothing-new-under-the-sun",
       "permanent": true
     },
@@ -103,7 +197,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-08-27-nobody-makes-a-toaster",
+      "destination": "/lab-notes/nobody-makes-a-toaster",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-09-03-the-millicorn.html",
+      "destination": "/lab-notes/the-millicorn",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-09-03-the-millicorn",
       "destination": "/lab-notes/the-millicorn",
       "permanent": true
     },
@@ -113,7 +217,17 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-09-10-gods-of-sand",
+      "destination": "/lab-notes/gods-of-sand",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-09-17-ten-thousand-agents.html",
+      "destination": "/lab-notes/ten-thousand-agents",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-09-17-ten-thousand-agents",
       "destination": "/lab-notes/ten-thousand-agents",
       "permanent": true
     },
@@ -123,12 +237,27 @@
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-09-24-one-chopstick",
+      "destination": "/lab-notes/one-chopstick",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-10-01-between-ice-and-gas.html",
       "destination": "/lab-notes/between-ice-and-gas",
       "permanent": true
     },
     {
+      "source": "/lab-notes/2026-10-01-between-ice-and-gas",
+      "destination": "/lab-notes/between-ice-and-gas",
+      "permanent": true
+    },
+    {
       "source": "/lab-notes/2026-10-08-sundoku.html",
+      "destination": "/lab-notes/sundoku",
+      "permanent": true
+    },
+    {
+      "source": "/lab-notes/2026-10-08-sundoku",
       "destination": "/lab-notes/sundoku",
       "permanent": true
     },
@@ -146,6 +275,22 @@
       "source": "/privacy.html",
       "destination": "/privacy",
       "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:path(.*)\\.html",
+      "destination": "/:path",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/:path((?!.*\\.).+)",
+      "destination": "/:path.html"
     }
   ]
 }

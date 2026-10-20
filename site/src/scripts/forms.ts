@@ -1,4 +1,5 @@
 import { announce, track } from '../lib/track';
+import { IS_LIVE } from '../lib/env';
 
 // Invite and partner forms. They post JSON to the form's action. Until the endpoints exist (Phase 5)
 // a 404 gets an honest "not open yet" message instead of a fake success.
@@ -22,11 +23,13 @@ document.querySelectorAll<HTMLFormElement>('form[data-invite-form], form[data-pa
     submit.textContent = 'Sending...';
     note.hidden = true;
     try {
-      const res = await fetch(form.action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+      // Test mode (anything but production): behave like a success, send and store nothing.
+      const res = !IS_LIVE ? { ok: true, status: 200 } : await fetch(form.action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
       if (res.status === 404) throw Object.assign(new Error('not-open'), { soft: true });
       if (!res.ok) throw new Error(String(res.status));
       track(`${kind}_success`);
       if (success) { fields.hidden = true; success.hidden = false; success.focus?.(); } else { submit.textContent = 'Invite sent'; }
+      if (!IS_LIVE) { note.textContent = 'Test mode: nothing was sent or stored.'; note.hidden = false; }
       announce(success?.textContent ?? 'Done');
       form.dispatchEvent(new CustomEvent(`ik:${kind}-success`, { bubbles: true }));
     } catch (err) {

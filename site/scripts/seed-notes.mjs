@@ -36,13 +36,20 @@ for (const f of files) {
   const q = (s) => JSON.stringify(s);
   fs.writeFileSync(path.join(out, 'src/content/notes', `${slug}.md`),
     `---\ntitle: ${q(meta.title)}\ndate: ${meta.date}\nweek: ${+meta.week}\nslug: ${q(slug)}\ncover: ../../assets/covers/${slug}.jpg\nexcerpt: ${q(excerpt(body))}\nsource: repo\n---\n\n${body}`);
-  redirects.push({ source: `/lab-notes/${stem}.html`, destination: `/lab-notes/${slug}`, permanent: true });
+  for (const source of [`/lab-notes/${stem}.html`, `/lab-notes/${stem}`]) redirects.push({ source, destination: `/lab-notes/${slug}`, permanent: true });
 }
 redirects.push(
   { source: '/lab-notes/index.html', destination: '/lab-notes', permanent: true },
   { source: '/terms.html', destination: '/terms', permanent: true },
   { source: '/privacy.html', destination: '/privacy', permanent: true },
+  { source: '/index.html', destination: '/', permanent: true },
+  // Any other .html goes to its clean URL. cleanUrls is off on purpose: it strips .html before the redirects above run,
+  // which sent old note URLs to a 404. Clean URLs are served by the rewrites instead.
+  { source: '/:path(.*)\\.html', destination: '/:path', permanent: true },
 );
-fs.writeFileSync(path.join(out, 'vercel.json'), JSON.stringify({ cleanUrls: true, trailingSlash: false, redirects }, null, 2) + '\n');
+const rewrites = [
+  { source: '/:path((?!.*\\.).+)', destination: '/:path.html' },
+];
+fs.writeFileSync(path.join(out, 'vercel.json'), JSON.stringify({ trailingSlash: false, redirects, rewrites }, null, 2) + '\n');
 for (const a of ['cover.jpg', 'ikigaicollective-logo.jpg']) fs.copyFileSync(path.join(repo, '..', a), path.join(out, 'public', a));
 console.log(`${files.length} notes, ${redirects.length} redirects`);
