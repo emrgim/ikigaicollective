@@ -10,6 +10,7 @@ import DiscordIcon from '../components/DiscordIcon.astro';
 import { SITE } from '../config';
 import NoteCover from '../components/NoteCover.astro';
 import { getNotes, words } from '../lib/notes';
+import { homeLd } from '../lib/seo';
 import SpiralArchive from '../components/SpiralArchive.astro';
 import stats from '../content/site/stats.json';
 import faq from '../content/site/faq.json';
@@ -32,7 +33,7 @@ const labels = [
 const stage = ['Implement', 'Measure', 'Shipped'];
 const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5 days ago', 'An entrepreneur · 1 week ago'];
 ---
-<Base overlayNav>
+<Base overlayNav jsonld={[...homeLd, { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}>
   <!-- 1 Hero: static dawn gradient; the shader replaces it in Phase 4 -->
   <section aria-labelledby="hero-h" class="relative flex min-h-[940px] flex-col overflow-hidden pt-[150px]">
     <div aria-hidden="true" data-hero-glow class="absolute inset-0" style="background: radial-gradient(ellipse 85% 58% at 50% 112%, var(--copper-900) 0%, var(--copper-700) 10%, var(--copper-500) 22%, var(--copper-300) 36%, var(--copper-100) 52%, transparent 72%)"></div>

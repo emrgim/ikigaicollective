@@ -21,8 +21,9 @@ const hour = [
   ['SECOND HALF', 'Demos and builds', 'Members show what they made this week, ask for feedback, and get it honestly.'],
   ['THE CLOSE', 'A question for next week', 'Everyone leaves with a challenge to think about. The night becomes a Lab Note.'],
 ];
+import { eventLd } from '../lib/seo';
 ---
-<Base title="Lab Night" description="Every Thursday, one hour, 21:00 Rome time. Members show the week's work, think out loud together and leave with a question." overlayNav>
+<Base jsonld={eventLd} title="Lab Night" description="Every Thursday, one hour, 21:00 Rome time. Members show the week's work, think out loud together and leave with a question." overlayNav>
   <section aria-labelledby="h1" class="relative overflow-hidden pt-[150px]">
     <div aria-hidden="true" class="absolute inset-0" style="background: radial-gradient(ellipse 70% 55% at 80% 110%, var(--copper-500) 0%, var(--copper-300) 18%, var(--copper-100) 40%, transparent 66%)"></div>
     <div class="wrap relative flex flex-wrap items-end gap-14 pb-[140px] pt-[100px] max-md:pb-20 max-md:pt-16">

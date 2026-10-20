@@ -4,9 +4,14 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { IS_LIVE } from '../lib/env';
 
-interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string; canonical?: string }
-const { overlayNav = false, image, canonical, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
-const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
+interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string; canonical?: string; type?: 'website' | 'article'; jsonld?: object | object[]; noindex?: boolean }
+const { overlayNav = false, image, canonical, type = 'website', jsonld, noindex = false, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
+const origin = 'https://ikigaicollective.org';
+const path = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/\/$/, '') || '/';
+const self = origin + (path === '/' ? '' : path);
+const ogImage = image ?? `${origin}/og-card.png`;
+const mdPath = path === '/' ? '/index.md' : `${path}.md`;
+const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective | Life design through experimentation';
 ---
 <!doctype html>
 <html lang="en" data-theme="ikigai-night">
@@ -26,14 +31,25 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{full}</title>
     <meta name="description" content={description} />
-    {canonical && <link rel="canonical" href={canonical} />}
-    {!IS_LIVE && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <link rel="canonical" href={canonical ?? self} />}
+    {!noindex && <link rel="alternate" type="text/markdown" href={mdPath} />}
+    <link rel="alternate" type="application/rss+xml" title="Ikigai Collective Lab Notes" href="/lab-notes/rss.xml" />
+    {(!IS_LIVE || noindex) && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href="/fonts/charter-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:site_name" content="Ikigai Collective" />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={self} />
     <meta property="og:title" content={full} />
     <meta property="og:description" content={description} />
-    {image && <meta property="og:image" content={image} />}
-    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={image ? full : 'The Ikigai Collective mark: a spiral with a dot released at the end'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={full} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#0a0a0a" />
+    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
     {IS_LIVE && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="5c467d4a-bf8a-42c0-a76b-a14753c54749" data-domains="ikigaicollective.org"></script>}
     <meta name="generator" content={Astro.generator} />
   </head>

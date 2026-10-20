@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+<Base title="Page not found" description="This page is not on the map." noindex>
+  <section aria-labelledby="h1">
+    <div class="wrap flex flex-col gap-7 pb-[140px] pt-[100px] max-md:pb-20 max-md:pt-16">
+      <span class="eyebrow">404 · NOT FOUND</span>
+      <h1 id="h1" class="font-display text-[clamp(42px,8vw,120px)] font-normal leading-none">This page is<br /><span class="em">not on the map.</span></h1>
+      <p class="max-w-[640px] text-[22px] leading-[1.6]">The link may be old, or mistyped. Lab Night is still on Thursdays, and the notes are all here.</p>
+      <div class="flex flex-wrap gap-3.5">
+        <Button href="/" variant="paper">Back to the start</Button>
+        <Button href="/lab-notes" variant="line-light">Read the Lab Notes</Button>
+        <Button href="/join" variant="line-light">Join</Button>
+      </div>
+    </div>
+  </section>
+</Base>
