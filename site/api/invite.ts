@@ -1,4 +1,4 @@
-import { addGuest, appendRow, configured, hasEmail } from './_lib/google.js';
+import { addGuest, appendRow, configured, hasEmail, tab } from './_lib/google.js';
 import { EMAIL, json, read } from './_lib/form.js';
 
 export async function POST(req: Request) {
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   try {
     // Calendar first: if it fails nothing is recorded, so the person can retry. Sheet is the log.
     await addGuest(email);
-    if (!(await hasEmail('Signups', email))) await appendRow('Signups', [email, f.name, new Date().toISOString(), f.source]);
+    if (!(await hasEmail(tab('Signups'), email))) await appendRow(tab('Signups'), [email, f.name, new Date().toISOString(), f.source]);
     return json({ ok: true });
   } catch (e) {
     console.error('invite failed', (e as Error).message);

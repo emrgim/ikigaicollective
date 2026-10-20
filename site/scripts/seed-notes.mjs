@@ -56,6 +56,6 @@ redirects.push(
 const rewrites = [
   { source: '/:path((?!.*\\.).+)', destination: '/:path.html' },
 ];
-fs.writeFileSync(path.join(out, 'vercel.json'), JSON.stringify({ trailingSlash: false, redirects, rewrites }, null, 2) + '\n');
+fs.writeFileSync(path.join(out, 'vercel.json'), JSON.stringify({ trailingSlash: false, crons: [{ path: '/api/cron/substack', schedule: '17 5 * * *' }], redirects, rewrites }, null, 2) + '\n');
 for (const a of ['cover.jpg', 'ikigaicollective-logo.jpg']) fs.copyFileSync(path.join(repo, '..', a), path.join(out, 'public', a));
 console.log(`${files.length} notes, ${redirects.length} redirects`);

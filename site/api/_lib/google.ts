@@ -1,7 +1,10 @@
 // Google APIs over plain fetch with one OAuth refresh token (dedicated Ikigai account, app published "In production").
-// Scopes: calendar.events, spreadsheets, gmail.send.
+// Scopes: calendar.events, spreadsheets. Preview (PUBLIC_SITE_ENV != production) uses the test event and the '-test' tabs.
 const env = (k: string) => process.env[k];
-export const configured = () => ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REFRESH_TOKEN'].every(env);
+const live = () => env('PUBLIC_SITE_ENV') === 'production';
+/** Sheet tab name: test tabs in preview so real sign-ups stay clean. */
+export const tab = (name: string) => (live() ? name : `${name}-test`);
+export const configured = () => ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REFRESH_TOKEN', 'SHEET_ID'].every(env) && !!(live() ? env('LAB_NIGHT_EVENT_ID') : env('LAB_NIGHT_EVENT_ID_PREVIEW'));
 
 let cached: { token: string; exp: number } | undefined;
 async function accessToken() {
@@ -24,18 +27,17 @@ async function g(url: string, init: RequestInit = {}) {
 
 const meetOf = (ev: any): string[] => [ev.hangoutLink, ...(ev.conferenceData?.entryPoints ?? []).map((e: any) => e.uri), ev.location].filter(Boolean).map((u: string) => u.replace(/\/$/, ''));
 
-/** Mail the owner when the Lab Night event looks wrong. Never throws. */
+/** Log to the Alerts tab (the sheet's own "notify me right away" rule emails the owner). Never throws. */
 export async function alert(subject: string, text: string) {
   console.error('ALERT', subject, text);
-  const to = env('ALERT_EMAIL') ?? env('PARTNER_INBOX');
-  if (to) await sendMail(to, `[ikigaicollective.org] ${subject}`, text).catch(() => {});
+  await appendRow(tab('Alerts'), [new Date().toISOString(), subject, text]).catch(() => {});
 }
 
 // Add a guest to the Lab Night event. Patches ONLY `attendees` (no conferenceDataVersion, so Meet/location/description cannot change).
 // Before and after: the event's Meet link must equal PUBLIC_MEET_URL and guestsCanSeeOtherGuests must be false. Otherwise roll back and alert.
 export async function addGuest(email: string) {
   const cal = encodeURIComponent(env('GOOGLE_CALENDAR_ID') ?? 'primary');
-  const id = encodeURIComponent(env('LAB_NIGHT_EVENT_ID')!);
+  const id = encodeURIComponent((live() ? env('LAB_NIGHT_EVENT_ID') : env('LAB_NIGHT_EVENT_ID_PREVIEW'))!);
   const base = `https://www.googleapis.com/calendar/v3/calendars/${cal}/events/${id}`;
   const meet = env('PUBLIC_MEET_URL')?.replace(/\/$/, '');
   if (!meet) throw new Error('PUBLIC_MEET_URL is not set; refusing to touch the event');
@@ -57,21 +59,15 @@ export async function addGuest(email: string) {
   return { added: true };
 }
 
-export async function appendRow(tab: string, row: string[]) {
+export async function appendRow(sheetTab: string, row: string[]) {
   const id = env('SHEET_ID')!;
-  await g(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(tab + '!A:F')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
+  await g(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(sheetTab + '!A:F')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
     method: 'POST', body: JSON.stringify({ values: [row] }),
   });
 }
 
-export async function hasEmail(tab: string, email: string) {
+export async function hasEmail(sheetTab: string, email: string) {
   const id = env('SHEET_ID')!;
-  const j = await g(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(tab + '!A:A')}`);
+  const j = await g(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(sheetTab + '!A:A')}`);
   return (j.values ?? []).some((r: string[]) => r[0]?.toLowerCase() === email);
-}
-
-export async function sendMail(to: string, subject: string, text: string, replyTo?: string) {
-  const enc = (s: string) => `=?UTF-8?B?${Buffer.from(s).toString('base64')}?=`;
-  const raw = [`To: ${to}`, `Subject: ${enc(subject)}`, ...(replyTo ? [`Reply-To: ${replyTo}`] : []), 'Content-Type: text/plain; charset=UTF-8', '', text].join('\r\n');
-  await g('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', { method: 'POST', body: JSON.stringify({ raw: Buffer.from(raw).toString('base64url') }) });
 }
