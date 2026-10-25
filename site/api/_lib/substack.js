@@ -27,7 +27,8 @@ export const facts = (mds) => mds.map((s) => ({
   week: +s.match(/^week: (\d+)/m)?.[1] || 0,
 }));
 
-/** New posts only: skips a post whose link is known, whose slug exists, or whose date is within 2 days of an existing note. */
+/** New posts only: skips a post whose link is known, whose slug exists, or whose date is within 2 days of an existing note.
+ * @param {(message: string) => unknown} [log] */
 export function plan(items, existing, log = () => {}) {
   const days = [...existing];
   let week = Math.max(0, ...days.map((d) => d.week));

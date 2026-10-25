@@ -1,0 +1,5 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": { "types": ["node"], "allowJs": true, "noEmit": true },
+  "include": ["./**/*"]
+}
