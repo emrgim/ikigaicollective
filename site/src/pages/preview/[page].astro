@@ -14,21 +14,26 @@ export function getStaticPaths() {
 }
 
 const open = (t: string) => /\[.*\]/.test(t);
+const ok = copy.approved;
 const items = [
   {
-    title: 'The Next and Horizon text', file: 'src/content/site/horizon.json',
+    title: 'Next', file: 'src/content/site/horizon.json (next)', approved: horizon.next.approved,
     where: [['Home, "Horizon" section', '/#hz-h'], ['Horizon page', '/horizon']],
-    lines: [`NEXT title: ${horizon.next.title}`, ...horizon.next.items.map((t) => `NEXT: ${t}`), `NEXT summary: ${horizon.next.summary}`, `HORIZON title: ${horizon.horizon.title}`, `HORIZON: ${horizon.horizon.text}`, `HORIZON summary: ${horizon.horizon.summary}`],
-    note: 'Needs David\'s words. These are empty slots, shown on the page as brackets.',
+    lines: horizon.next.items.map((it) => `${it.title}: ${it.text}`),
   },
-  { title: '"Come and build toward meaning."', file: 'src/content/site/copy.json (joinHeadline)', where: [['Home, closing section', '/#jn-h']], lines: [`${copy.joinHeadline.plain} ${copy.joinHeadline.em}`] },
   {
-    title: 'The ikigai circle descriptions', file: 'src/content/site/copy.json (ikigai)', where: [['Home, "ikigai" diagram (click each circle)', '/#ik-h']],
+    title: 'Horizon', file: 'src/content/site/horizon.json (horizon)', approved: horizon.horizon.approved,
+    where: [['Home, "Horizon" section', '/#hz-h'], ['Horizon page', '/horizon']],
+    lines: [`${horizon.horizon.title}: ${horizon.horizon.text}`],
+  },
+  { title: '"Come and build toward meaning."', file: 'src/content/site/copy.json (joinHeadline)', approved: ok.joinHeadline, where: [['Home, closing section', '/#jn-h']], lines: [`${copy.joinHeadline.plain} ${copy.joinHeadline.em}`] },
+  {
+    title: 'The ikigai circle descriptions', file: 'src/content/site/copy.json (ikigai)', approved: ok.ikigai, where: [['Home, "ikigai" diagram (click each circle)', '/#ik-h']],
     lines: Object.values(copy.ikigai).map(([label, text]) => `${label}: ${text}`),
   },
-  { title: 'The invitation paste text', file: 'src/content/site/copy.json (invitation)', where: [['Home, closing section', '/#jn-h'], ['Join page', '/join']], lines: [copy.invitation] },
-  { title: '"One line, still drawing."', file: 'src/content/site/copy.json (archiveTagline)', where: [['Home, Spiral Archive heading', '/#ar-h']], lines: [copy.archiveTagline] },
-  { title: 'The partner principles', file: 'src/content/site/copy.json (partnerPrinciples)', where: [['Partners page, "What we will and won\'t do"', '/partners']], lines: copy.partnerPrinciples },
+  { title: 'The invitation paste text', file: 'src/content/site/copy.json (invitation)', approved: ok.invitation, where: [['Join page', '/join']], lines: [copy.invitation] },
+  { title: 'The Spiral line', file: 'src/content/site/copy.json (archiveTagline)', approved: ok.archiveTagline, where: [['Home, Spiral Archive heading', '/#ar-h']], lines: [copy.archiveTagline] },
+  { title: 'The partner principles', file: 'src/content/site/copy.json (partnerPrinciples)', approved: ok.partnerPrinciples, where: [['Partners page, "What we will and won\'t do"', '/partners']], lines: [copy.partnerIntro, ...copy.partnerPrinciples] },
 ];
 const also = [
   ['Member and continent numbers', 'src/content/site/stats.json', `${stats.members} members, ${stats.continents} continents. Mayur updates these by hand.`],
@@ -36,14 +41,15 @@ const also = [
   ['"Inside the studio" cards', 'Discord, #the-loop', 'Shows threads tagged 🌐. Until some are tagged, the preview shows grey placeholder cards.'],
   ['Privacy contact email', 'PUBLIC_PRIVACY_EMAIL (Vercel)', SITE.privacyEmail || 'Not set yet: the privacy page shows a bracketed placeholder.'],
 ];
-const todo = items.filter((i) => i.lines.some(open)).length;
+const todo = items.filter((i) => !i.approved).length;
 ---
 <Base title="Placeholder checklist" description="Every placeholder line for review." noindex>
   <section aria-labelledby="h1">
     <div class="wrap flex flex-col gap-6 pb-10 pt-[72px]">
       <span class="eyebrow">COMMUNITY PREVIEW · FOR DAVID</span>
-      <h1 id="h1" class="font-display text-[clamp(38px,6vw,84px)] font-normal leading-[1.02]">Lines to <span class="em">approve</span></h1>
-      <p class="max-w-[760px] text-[19px] leading-[1.6]">Six lines on the site are drafts until you say so. Each one is below with where it appears. To approve in one go, reply in the {SITE.previewFeedbackUrl ? <a href={SITE.previewFeedbackUrl}>feedback thread</a> : 'feedback thread'} with "approved" for each, or the wording you want instead. Empty slots still waiting for your words: {todo}.</p>
+      <h1 id="h1" class="font-display text-[clamp(38px,6vw,84px)] font-normal leading-[1.02]">Lines <span class="em">approved</span></h1>
+      <p class="max-w-[760px] text-[19px] leading-[1.6]">Approved by David Orban (via Dex), 22 October 2026.</p>
+      <p class="max-w-[760px] text-[19px] leading-[1.6]">Each approved line is below with where it appears. Changes: reply in the {SITE.previewFeedbackUrl ? <a href={SITE.previewFeedbackUrl}>feedback thread</a> : 'feedback thread'}. Lines still waiting for approval: {todo}.</p>
     </div>
   </section>
   <section aria-label="Lines to approve">
@@ -52,7 +58,7 @@ const todo = items.filter((i) => i.lines.some(open)).length;
         <article class="flex flex-col gap-4 border border-line p-7">
           <div class="flex flex-wrap items-baseline justify-between gap-3">
             <h2 class="font-display text-[26px] font-normal"><span class="text-copper">{i + 1}.</span> {it.title}</h2>
-            <span class={`rounded px-3 py-1 text-[13px] tracking-[0.06em] ${it.lines.some(open) ? 'bg-copper text-bg' : 'border border-copper text-cu-700'}`}>{it.lines.some(open) ? 'NEEDS DAVID' : 'DRAFT TO APPROVE'}</span>
+            <span style="--approved:color-mix(in srgb, var(--success) 70%, var(--fg))" class={`rounded px-3 py-1 text-[13px] tracking-[0.06em] ${it.approved ? 'border border-[var(--approved)] text-[var(--approved)]' : it.lines.some(open) ? 'bg-copper text-bg' : 'border border-copper text-cu-700'}`}>{it.approved ? 'APPROVED' : it.lines.some(open) ? 'NEEDS DAVID' : 'DRAFT TO APPROVE'}</span>
           </div>
           <ul class="m-0 flex list-none flex-col gap-2 p-0 text-[17px] leading-[1.55]">
             {it.lines.map((l) => <li class="border-l-2 border-line pl-4">{l}</li>)}

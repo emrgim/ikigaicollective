@@ -1,20 +1,50 @@
 {
-  "_note": "Placeholder lines David must approve before launch (brief section 13). Edit here, not in components.",
+  "_note": "Lines approved by David Orban (via Dex), 22 October 2026. Edit here, not in components.",
   "ikigai": {
-    "love": ["WHAT YOU LOVE", "Where your attention goes when nobody is asking. With what you are good at, it becomes passion; with what the world needs, mission."],
-    "good": ["WHAT YOU ARE GOOD AT", "Your capability. With what you love, it becomes passion; with what you can be paid for, profession."],
-    "need": ["WHAT THE WORLD NEEDS", "The need outside yourself. With what you love, it becomes mission; with what you can be paid for, vocation."],
-    "paid": ["WHAT YOU CAN BE PAID FOR", "Economic viability. With what you are good at, it becomes profession; with what the world needs, vocation."],
-    "core": ["WHERE ALL FOUR MEET", "The intersection of what you are good at, what you love, what the world needs, and what you can be paid for. We look for it through experiments."]
+    "love": [
+      "WHAT YOU LOVE",
+      "Where your attention goes when nobody is asking. With what you are good at, it becomes passion; with what the world needs, mission."
+    ],
+    "good": [
+      "WHAT YOU ARE GOOD AT",
+      "Your capability. With what you love, it becomes passion; with what you can be paid for, profession."
+    ],
+    "need": [
+      "WHAT THE WORLD NEEDS",
+      "The need outside yourself. With what you love, it becomes mission; with what you can be paid for, vocation."
+    ],
+    "paid": [
+      "WHAT YOU CAN BE PAID FOR",
+      "Economic viability. With what you are good at, it becomes profession; with what the world needs, vocation."
+    ],
+    "core": [
+      "WHERE ALL FOUR MEET",
+      "The intersection of what you are good at, what you love, what the world needs, and what you can be paid for. We look for it through experiments."
+    ]
   },
-  "archiveTagline": "One line, still drawing.",
-  "joinHeadline": { "plain": "Come and build", "em": "toward meaning." },
-  "invitation": "I'm part of Ikigai Collective, a studio for people using AI to design their lives. Lab Night is Thursday. Come: ikigaicollective.org/join",
+  "archiveTagline": "Every Thursday, one more turn.",
+  "joinHeadline": {
+    "plain": "Come and build",
+    "em": "toward meaning."
+  },
+  "invitation": "Lab Night is Thursday at Ikigai Collective. Bring a project, or just your curiosity: ikigaicollective.org/join",
   "partnerPrinciples": [
-    "Members come first. If they wouldn't notice it, we don't do it.",
-    "No one buys our voice. No paid placement in Lab Night, Lab Notes or the Discord.",
-    "Feedback on your tools stays honest and public.",
-    "No member data is shared. Members choose.",
-    "Your agents are welcome, under their own names."
-  ]
+    "Members come first. If members wouldn’t notice it, we don’t do it.",
+    "No one buys our voice. No paid place in Lab Night, the Lab Notes or the Discord; feedback on a partner’s tools stays honest and public.",
+    "Open by default. Every partnership produces something public.",
+    "Partners take part like members. No promotional posting.",
+    "Members choose. No member data is shared.",
+    "Agents are welcome, under their own names.",
+    "Small and reversible. Eight-week pilots, reviewed, ended without fuss if they don’t help members.",
+    "No money, no exclusivity, for now. Any proposal of that kind goes to the Collective’s founder.",
+    "Values fit. We say no to products that work against agency."
+  ],
+  "partnerIntro": "Partners are participants in the studio, not sponsors of it.",
+  "approved": {
+    "ikigai": true,
+    "archiveTagline": true,
+    "joinHeadline": true,
+    "invitation": true,
+    "partnerPrinciples": true
+  }
 }

@@ -195,12 +195,21 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
     <span class="eyebrow text-bg">THE HORIZON</span>
     <h2 id="hz-h" class="font-display text-[clamp(40px,5vw,60px)] font-normal leading-[1.05]">Where this <span class="italic">is going</span></h2>
     <div class="flex flex-wrap gap-6">
-      {[['NOW', 'solid', horizon.now.summary], ['NEXT', 'dashed', horizon.next.summary], ['HORIZON', 'dotted', horizon.horizon.summary]].map(([l, b, t]) => (
-        <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-3.5 border-2 p-8" style={`border-style:${b};border-color:var(--bg)`}>
-          <span class="text-[13px] tracking-[0.24em]">{l}</span>
-          <p class="font-display text-[24px] leading-[1.4]">{t}</p>
-        </div>
-      ))}
+      <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-3.5 border-2 p-8" style="border-style:solid;border-color:var(--bg)">
+        <span class="text-[13px] tracking-[0.24em]">NOW</span>
+        <p class="font-display text-[24px] leading-[1.4]">{horizon.now.summary}</p>
+      </div>
+      <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-5 border-2 p-8" style="border-style:dashed;border-color:var(--bg)">
+        <span class="text-[13px] tracking-[0.24em]">NEXT</span>
+        {horizon.next.items.map((it) => (
+          <div class="flex flex-col gap-1.5"><p class="font-display text-[24px] leading-[1.25]">{it.title}</p><p class="text-[16px] leading-[1.55]">{it.text}</p></div>
+        ))}
+      </div>
+      <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-3.5 border-2 p-8" style="border-style:dotted;border-color:var(--bg)">
+        <span class="text-[13px] tracking-[0.24em]">HORIZON</span>
+        <p class="font-display text-[24px] leading-[1.25]">{horizon.horizon.title}</p>
+        <p class="text-[16px] leading-[1.55]">{horizon.horizon.text}</p>
+      </div>
     </div>
     <div class="flex flex-wrap gap-x-10 gap-y-4 text-[17px]">
       <a href="/horizon" class="underline">Read the full horizon</a>

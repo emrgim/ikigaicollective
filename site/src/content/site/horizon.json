@@ -10,13 +10,21 @@
     "summary": "A weekly Lab Night, open Lab Notes, a studio on Discord, three values."
   },
   "next": {
-    "title": "[Title]",
-    "items": ["[What is planned for the coming months, in David's words]", "[A second planned step]", "[Partnerships, once real]"],
-    "summary": "[What is planned, in David's words]"
+    "items": [
+      {
+        "title": "Open the studio",
+        "text": "More of the work happens in the open. Members’ experiments, shown on this site and in the Discord, each at its stage: designed, built, measured, iterated. Every member’s journey is itself an experiment, shared so others can learn from it."
+      },
+      {
+        "title": "From experiment to something real",
+        "text": "We help members take an experiment all the way: from a Thursday demo to something that stands on its own. Not a unicorn. A millicorn: small, self-funded, built with AI, solving a problem close to home."
+      }
+    ],
+    "approved": true
   },
   "horizon": {
-    "title": "[Title]",
-    "text": "[The long ambition, in David's words]",
-    "summary": "[The ambition, in David's words]"
+    "title": "Eight billion",
+    "text": "Eight billion people are heading toward a world where the distance from idea to action is zero, and most of us were never taught how to design our lives for it. The Collective is a place to learn it together, one experiment at a time, and to pass it on.",
+    "approved": true
   }
 }

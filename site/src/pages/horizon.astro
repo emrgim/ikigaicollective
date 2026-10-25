@@ -35,8 +35,8 @@ const now = pt(tNow);
       <ul class="m-0 flex flex-[1_1_480px] list-none flex-col gap-3.5 p-0 text-[19px] leading-[1.5]">{horizon.now.items.map((t) => <li>{t}</li>)}</ul>
     </div>
     <div class="flex flex-wrap gap-x-16 gap-y-6 border-t-2 border-dashed border-cu-700 py-12">
-      <div class="flex flex-[0_0_240px] flex-col gap-2"><span class="eyebrow text-cu-700">NEXT</span><span class="font-display text-[40px]">{horizon.next.title}</span></div>
-      <ul class="m-0 flex flex-[1_1_480px] list-none flex-col gap-3.5 p-0 text-[19px] leading-[1.5] text-cu-700">{horizon.next.items.map((t) => <li>{t}</li>)}</ul>
+      <div class="flex flex-[0_0_240px] flex-col gap-2"><span class="eyebrow text-cu-700">NEXT</span></div>
+      <ul class="m-0 flex flex-[1_1_480px] list-none flex-col gap-8 p-0 text-[19px] leading-[1.5] text-cu-700">{horizon.next.items.map((it) => <li class="flex flex-col gap-2"><span class="font-display text-[32px] leading-[1.2]">{it.title}</span><span>{it.text}</span></li>)}</ul>
     </div>
     <div class="flex flex-wrap gap-x-16 gap-y-6 border-b border-t-2 border-dotted border-b-line border-t-cu-400 py-12">
       <div class="flex flex-[0_0_240px] flex-col gap-2"><span class="eyebrow text-cu-500">HORIZON</span><span class="font-display text-[40px]">{horizon.horizon.title}</span></div>
