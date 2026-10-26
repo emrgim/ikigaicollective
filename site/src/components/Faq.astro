@@ -1,15 +1,146 @@
 ---
+import Agent from './footer/FooterAgent.astro';
+import { SITE } from '../config';
+
+// Question chips with one answer card. Every answer stays in the HTML (the card shows one at a time once the script runs;
+// without JavaScript it is a plain list of all questions and answers). Deep links: #faq-<slug of the question>.
 interface Item { q: string; a: string; link?: { href: string; label: string } }
-interface Props { items: Item[]; qSize?: string }
-const { items, qSize = '25px' } = Astro.props;
+interface Props { items: Item[]; tone?: 'copper' | 'light' }
+const { items, tone = 'copper' } = Astro.props;
+const slug = (q: string) => q.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const rows = items.map((it, i) => ({ ...it, slug: slug(it.q), n: i + 1 }));
+const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
 ---
-<div class="flex flex-col">
-  {items.map((it, i) => (
-    <details class={`border-t border-ink py-[22px] ${i === items.length - 1 ? 'border-b' : ''}`}>
-      <summary class="-my-2 cursor-pointer py-2 font-display" style={`font-size:${qSize}`}>{it.q}</summary>
-      <p class="mt-3.5 text-[18px] leading-[1.65]">
-        {it.a}{it.link && <> <a href={it.link.href} class="text-ink underline">{it.link.label}</a></>}
-      </p>
-    </details>
-  ))}
+<div class={`fq fq-${tone}`} data-faq data-discord={SITE.discordUrl}>
+  <div class="fq-chips">
+    {rows.map((r, i) => (
+      <button type="button" class="fq-chip" data-chip data-slug={r.slug} id={`faq-${r.slug}`} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={cardId}>{r.q}</button>
+    ))}
+  </div>
+  <div class="fq-card" id={cardId} role="region" aria-label="Answer" aria-live="polite" data-card>
+    <svg class="fq-agent" viewBox="-26 -92 52 102" width="44" aria-hidden="true"><Agent x={0} y={0} s={1} legs={8} arms={['M-23 -26 Q-31 -14 -27 -4', 'M23 -26 Q31 -14 27 -4']} /></svg>
+    <div class="fq-main">
+      <div class="fq-body" data-body>
+        {rows.map((r, i) => (
+          <div class={`fq-item${i === 0 ? ' on' : ''}`} data-item data-slug={r.slug}>
+            <h3 class="fq-q">{r.q}</h3>
+            <p class="fq-a">{r.a}{r.link && <> <a href={r.link.href}>{r.link.label}</a></>}</p>
+          </div>
+        ))}
+      </div>
+      <p class="fq-foot"><span data-count>1 of {rows.length}</span> · <button type="button" class="fq-next" data-next>Next question →</button><a class="fq-last" data-last href={SITE.discordUrl} target="_blank" rel="noopener" hidden>Something else? Ask in #introductions</a></p>
+    </div>
+  </div>
 </div>
+
+<style is:global>
+  .fq { display: flex; flex-direction: column; gap: 28px; color: var(--ink); }
+  .fq-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .fq-chip { min-height: 44px; padding: 11px 18px; border-radius: 9999px; font: inherit; font-size: 17px; line-height: 1.3; color: var(--ink); cursor: pointer; text-align: left; transition: background-color .15s, color .15s; border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); background: color-mix(in srgb, var(--paper) 28%, transparent); }
+  .fq-chip:hover { background: color-mix(in srgb, var(--paper) 48%, transparent); }
+  .fq-light .fq-chip { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+  .fq-light .fq-chip:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+  .fq .fq-chip[aria-expanded='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .fq-card { display: flex; gap: 18px; align-items: flex-start; padding: 28px 32px; border-radius: 20px; background: color-mix(in srgb, var(--paper) 62%, transparent); backdrop-filter: blur(6px); }
+  .fq-agent { flex: 0 0 44px; height: auto; overflow: visible; }
+  .fq-agent :is(.fs-blink, .fs-dot, .fs-bob, .fs-hop) { transform-box: fill-box; transform-origin: center; }
+  .fq-agent .fs-dot { fill: var(--copper-300); }
+  .fq-main { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 14px; }
+  .fq-body { overflow: hidden; }
+  .fq-item { display: flex; flex-direction: column; gap: 10px; }
+  .fq-q { margin: 0; font: inherit; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--copper-200); }
+  .fq-a { margin: 0; font-size: 21px; line-height: 1.55; }
+  .fq-a a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .fq-foot { margin: 0; font-size: 15px; color: var(--copper-200); }
+  .fq-next, .fq-last { display: inline-flex; min-height: 44px; margin-block: -12px; align-items: center; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .fq-next:hover, .fq-last:hover { color: var(--ink); }
+  .fq-last[hidden], .fq-next[hidden] { display: none; }
+
+  /* With the script: one item at a time. Without it: a plain list of everything. */
+  html.js .fq-item:not(.on) { display: none; }
+  html:not(.js) .fq-chips, html:not(.js) .fq-foot, html:not(.js) .fq-agent { display: none; }
+  html:not(.js) .fq-card { gap: 0; padding: 0; background: none; backdrop-filter: none; }
+  html:not(.js) .fq-main, html:not(.js) .fq-body { gap: 28px; }
+  html:not(.js) .fq-body { display: flex; flex-direction: column; }
+  html:not(.js) .fq-q { font-size: 22px; letter-spacing: 0; text-transform: none; color: var(--ink); }
+  html:not(.js) .fq-a { font-size: 18px; }
+
+  /* Swap motion: only when motion is allowed (reduced motion: instant, no hop). */
+  html.motion .fq-body { transition: height 0.25s ease; }
+  html.motion .fq-item { transition: opacity 0.09s linear; }
+  html.motion .fq-item.out { opacity: 0; }
+  html.motion .fq-item.in { animation: fq-in 0.16s ease-out; }
+  html.motion .fq-hop-now .fs-hop { animation: fq-hop 0.32s ease-out; }
+  @keyframes fq-in { from { opacity: 0; } }
+  @keyframes fq-hop { 40% { transform: translateY(-9px); } }
+
+  @media (max-width: 767px) {
+    .fq { gap: 20px; }
+    .fq-chip { font-size: 15px; padding: 11px 16px; }
+    .fq-card { padding: 22px 20px; gap: 14px; }
+    .fq-a { font-size: 17px; }
+  }
+</style>
+
+<script>
+  import { track } from '../lib/track';
+  import { canMotion } from '../lib/motion';
+
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((root) => {
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-chip]')];
+    const items = [...root.querySelectorAll<HTMLElement>('[data-item]')];
+    const card = root.querySelector<HTMLElement>('[data-card]')!;
+    const body = root.querySelector<HTMLElement>('[data-body]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const last = root.querySelector<HTMLAnchorElement>('[data-last]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    let cur = 0, busy = false;
+
+    const paint = (i: number) => {
+      chips.forEach((c, k) => c.setAttribute('aria-expanded', String(k === i)));
+      count.textContent = `${i + 1} of ${items.length}`;
+      next.hidden = i === items.length - 1;
+      last.hidden = !next.hidden;
+    };
+
+    const show = (i: number, user: boolean) => {
+      if (i === cur || busy) return;
+      const from = items[cur], to = items[i], animate = canMotion();
+      const done = () => {
+        from.classList.remove('on', 'out'); to.classList.add('on');
+        cur = i; paint(i); busy = false;
+      };
+      if (user) {
+        track('faq-open', { slug: to.dataset.slug });
+        history.replaceState(null, '', `#faq-${to.dataset.slug}`);
+      }
+      if (!animate) { done(); return; }
+      busy = true;
+      const h0 = body.offsetHeight;
+      from.classList.add('out');
+      setTimeout(() => {
+        body.style.height = `${h0}px`;
+        from.classList.remove('on', 'out'); to.classList.add('in', 'on');
+        const h1 = (body.style.height = 'auto', body.offsetHeight);
+        body.style.height = `${h0}px`; void body.offsetHeight; body.style.height = `${h1}px`;
+        cur = i; paint(i);
+        card.classList.remove('fq-hop-now'); void card.offsetWidth; card.classList.add('fq-hop-now');
+        setTimeout(() => { body.style.height = ''; to.classList.remove('in'); card.classList.remove('fq-hop-now'); busy = false; }, 260);
+      }, 90);
+      if (user && matchMedia('(max-width: 767px)').matches) {
+        const r = card.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > innerHeight) card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    };
+
+    chips.forEach((c, i) => c.addEventListener('click', () => show(i, true)));
+    next.addEventListener('click', () => show((cur + 1) % items.length, true));
+
+    // Deep link: #faq-<slug>. Exact slug first, then any question whose slug contains the word (#faq-cost).
+    const want = decodeURIComponent(location.hash.replace(/^#faq-?/, '')).toLowerCase();
+    if (want && location.hash.startsWith('#faq')) {
+      const i = items.findIndex((it) => it.dataset.slug === want) >= 0 ? items.findIndex((it) => it.dataset.slug === want) : items.findIndex((it) => it.dataset.slug!.includes(want));
+      if (i > 0) { items[0].classList.remove('on'); items[i].classList.add('on'); cur = i; paint(i); card.scrollIntoView({ block: 'center' }); }
+    }
+  });
+</script>
