@@ -33,7 +33,7 @@ const labels = [
 const stage = ['Implement', 'Measure', 'Shipped'];
 const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5 days ago', 'An entrepreneur · 1 week ago'];
 ---
-<Base overlayNav footerHead={false} jsonld={[...homeLd, { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}>
+<Base overlayNav jsonld={[...homeLd, { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}>
   <!-- 1 Hero: static dawn gradient; the shader replaces it in Phase 4 -->
   <section aria-labelledby="hero-h" class="relative flex min-h-[940px] flex-col overflow-hidden pt-[150px]">
     <div aria-hidden="true" data-hero-glow class="absolute inset-0" style="background: radial-gradient(ellipse 85% 58% at 50% 112%, var(--copper-900) 0%, var(--copper-700) 10%, var(--copper-500) 22%, var(--copper-300) 36%, var(--copper-100) 52%, transparent 72%)"></div>

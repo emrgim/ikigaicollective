@@ -5,8 +5,6 @@ import { SITE } from '../config';
 import copy from '../content/site/copy.json';
 import { nextLabNight, pillText } from '../lib/labnight';
 
-interface Props { head?: boolean }
-const { head = true } = Astro.props;
 const f = copy.footer, credit = copy.footerCredit;
 const site = [['/how-it-works', 'How it works'], ['/lab-night', 'Lab Night'], ['/lab-notes', 'Lab Notes'], ['/horizon', 'Horizon'], ['/partners', 'Partners'], ['/join', 'Join']];
 // Official marks (24x24 viewBox, single path), drawn in currentColor so they follow the footer palette.
@@ -22,17 +20,14 @@ const link = 'hit inline-flex min-h-11 items-center gap-3.5 font-display text-[2
 const label = 'mb-2 text-[12px] tracking-[0.28em] text-copper';
 ---
 <footer data-bg-start="var(--paper)" data-bg-end="var(--paper)" data-theme="ikigai-dawn" class="overflow-hidden border-t border-line bg-bg text-fg">
-  <div class={`wrap grid gap-x-12 gap-y-10 pb-6 pt-16 md:pt-24 md:grid-cols-[1.7fr_1fr_1fr]`}>
-    {head && (
-      <div class="flex flex-col items-start gap-5">
+  <div class={`wrap grid gap-x-12 gap-y-10 pb-6 pt-16 md:pb-0 md:pt-24 md:grid-cols-[1.7fr_1fr_1fr]`}>
+    <div class="flex flex-col items-start gap-5">
         <h2 class="m-0 font-display text-[clamp(34px,5vw,58px)] font-normal leading-[1.04]">
           {f.useFallback ? f.headlineFallback : <><span class="whitespace-nowrap">{f.headline.plain}</span><br /><span class="italic text-copper">{f.headline.em}</span></>}
         </h2>
         <p class="m-0 text-[18px] text-muted">{f.line}</p>
         <Button href="/join" variant="ink" class="mt-1">{f.button}</Button>
       </div>
-    )}
-    {!head && <div class="max-md:hidden" aria-hidden="true"></div>}
     <nav aria-label="Footer" class="flex flex-col">
       <span class={label}>{f.siteLabel}</span>
       {site.map(([href, text]) => <a href={href} class={link}>{text}</a>)}
@@ -41,13 +36,13 @@ const label = 'mb-2 text-[12px] tracking-[0.28em] text-copper';
       <span class={label}>{f.communityLabel}</span>
       {community.map(([href, text, d]) => (
         <a href={href} target="_blank" rel="noopener" class={link}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="shrink-0"><path d={d} /></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="relative top-[2px] shrink-0 max-md:top-px"><path d={d} /></svg>
           <span>{text}</span>
         </a>
       ))}
     </div>
   </div>
-  <div class="mt-8"><FooterScene /></div>
+  <div class="mt-8 md:-mt-[2.5vw]"><FooterScene /></div>
   <div class="border-t border-line bg-[color-mix(in_srgb,var(--accent)_8%,var(--bg))]">
     <div class="wrap grid grid-cols-1 gap-x-8 gap-y-6 py-7 text-[14px] leading-[1.5] min-[480px]:grid-cols-2 md:grid-cols-4">
       <div class="flex flex-col"><span>{f.copyright}</span><span class="text-muted">{f.licence}</span></div>
