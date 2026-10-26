@@ -35,7 +35,7 @@ const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
 
 <style is:global>
   .fq { display: flex; flex-direction: column; gap: 28px; color: var(--ink); }
-  .fq-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .fq-chips { position: relative; display: flex; flex-wrap: wrap; gap: 10px; }
   .fq-chip { min-height: 44px; padding: 11px 18px; border-radius: 9999px; font: inherit; font-size: 17px; line-height: 1.3; color: var(--ink); cursor: pointer; text-align: left; transition: background-color .15s, color .15s; border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); background: color-mix(in srgb, var(--paper) 28%, transparent); }
   .fq-chip:hover { background: color-mix(in srgb, var(--paper) 48%, transparent); }
   .fq-light .fq-chip { background: color-mix(in srgb, var(--ink) 5%, transparent); }
@@ -76,8 +76,15 @@ const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
 
   @media (max-width: 767px) {
     .fq { gap: 20px; }
-    .fq-chips { gap: 8px; }
-    .fq-chip { font-size: 14px; padding: 8px 14px; min-height: 44px; }
+    /* One scrollable row that bleeds past the 24px page gutter; the first chip lines up with the content edge. */
+    .fq-chips { contain: inline-size; flex-wrap: nowrap; gap: 8px; margin-inline: -24px; padding-inline: 24px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: 24px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .fq-chips::-webkit-scrollbar { display: none; }
+    .fq-chips::after { content: ''; flex: 0 0 16px; }
+    .fq-chip { flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start; font-size: 14px; padding: 8px 14px; min-height: 44px; }
+    /* Soft edge fade on the chips themselves (works on any background): right while more is ahead, left once scrolled. */
+    .fq-chips.fade-r { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); }
+    .fq-chips.fade-l { -webkit-mask-image: linear-gradient(90deg, transparent, #000 48px); mask-image: linear-gradient(90deg, transparent, #000 48px); }
+    .fq-chips.fade-l.fade-r { -webkit-mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
     .fq-card { padding: 22px 20px; gap: 14px; }
     .fq-a { font-size: 17px; }
   }
@@ -97,8 +104,25 @@ const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
     const count = root.querySelector<HTMLElement>('[data-count]')!;
     let cur = 0, busy = false;
 
-    const paint = (i: number) => {
+    // Mobile: the chips are one scrolling row. Edge fades follow the scroll position.
+    const row = root.querySelector<HTMLElement>('.fq-chips')!;
+    const fades = () => {
+      const max = row.scrollWidth - row.clientWidth;
+      row.classList.toggle('fade-l', max > 1 && row.scrollLeft > 4);
+      row.classList.toggle('fade-r', max > 1 && row.scrollLeft < max - 4);
+    };
+    row.addEventListener('scroll', fades, { passive: true });
+    addEventListener('resize', fades);
+    fades();
+    const reveal = (i: number, smooth: boolean) => {
+      if (row.scrollWidth <= row.clientWidth + 1) return;
+      const c = chips[i], left = Math.max(0, c.offsetLeft - (row.clientWidth - c.offsetWidth) / 2);
+      row.scrollTo({ left, behavior: smooth && canMotion() ? 'smooth' : 'auto' });
+    };
+
+    const paint = (i: number, smooth = true) => {
       chips.forEach((c, k) => c.setAttribute('aria-expanded', String(k === i)));
+      reveal(i, smooth);
       count.textContent = `${i + 1} of ${items.length}`;
       next.hidden = i === items.length - 1;
       last.hidden = !next.hidden;
@@ -141,7 +165,7 @@ const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
     const want = decodeURIComponent(location.hash.replace(/^#faq-?/, '')).toLowerCase();
     if (want && location.hash.startsWith('#faq')) {
       const i = items.findIndex((it) => it.dataset.slug === want) >= 0 ? items.findIndex((it) => it.dataset.slug === want) : items.findIndex((it) => it.dataset.slug!.includes(want));
-      if (i > 0) { items[0].classList.remove('on'); items[i].classList.add('on'); cur = i; paint(i); card.scrollIntoView({ block: 'center' }); }
+      if (i > 0) { items[0].classList.remove('on'); items[i].classList.add('on'); cur = i; paint(i, false); card.scrollIntoView({ block: 'center' }); }
     }
   });
 </script>
