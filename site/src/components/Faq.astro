@@ -82,9 +82,9 @@ const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
     .fq-chips::after { content: ''; flex: 0 0 16px; }
     .fq-chip { flex: 0 0 auto; white-space: nowrap; scroll-snap-align: start; font-size: 14px; padding: 8px 14px; min-height: 44px; }
     /* Soft edge fade on the chips themselves (works on any background): right while more is ahead, left once scrolled. */
-    .fq-chips.fade-r { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); }
-    .fq-chips.fade-l { -webkit-mask-image: linear-gradient(90deg, transparent, #000 48px); mask-image: linear-gradient(90deg, transparent, #000 48px); }
-    .fq-chips.fade-l.fade-r { -webkit-mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
+    .fq-chips.fade-r { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent); }
+    .fq-chips.fade-l { -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px); mask-image: linear-gradient(90deg, transparent, #000 24px); }
+    .fq-chips.fade-l.fade-r { -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
     .fq-card { padding: 22px 20px; gap: 14px; }
     .fq-a { font-size: 17px; }
   }
@@ -116,7 +116,7 @@ const cardId = `faq-card-${rows[0].slug.slice(0, 12)}`;
     fades();
     const reveal = (i: number, smooth: boolean) => {
       if (row.scrollWidth <= row.clientWidth + 1) return;
-      const c = chips[i], left = Math.max(0, c.offsetLeft - (row.clientWidth - c.offsetWidth) / 2);
+      const c = chips[i], left = Math.max(0, c.offsetLeft - 24); // lands on the content edge, clear of the 24px fade
       row.scrollTo({ left, behavior: smooth && canMotion() ? 'smooth' : 'auto' });
     };
 
