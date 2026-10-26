@@ -1,0 +1,16 @@
+---
+// Simple line figure. Origin is the feet centre on the ground line (y 330); `dir` -1 mirrors it. Arms are paths relative to that origin.
+interface Props { x: number; dir?: 1 | -1; top: string; hair?: 'bob' | 'cap' | 'bun' | 'none'; arms?: string[] }
+const { x, dir = 1, top, hair = 'cap', arms = ['M-15 210 Q-27 232 -22 254', 'M15 210 Q27 232 22 254'] } = Astro.props;
+const hairPath = { bob: 'M-15 174 Q-16 156 0 156 Q16 156 15 174 Q10 166 0 166 Q-9 166 -15 174 Z', cap: 'M-14 171 Q-12 158 0 158 Q12 158 14 171 Q6 165 0 165 Q-6 165 -14 171 Z', bun: 'M-14 171 Q-12 158 0 158 Q12 158 14 171 Q6 165 0 165 Q-6 165 -14 171 Z', none: '' }[hair];
+---
+<g transform={`translate(${x} 0) scale(${dir} 1)`}>
+  <path class="fs-st" fill="none" d="M-8 268 L-11 328 M8 268 L11 328 M-11 328 H-19 M11 328 H19" />
+  {arms.map((d) => <path class="fs-st" fill="none" d={d} />)}
+  <path class="fs-st" d="M-17 204 Q-20 238 -16 270 H16 Q20 238 17 204 Q0 198 -17 204 Z" fill={top} />
+  <circle class="fs-st" cx="0" cy="176" r="14" fill="var(--paper)" />
+  {hairPath && <path d={hairPath} fill="var(--ink)" />}
+  {hair === 'bun' && <circle cx="0" cy="153" r="6" fill="var(--ink)" />}
+  <circle cx="5" cy="177" r="1.7" fill="var(--ink)" />
+  <path class="fs-st" fill="none" d="M3 184 Q7 187 11 184" />
+</g>

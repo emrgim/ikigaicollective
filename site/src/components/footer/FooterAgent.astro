@@ -1,0 +1,18 @@
+---
+// Agent drawn from the mark: capsule body, two dot eyes, a smile, little legs and the copper dot above. Origin is bottom centre of the body.
+// Layers: bob (CSS idle), hop (click), look (eyes follow the pointer), blink (CSS idle).
+interface Props { x: number; y?: number; s?: number; delay?: number; legs?: number; arms?: string[] }
+const { x, y = 322, s = 1, delay = 0, legs = 8, arms = ['M-23 -26 Q-31 -14 -27 -4', 'M23 -26 Q31 -14 27 -4'] } = Astro.props;
+---
+<g transform={`translate(${x} ${y}) scale(${s})`}>
+  <g class="fs-bob" style={`--d:${delay}s`}>
+    <g class="fs-hop" data-agent>
+      <path class="fs-st" fill="none" d={`M-9 0 V${legs} M9 0 V${legs} M-9 ${legs} H-16 M9 ${legs} H16`} />
+      {arms.map((d) => <path class="fs-st" fill="none" d={d} />)}
+      <rect class="fs-st" x="-23" y="-62" width="46" height="62" rx="23" fill="var(--paper)" />
+      <g class="fs-look"><g class="fs-blink" style={`--b:${delay * 0.7}s`}><circle cx="-7" cy="-36" r="2.4" fill="var(--ink)" /><circle cx="7" cy="-36" r="2.4" fill="var(--ink)" /></g></g>
+      <path class="fs-st" fill="none" d="M-6 -26 Q0 -21 6 -26" />
+      <circle class="fs-dot" cx="0" cy="-84" r="4.6" fill="var(--accent)" />
+    </g>
+  </g>
+</g>

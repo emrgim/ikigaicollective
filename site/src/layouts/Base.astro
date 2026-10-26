@@ -5,8 +5,8 @@ import Footer from '../components/Footer.astro';
 import { IS_LIVE } from '../lib/env';
 import { SITE } from '../config';
 
-interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string; canonical?: string; type?: 'website' | 'article'; jsonld?: object | object[]; noindex?: boolean }
-const { overlayNav = false, image, canonical, type = 'website', jsonld, noindex = false, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
+interface Props { title?: string; description?: string; overlayNav?: boolean; image?: string; canonical?: string; type?: 'website' | 'article'; jsonld?: object | object[]; noindex?: boolean; footerHead?: boolean }
+const { overlayNav = false, image, canonical, type = 'website', jsonld, noindex = false, footerHead = true, title, description = 'Life design through experimentation. A weekly Lab Night for people building toward meaning.' } = Astro.props;
 const banner = !IS_LIVE && SITE.previewFeedbackUrl;
 const origin = 'https://ikigaicollective.org';
 const path = Astro.url.pathname.replace(/(\/index)?\.html$/, '').replace(/\/$/, '') || '/';
@@ -65,7 +65,7 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective | Life 
     <div class={overlayNav ? 'absolute inset-x-0 z-30' : 'relative z-30'} style={overlayNav ? `top:${banner ? '2.5rem' : '0'}` : undefined}><Nav /></div>
     <main id="main"><slot /></main>
     <div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
-    <Footer />
+    <Footer head={footerHead} />
     <script>
       import { initLabNight } from '../lib/labnight-dom';
       initLabNight();

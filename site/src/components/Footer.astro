@@ -1,11 +1,14 @@
 ---
-import Mark from './Mark.astro';
+import Button from './Button.astro';
+import FooterScene from './footer/FooterScene.astro';
 import { SITE } from '../config';
 import copy from '../content/site/copy.json';
-const credit = copy.footerCredit;
-const col1 = [['/how-it-works', 'How it works'], ['/lab-night', 'Lab Night'], ['/lab-notes', 'Lab Notes']];
-const col2 = [['/horizon', 'Horizon'], ['/partners', 'Partners'], ['/join', 'Join']];
-const cols = [col1, col2];
+import { nextLabNight, pillText } from '../lib/labnight';
+
+interface Props { head?: boolean }
+const { head = true } = Astro.props;
+const f = copy.footer, credit = copy.footerCredit;
+const site = [['/how-it-works', 'How it works'], ['/lab-night', 'Lab Night'], ['/lab-notes', 'Lab Notes'], ['/horizon', 'Horizon'], ['/partners', 'Partners'], ['/join', 'Join']];
 // Official marks (24x24 viewBox, single path), drawn in currentColor so they follow the footer palette.
 const community = [
   [SITE.discordUrl, 'Discord', 'M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z'],
@@ -13,43 +16,58 @@ const community = [
   [SITE.githubUrl, 'GitHub', 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'],
   [SITE.linkedinUrl, 'LinkedIn', 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'],
 ].filter(([href]) => href);
+// Static fallback for the next Lab Night, computed from the schedule logic at build; the page script keeps it live in the visitor's browser.
+const next = pillText(nextLabNight()).date;
+const link = 'hit inline-flex min-h-11 items-center gap-3.5 font-display text-[28px] leading-[1.2] no-underline text-fg hover:text-copper max-md:text-[24px]';
+const label = 'mb-2 text-[12px] tracking-[0.28em] text-copper';
 ---
-<footer data-bg-start="var(--paper)" data-bg-end="var(--paper)" data-theme="ikigai-dawn" class="border-t border-line bg-bg text-fg">
-  <div class="wrap flex flex-wrap justify-between gap-x-16 gap-y-8 pb-10 pt-14">
-    <div class="flex flex-[1_1_280px] flex-col gap-3.5">
-      <div class="flex items-center gap-3">
-        <Mark size={32} variant="small" />
-        <span class="font-display text-[14px] tracking-[0.24em]">IKIGAI COLLECTIVE</span>
+<footer data-bg-start="var(--paper)" data-bg-end="var(--paper)" data-theme="ikigai-dawn" class="overflow-hidden border-t border-line bg-bg text-fg">
+  <div class={`wrap grid gap-x-12 gap-y-10 pb-6 pt-16 md:pt-24 md:grid-cols-[1.7fr_1fr_1fr]`}>
+    {head && (
+      <div class="flex flex-col items-start gap-5">
+        <h2 class="m-0 font-display text-[clamp(34px,5vw,58px)] font-normal leading-[1.04]">
+          {f.useFallback ? f.headlineFallback : <><span class="whitespace-nowrap">{f.headline.plain}</span><br /><span class="italic text-copper">{f.headline.em}</span></>}
+        </h2>
+        <p class="m-0 text-[18px] text-muted">{f.line}</p>
+        <Button href="/join" variant="ink" class="mt-1">{f.button}</Button>
       </div>
-      <span class="italic text-copper">Curiosity · Agency · Compassion</span>
-      <span class="text-[14px] text-muted">Lab Night every Thursday, 21:00 Rome time.</span>
-    </div>
-    <nav aria-label="Footer" class="flex flex-[2_1_520px] flex-wrap gap-x-12 gap-y-3 text-[15px]">
-      {cols.map((col) => (
-        <div class="flex flex-col gap-2.5">
-          {col.map(([href, label]) => (
-            <a href={href} class="hit py-1 no-underline text-fg hover:text-copper" rel={href.startsWith('http') ? 'noopener' : undefined}>{label}</a>
-          ))}
-        </div>
-      ))}
-      <div class="flex flex-col gap-0.5">
-        <span class="mb-1 font-display text-[14px] tracking-[0.24em]">COMMUNITY</span>
-        {community.map(([href, label, d]) => (
-          <a href={href} target="_blank" rel="noopener" class="hit group inline-flex min-h-11 items-center gap-2.5 no-underline text-fg hover:text-copper">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="shrink-0"><path d={d} /></svg>
-            <span>{label}</span>
-          </a>
-        ))}
-      </div>
+    )}
+    {!head && <div class="max-md:hidden" aria-hidden="true"></div>}
+    <nav aria-label="Footer" class="flex flex-col">
+      <span class={label}>{f.siteLabel}</span>
+      {site.map(([href, text]) => <a href={href} class={link}>{text}</a>)}
     </nav>
+    <div class="flex flex-col">
+      <span class={label}>{f.communityLabel}</span>
+      {community.map(([href, text, d]) => (
+        <a href={href} target="_blank" rel="noopener" class={link}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="shrink-0"><path d={d} /></svg>
+          <span>{text}</span>
+        </a>
+      ))}
+    </div>
   </div>
-  <div class="wrap flex flex-wrap gap-x-6 gap-y-2 pb-10 text-[13px] text-muted">
-    <span>© 2026 Ikigai Collective</span>
-    <span>Content CC BY-SA 4.0 · Code MIT</span>
-    <a href="/terms" class="hit text-muted hover:text-copper">Terms</a>
-    <a href="/privacy" class="hit text-muted hover:text-copper">Privacy</a>
-  </div>
-  <div class="wrap border-t border-line py-5 text-[15px] text-muted">
-    <span>{credit.text} <a href={credit.url} target="_blank" rel="noopener" class="hit text-copper underline decoration-1 underline-offset-4 hover:text-fg">{credit.name}</a></span>
+  <div class="mt-8"><FooterScene /></div>
+  <div class="border-t border-line bg-[color-mix(in_srgb,var(--accent)_8%,var(--bg))]">
+    <div class="wrap grid grid-cols-1 gap-x-8 gap-y-6 py-7 text-[14px] leading-[1.5] min-[480px]:grid-cols-2 md:grid-cols-4">
+      <div class="flex flex-col"><span>{f.copyright}</span><span class="text-muted">{f.licence}</span></div>
+      <div class="flex flex-col">
+        <span>{f.nextLabel}</span>
+        <span class="font-mono text-[13px] text-muted" data-ln-show="idle tonight"><span data-ln-date>{next}</span> · 21:00 Rome</span>
+        <span class="font-mono text-muted" data-ln-show="live" hidden>{f.live}</span>
+      </div>
+      <div class="flex flex-col">
+        <span><a href="/terms" class="tap text-fg hover:text-copper">{f.terms}</a> · <a href="/privacy" class="tap text-fg hover:text-copper">{f.privacy}</a></span>
+        <span class="text-muted">{f.noCookies}</span>
+      </div>
+      <div class="flex flex-col">
+        <span>{credit.text}</span>
+        <a href={credit.url} target="_blank" rel="noopener" class="tap self-start text-copper underline decoration-1 underline-offset-4 hover:text-fg">{credit.name}</a>
+      </div>
+    </div>
   </div>
 </footer>
+<style is:global>
+  /* 44px tap area without growing the small-print rows. */
+  footer .tap { display: inline-flex; align-items: center; min-height: 44px; margin-block: -11px; }
+</style>

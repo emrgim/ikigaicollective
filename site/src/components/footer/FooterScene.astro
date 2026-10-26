@@ -1,0 +1,135 @@
+---
+import Person from './FooterPerson.astro';
+import Agent from './FooterAgent.astro';
+
+// People and agents building together beside a rising sun. Inline SVG, fills from the existing tokens only.
+// Each vignette is its own <g id="fs-v*">: a member's final artwork can replace the group contents without touching layout or motion code.
+// Ground line y=330. On mobile the CSS crops this scene to its centre (vignettes 2 to 4) at full figure size.
+const dashes = (() => {
+  let x = 30, i = 0, d = '';
+  for (; x < 1440; i++) { d += `M${x} ${[342, 348, 354, 360][i % 4]} h${[10, 18, 26][i % 3]} `; x += [65, 65, 38][i % 3]; }
+  return d.trim();
+})();
+const ink = 'var(--ink)', paper = 'var(--paper)';
+const notes = [[884, 188, 600], [920, 192, 900], [958, 188, 600], [900, 228, 900], [944, 228, 600]];
+---
+<div class="fs-band">
+  <svg class="fs-svg" viewBox="0 0 1440 400" role="img" aria-label="Illustration: people and AI agents building together beside a rising sun." preserveAspectRatio="xMidYMax meet">
+    <g class="fs-sun-rise">
+      <g class="fs-breathe">
+        <circle cx="720" cy="330" r="230" fill="var(--copper-900)" opacity=".55" />
+        <circle cx="720" cy="330" r="150" fill="var(--copper-800)" opacity=".45" />
+      </g>
+      <g transform="translate(560 40) scale(5)" opacity=".5">
+        <g fill="none" stroke="var(--copper-600)" stroke-width="5" stroke-linecap="round">
+          <path d="M25 39 A7 7 0 0 1 39 39 A11 11 0 0 1 17 39 A15 15 0 0 1 47 39" />
+          <path d="M47 39 L47 25" />
+        </g>
+        <circle cx="47" cy="13.5" r="4.6" fill="var(--copper-600)" />
+      </g>
+    </g>
+    <rect x="0" y="330" width="1440" height="70" fill={paper} />
+    <path d="M0 330 H1440" class="fs-st" fill="none" />
+    <path d={dashes} class="fs-st" fill="none" stroke-width="2" opacity=".35" />
+
+    <g class="fs-birds" fill="none">
+      <path class="fs-st" d="M1110 190 q8 -9 16 0 q8 -9 16 0" />
+      <path class="fs-st" d="M1172 214 q6 -7 12 0 q6 -7 12 0" />
+    </g>
+    <Agent x={590} y={178} s={0.6} delay={-2} legs={12} arms={['M-23 -26 Q-34 -14 -30 -4', 'M23 -26 Q34 -14 30 -4']} />
+
+    <!-- 1. A person and an agent carrying a plank together -->
+    <g id="fs-v1" class="fs-fig">
+      <Person x={100} top="var(--copper-900)" hair="bob" arms={['M-15 210 Q-27 232 -22 254', 'M14 212 Q30 214 40 227']} />
+      <Agent x={262} delay={-0.4} arms={['M-23 -28 Q-34 -50 -22 -79', 'M23 -26 Q34 -14 30 -4']} />
+      <rect class="fs-st" x="0" y="-4" width="136" height="8" rx="2" fill="var(--copper-600)" transform="translate(118 219.5) rotate(9.23)" />
+      <circle class="fs-st" cx="140" cy="227" r="3.4" fill={paper} />
+      <circle class="fs-st" cx="240" cy="243" r="3.4" fill={paper} />
+    </g>
+
+    <!-- 2. A person and an agent at one laptop on a table -->
+    <g id="fs-v2" class="fs-fig">
+      <path class="fs-st" fill="none" d="M492 272 V330 M562 272 V330" />
+      <rect class="fs-st" x="482" y="266" width="88" height="6" rx="2" fill="var(--copper-800)" />
+      <rect class="fs-st" x="510" y="236" width="34" height="26" rx="2" fill={paper} />
+      <circle cx="527" cy="249" r="3.2" fill="var(--accent)" />
+      <rect class="fs-st" x="504" y="262" width="46" height="4" rx="1" fill={paper} />
+      <Person x={446} top="var(--copper-600)" hair="cap" arms={['M-15 210 Q-27 232 -22 254', 'M14 214 Q44 218 58 261']} />
+      <Agent x={608} delay={-1.3} arms={['M-23 -30 Q-44 -34 -58 -66', 'M23 -26 Q34 -14 30 -4']} />
+    </g>
+
+    <!-- 3. Centre: a person and a floating agent reaching toward each other -->
+    <g id="fs-v3" class="fs-fig">
+      <rect class="fs-hit" x="640" y="200" width="150" height="130" fill="transparent" />
+      <ellipse cx="764" cy="330" rx="24" ry="3" fill={ink} opacity=".12" />
+      <Person x={660} top="var(--copper-400)" hair="bun" arms={['M-15 210 Q-27 232 -22 254', 'M14 212 Q34 214 42 232']} />
+      <Agent x={764} y={296} delay={-0.8} legs={14} arms={['M-23 -30 Q-38 -40 -34 -56', 'M23 -26 Q34 -14 30 -4']} />
+      <g transform="translate(716 231)" class="fs-flare">
+        <circle class="fs-glow" r="11" fill="var(--copper-600)" opacity=".3" />
+        <g class="fs-spark" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"><path d="M0 -8 V8 M-7 -4 L7 4 M-7 4 L7 -4" /></g>
+      </g>
+    </g>
+
+    <!-- 4. An agent and a person putting copper and pale sticky notes on a board -->
+    <g id="fs-v4" class="fs-fig">
+      <path class="fs-st" fill="none" d="M902 276 L892 330 M962 276 L972 330" />
+      <rect class="fs-st" x="872" y="176" width="120" height="100" rx="3" fill={paper} />
+      {notes.map(([nx, ny, c]) => <rect class="fs-st" x={nx} y={ny} width="24" height="22" fill={`var(--copper-${c})`} stroke-width="1.8" />)}
+      <Person x={1026} dir={-1} top="var(--copper-600)" hair="cap" arms={['M-15 210 Q-27 232 -22 254', 'M14 212 Q32 208 34 224']} />
+      <Agent x={838} delay={-2.1} arms={['M-23 -26 Q-34 -14 -30 -4', 'M23 -30 Q38 -48 36 -74']} />
+      <rect class="fs-st" x="867" y="244" width="14" height="14" fill="var(--copper-600)" stroke-width="1.8" />
+      <rect class="fs-st" x="984" y="216" width="14" height="14" fill="var(--copper-900)" stroke-width="1.8" />
+    </g>
+
+    <!-- 5. A person watering a sprout, with a small agent floating nearby -->
+    <g id="fs-v5" class="fs-fig">
+      <Person x={1200} top="var(--copper-900)" hair="bun" arms={['M-15 210 Q-27 232 -22 254', 'M14 212 Q32 214 40 230']} />
+      <g transform="translate(1240 230) rotate(18)">
+        <path class="fs-st" fill="none" d="M-10 -2 Q-18 2 -14 12" />
+        <path class="fs-st" fill="none" d="M12 -2 L28 6" />
+        <path class="fs-st" d="M-10 -6 H12 L9 14 H-7 Z" fill="var(--copper-800)" />
+      </g>
+      <circle class="fs-drip" style="--d:0s" cx="1266" cy="248" r="2" fill="var(--copper-500)" />
+      <circle class="fs-drip" style="--d:.5s" cx="1266" cy="248" r="2" fill="var(--copper-500)" />
+      <circle class="fs-drip" style="--d:1s" cx="1266" cy="248" r="2" fill="var(--copper-500)" />
+      <g class="fs-sprout">
+        <path class="fs-st" fill="none" d="M1284 330 Q1281 312 1284 288" />
+        <path class="fs-st" d="M1284 304 Q1266 294 1260 304 Q1272 314 1284 304 Z" fill="var(--copper-600)" />
+        <path class="fs-st" d="M1284 296 Q1302 284 1310 294 Q1298 306 1284 296 Z" fill="var(--copper-600)" />
+      </g>
+      <Agent x={1366} y={292} s={0.75} delay={-1.7} legs={12} />
+    </g>
+  </svg>
+</div>
+
+<style is:global>
+  .fs-svg { display: block; width: 100%; height: auto; }
+  .fs-st { stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .fs-hit { pointer-events: all; }
+  .fs-svg :is(.fs-bob, .fs-blink, .fs-dot, .fs-spark, .fs-glow, .fs-drip, .fs-birds, .fs-breathe, .fs-flare, .fs-hop) { transform-box: fill-box; transform-origin: center; }
+
+  /* Idle loops: only with motion allowed, and only while the footer is on screen (.fs-on from the observer). No JS or reduced motion: the finished static scene. */
+  html.motion .fs-svg:not(.fs-on) * { animation-play-state: paused; }
+  html.motion .fs-bob { animation: fs-bob 3.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  html.motion .fs-blink { animation: fs-blink 4.6s ease-in-out infinite; animation-delay: var(--b, 0s); }
+  html.motion .fs-dot { animation: fs-pulse 2.6s ease-in-out infinite; }
+  html.motion .fs-spark { animation: fs-spin 5s linear infinite; }
+  html.motion .fs-glow { animation: fs-glow 2.4s ease-in-out infinite; }
+  html.motion .fs-drip { animation: fs-drip 1.5s ease-in infinite; animation-delay: var(--d, 0s); opacity: 0; }
+  html.motion .fs-birds { animation: fs-drift 9s ease-in-out infinite alternate; }
+  html.motion .fs-breathe { animation: fs-breathe 6s ease-in-out infinite alternate; }
+  @keyframes fs-bob { 50% { transform: translateY(-5px); } }
+  @keyframes fs-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+  @keyframes fs-pulse { 50% { transform: scale(1.3); opacity: 0.75; } }
+  @keyframes fs-spin { to { transform: rotate(180deg); } }
+  @keyframes fs-glow { 50% { transform: scale(1.35); opacity: 0.5; } }
+  @keyframes fs-drip { 0% { transform: translate(0, 0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate(14px, 66px); opacity: 0; } }
+  @keyframes fs-drift { to { transform: translateX(-60px); } }
+  @keyframes fs-breathe { to { transform: scale(1.025); } }
+
+  /* Mobile: crop to the centre (vignettes 2 to 4) at full figure size instead of shrinking the whole 1440 scene. */
+  @media (max-width: 767px) {
+    .fs-band { position: relative; height: 240px; overflow: hidden; }
+    .fs-svg { position: absolute; bottom: 0; left: 50%; height: 250px; width: auto; max-width: none; transform: translateX(calc(-50% - 9px)); }
+  }
+</style>

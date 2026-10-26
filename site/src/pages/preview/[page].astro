@@ -33,6 +33,7 @@ const items = [
   },
   { title: 'The invitation paste text', file: 'src/content/site/copy.json (invitation)', approved: ok.invitation, where: [['Join page', '/join']], lines: [copy.invitation] },
   { title: 'The Spiral line', file: 'src/content/site/copy.json (archiveTagline)', approved: ok.archiveTagline, where: [['Home, Spiral Archive heading', '/#ar-h']], lines: [copy.archiveTagline] },
+  { title: 'The footer headline', file: 'src/content/site/copy.json (footer.headline; footer.useFallback switches to the fallback line)', approved: ok.footerHeadline, needs: true, where: [['Every page footer except Home', '/partners']], lines: [`${copy.footer.headline.plain} ${copy.footer.headline.em}`, `Fallback: ${copy.footer.headlineFallback}`] },
   { title: 'The partner principles', file: 'src/content/site/copy.json (partnerPrinciples)', approved: ok.partnerPrinciples, where: [['Partners page, "What we will and won\'t do"', '/partners']], lines: [copy.partnerIntro, ...copy.partnerPrinciples] },
 ];
 const also = [
@@ -58,7 +59,7 @@ const todo = items.filter((i) => !i.approved).length;
         <article class="flex flex-col gap-4 border border-line p-7">
           <div class="flex flex-wrap items-baseline justify-between gap-3">
             <h2 class="font-display text-[26px] font-normal"><span class="text-copper">{i + 1}.</span> {it.title}</h2>
-            <span style="--approved:color-mix(in srgb, var(--success) 70%, var(--fg))" class={`rounded px-3 py-1 text-[13px] tracking-[0.06em] ${it.approved ? 'border border-[var(--approved)] text-[var(--approved)]' : it.lines.some(open) ? 'bg-copper text-bg' : 'border border-copper text-cu-700'}`}>{it.approved ? 'APPROVED' : it.lines.some(open) ? 'NEEDS DAVID' : 'DRAFT TO APPROVE'}</span>
+            <span style="--approved:color-mix(in srgb, var(--success) 70%, var(--fg))" class={`rounded px-3 py-1 text-[13px] tracking-[0.06em] ${it.approved ? 'border border-[var(--approved)] text-[var(--approved)]' : it.needs || it.lines.some(open) ? 'bg-copper text-bg' : 'border border-copper text-cu-700'}`}>{it.approved ? 'APPROVED' : it.needs || it.lines.some(open) ? 'NEEDS DAVID' : 'DRAFT TO APPROVE'}</span>
           </div>
           <ul class="m-0 flex list-none flex-col gap-2 p-0 text-[17px] leading-[1.55]">
             {it.lines.map((l) => <li class="border-l-2 border-line pl-4">{l}</li>)}

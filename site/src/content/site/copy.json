@@ -45,11 +45,31 @@
     "archiveTagline": true,
     "joinHeadline": true,
     "invitation": true,
-    "partnerPrinciples": true
+    "partnerPrinciples": true,
+    "footerHeadline": false
   },
   "footerCredit": {
     "text": "Designed and developed by",
     "name": "Mayur Sachdeva",
     "url": "https://mayursachdeva.com"
+  },
+  "footer": {
+    "headline": {
+      "plain": "People and agents,",
+      "em": "building together."
+    },
+    "headlineFallback": "Every Thursday, one more turn.",
+    "useFallback": false,
+    "line": "Every Thursday, one more turn.",
+    "button": "Get the Lab Night invite →",
+    "siteLabel": "THE SITE",
+    "communityLabel": "COMMUNITY",
+    "copyright": "© 2026 Ikigai Collective",
+    "licence": "CC BY-SA 4.0 · Code MIT",
+    "nextLabel": "Next Lab Night",
+    "live": "Live now",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "noCookies": "No cookies"
   }
 }
