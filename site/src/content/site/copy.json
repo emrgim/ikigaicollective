@@ -46,5 +46,10 @@
     "joinHeadline": true,
     "invitation": true,
     "partnerPrinciples": true
+  },
+  "footerCredit": {
+    "text": "Designed and developed by",
+    "name": "Mayur Sachdeva",
+    "url": "https://mayursachdeva.com"
   }
 }

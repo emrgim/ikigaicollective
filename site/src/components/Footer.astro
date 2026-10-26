@@ -1,6 +1,8 @@
 ---
 import Mark from './Mark.astro';
 import { SITE } from '../config';
+import copy from '../content/site/copy.json';
+const credit = copy.footerCredit;
 const col1 = [['/how-it-works', 'How it works'], ['/lab-night', 'Lab Night'], ['/lab-notes', 'Lab Notes']];
 const col2 = [['/horizon', 'Horizon'], ['/partners', 'Partners'], ['/join', 'Join']];
 const col3 = [
@@ -36,5 +38,6 @@ const cols = [col1, col2, col3];
     <span>Content CC BY-SA 4.0 · Code MIT</span>
     <a href="/terms" class="hit text-muted hover:text-copper">Terms</a>
     <a href="/privacy" class="hit text-muted hover:text-copper">Privacy</a>
+    <span>{credit.text} <a href={credit.url} target="_blank" rel="noopener" class="hit text-muted hover:text-copper">{credit.name}</a></span>
   </div>
 </footer>
