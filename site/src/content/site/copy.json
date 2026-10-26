@@ -74,7 +74,7 @@
   },
   "partnerForm": {
     "reassurance": "This goes straight to the team.",
-    "needOrg": "Add your name so we know who to answer.",
+    "needOrg": "Add your organisation’s name.",
     "needMessage": "Add what you would like to try.",
     "needEmail": "Add an email so we can reach you.",
     "badEmail": "That email does not look right."
