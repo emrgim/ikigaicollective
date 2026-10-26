@@ -78,5 +78,9 @@
     "needMessage": "Add what you would like to try.",
     "needEmail": "Add an email so we can reach you.",
     "badEmail": "That email does not look right."
+  },
+  "inviteTicket": {
+    "button": "Add me to Thursday →",
+    "stamp": "You’re in"
   }
 }

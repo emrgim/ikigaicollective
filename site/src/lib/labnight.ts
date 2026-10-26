@@ -52,3 +52,9 @@ export function labNightPhase(now = Date.now()): { phase: Phase; start: number; 
   const phase: Phase = msToStart <= 0 ? 'live' : msToStart <= 3 * HOUR ? 'tonight' : 'idle';
   return { phase, start, msToStart };
 }
+
+/** Weekday, day and month of the Lab Night in Rome, for the invite ticket's calendar tile. */
+export function tileParts(start: number) {
+  const f = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, ...o }).format(start);
+  return { wd: f({ weekday: 'short' }).toUpperCase(), day: f({ day: 'numeric' }), mon: f({ month: 'short' }).toUpperCase() };
+}

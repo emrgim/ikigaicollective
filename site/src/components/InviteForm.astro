@@ -1,20 +1,129 @@
 ---
-// Static in Phase 1. The endpoint, Turnstile and success state are wired in Phase 5.
+// The Lab Night ticket: event on top, the invite as one sentence below. Submission, spam checks and preview
+// handling live in scripts/forms.ts (data-invite-form); the next date comes from lib/labnight.
+import Agent from './footer/FooterAgent.astro';
+import copy from '../content/site/copy.json';
+import { nextLabNight, tileParts } from '../lib/labnight';
 interface Props { name?: boolean; intro?: string; foot?: string; success: string; id?: string }
 const { name = false, intro, foot = 'Protected by an invisible spam check.', success, id = 'invite-form' } = Astro.props;
+const tile = tileParts(nextLabNight());
+const f = copy.partnerForm;
+const t = copy.inviteTicket;
+const agent = ['M-23 -26 Q-31 -14 -27 -4'];
 ---
-<form data-theme="ikigai-dawn" id={id} aria-labelledby={`${id}-h`} data-invite-form class="flex flex-[1_1_400px] flex-col gap-4 bg-bg p-8 text-fg shadow-[0_30px_80px_rgba(10,10,10,0.35)] md:p-11" method="post" action="/api/invite">
-  <h3 id={`${id}-h`} class="font-display text-[34px] font-normal leading-tight">Get the invite</h3>
-  {intro && <p class="text-[17px] leading-[1.55]">{intro}</p>}
-  <div class="flex flex-col gap-2.5" data-invite-fields>
-    {name && (<>
-      <label for={`${id}-nm`} class="text-[15px]">First name</label>
-      <input id={`${id}-nm`} name="name" type="text" autocomplete="given-name" class="field" />
-    </>)}
-    <label for={`${id}-em`} class="text-[15px]">Email</label>
-    <input id={`${id}-em`} name="email" type="email" required autocomplete="email" placeholder="you@example.com" class="field" />
-    <button type="submit" class="btn btn-ink mt-1.5 min-h-[52px] w-full text-[17px]">Send me the invite</button>
+<form data-theme="ikigai-dawn" id={id} aria-labelledby={`${id}-h`} data-invite-form data-inline-errors novalidate class="tk" method="post" action="/api/invite">
+  <div class="tk-top">
+    <div class="tk-tile" aria-hidden="true"><span class="tk-tw" data-ln-wd>{tile.wd}</span><span class="tk-day" data-ln-day>{tile.day}</span><span class="tk-mon" data-ln-mon>{tile.mon}</span></div>
+    <div class="tk-ev">
+      <h3 id={`${id}-h`} class="tk-title">Lab Night · Ikigai Collective</h3>
+      <p class="tk-line">21:00 Rome<span data-ln-local="tk" class="tk-local"></span> · Google Meet · every Thursday</p>
+    </div>
+    <span class="tk-weekly">WEEKLY</span>
+    <span class="tk-stamp" aria-hidden="true">{t.stamp}</span>
   </div>
-  <p data-invite-success hidden tabindex="-1" class="border border-[var(--success)] p-4 text-[17px] leading-[1.5] text-[var(--success)]" role="status">{success}</p>
-  <span class="text-[13px] text-muted">{foot}</span>
+  <div class="tk-bot">
+    <div data-invite-fields data-fade>
+      <p class="tk-s">
+        Send it to{' '}
+        {name && (<>
+          <span class="tk-w">
+            <label for={`${id}-nm`} class="sr-only">First name</label>
+            <input id={`${id}-nm`} name="name" type="text" autocomplete="given-name" maxlength="80" placeholder="your first name" class="tk-f" />
+          </span>{' '}at{' '}
+        </>)}
+        <span class="tk-w tk-wd">
+          <label for={`${id}-em`} class="sr-only">Email</label>
+          <input id={`${id}-em`} name="email" type="email" required autocomplete="email" inputmode="email" maxlength="254" placeholder="you@example.com" class="tk-f" data-pc data-need={f.needEmail} data-bad={f.badEmail} aria-describedby={`${id}-em-e`} />
+          <span id={`${id}-em-e`} class="tk-err" hidden></span><span class="tk-dot">.</span>
+        </span>
+      </p>
+      {intro && <p class="tk-intro">{intro}</p>}
+      <div class="tk-foot">
+        <span class="tk-note">
+          <svg class="tk-agent" viewBox="-26 -92 52 102" width="34" aria-hidden="true"><Agent x={0} y={0} s={1} legs={8} arms={agent} /><path class="fs-st tk-arm" fill="none" d="M23 -26 Q31 -14 27 -4" /></svg>
+          <span>{foot}</span>
+        </span>
+        <button type="submit" class="tk-btn" data-sending="Sending…">{t.button}</button>
+      </div>
+    </div>
+    <div data-invite-success hidden tabindex="-1" class="tk-ok" role="status">
+      <svg class="tk-agent tk-wave" viewBox="-26 -92 52 102" width="44" aria-hidden="true"><Agent x={0} y={0} s={1} legs={8} arms={agent} /><path class="fs-st tk-arm" fill="none" d="M23 -26 Q31 -14 27 -4" /></svg>
+      <p>{success}</p>
+    </div>
+  </div>
 </form>
+
+<style is:global>
+  .tk { position: relative; flex: 1.6 1 520px; background: transparent; max-width: 100%; color: var(--ink); filter: drop-shadow(0 40px 50px rgb(0 0 0 / 0.38)); }
+  /* The two halves each cut a half-circle notch where they meet; the mask shows whatever section colour is behind. */
+  .tk { --tk-notch-b: radial-gradient(circle 14px at 0 100%, #0000 13px, #000 14px) 0 0 / 50% 100% no-repeat, radial-gradient(circle 14px at 100% 100%, #0000 13px, #000 14px) 100% 0 / 50% 100% no-repeat; --tk-notch-t: radial-gradient(circle 14px at 0 0, #0000 13px, #000 14px) 0 0 / 50% 100% no-repeat, radial-gradient(circle 14px at 100% 0, #0000 13px, #000 14px) 100% 0 / 50% 100% no-repeat; }
+  .tk-top, .tk-bot { background: var(--paper); }
+  .tk-top { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 22px; padding: 30px 40px; border-radius: 28px 28px 0 0; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%), var(--paper); border-bottom: 1px dashed color-mix(in srgb, var(--ink) 30%, transparent); mask: var(--tk-notch-b); }
+  .tk-bot { padding: 34px 40px 30px; border-radius: 0 0 28px 28px; mask: var(--tk-notch-t); }
+  .tk-tile { display: flex; flex-direction: column; width: 78px; overflow: hidden; text-align: center; background: #fff; border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 14px; box-shadow: 0 2px 0 color-mix(in srgb, var(--ink) 8%, transparent); }
+  .tk-tw { padding: 5px 0; font-size: 12px; letter-spacing: 0.2em; color: var(--paper); background: var(--accent); }
+  .tk-day { padding-top: 4px; font-size: 36px; line-height: 1.1; }
+  .tk-mon { padding-bottom: 8px; font-size: 11px; letter-spacing: 0.2em; color: var(--muted); }
+  .tk-ev { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .tk-title { margin: 0; font: inherit; font-size: 22px; line-height: 1.25; }
+  .tk-line { margin: 0; font-size: 15px; line-height: 1.45; color: color-mix(in srgb, var(--muted) 70%, var(--ink)); }
+  .tk-local { color: var(--ink); }
+  .tk-weekly { font-size: 12px; letter-spacing: 0.25em; color: var(--copper-300); border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 9999px; padding: 6px 12px; }
+
+  .tk-s { display: flow-root; margin: 0; font-size: 30px; line-height: 1.7; }
+  .tk-w { position: relative; display: inline-block; vertical-align: baseline; }
+  .tk-f { display: inline-block; max-width: 100%; margin: 0; padding: 0 4px 2px; width: 220px; font: inherit; font-style: normal; line-height: 1.35; color: var(--ink); background: transparent; border: 0; border-bottom: 2px solid color-mix(in srgb, var(--ink) 45%, transparent); border-radius: 0; outline: 0; transition: border-color 0.15s; }
+  @supports (field-sizing: content) { .tk-f { field-sizing: content; width: auto; min-width: 190px; } }
+  .tk-f::placeholder { font-style: italic; color: color-mix(in srgb, var(--ink) 66%, transparent); opacity: 1; }
+  .tk-f:focus { border-bottom: 3px solid var(--ink); padding-bottom: 1px; }
+  .tk-f:focus-visible { outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 3px; border-radius: 2px; }
+  .tk-f[aria-invalid='true'] { border-bottom-color: var(--danger); }
+  .tk-w:has([aria-invalid='true']) { margin-bottom: 34px; }
+  .tk-err { position: absolute; left: 4px; top: calc(100% + 8px); font-size: 14px; line-height: 1.3; color: color-mix(in srgb, var(--danger) 62%, var(--ink)); white-space: nowrap; }
+  .tk-err[hidden] { display: none; }
+  .tk-intro { margin: 18px 0 0; font-size: 15px; line-height: 1.5; color: var(--muted); }
+
+  .tk-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 26px; }
+  .tk-note { display: flex; flex: 1 1 160px; align-items: center; gap: 12px; max-width: 280px; font-size: 14px; line-height: 1.35; color: var(--muted); }
+  .tk-agent { flex: none; height: auto; overflow: visible; }
+  .tk .fs-bob { animation: none !important; }
+  .tk-btn { display: inline-flex; min-height: 52px; align-items: center; justify-content: center; padding: 17px 28px; border: 0; border-radius: 9999px; font: inherit; font-size: 17px; cursor: pointer; color: var(--paper); background: var(--ink); transition: background-color 0.15s, opacity 0.15s; }
+  .tk-btn:hover { background: color-mix(in srgb, var(--ink) 82%, var(--accent)); }
+  .tk-btn:disabled { opacity: 0.7; cursor: progress; }
+  .tk-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .tk > [role='status']:not(.tk-ok) { margin: 14px 0 0; padding: 14px 18px; border-radius: 16px; font-size: 15px; line-height: 1.5; color: var(--ink); background: var(--paper); }
+
+  .tk [data-fade] { transition: opacity 0.2s ease; }
+  .tk [data-fade].is-out { opacity: 0; }
+  .tk-ok { display: flex; align-items: center; gap: 32px; padding: 14px 0 8px; }
+  .tk-ok p { margin: 0; font-size: 22px; line-height: 1.4; }
+  .tk-ok:focus { outline: 0; }
+  .tk-arm { transform-box: fill-box; transform-origin: 0 0; }
+  .tk-stamp { display: none; position: absolute; right: 30px; top: 34px; padding: 4px 12px; font-size: 17px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 3px solid var(--accent); border-radius: 10px; transform: rotate(-8deg); background: color-mix(in srgb, var(--paper) 70%, transparent); pointer-events: none; }
+  .tk:has([data-invite-success]:not([hidden])) .tk-stamp { display: block; }
+  .tk:has([data-invite-success]:not([hidden])) .tk-weekly { visibility: hidden; }
+  .tk:has([data-invite-success]:not([hidden])) .tk-ev { padding-right: 24px; }
+  html.motion .tk-ok:not([hidden]) { animation: tk-in 0.3s ease both; }
+  html.motion .tk-ok:not([hidden]) .tk-arm { animation: tk-wave 1.6s ease-in-out 0.3s both; }
+  html.motion .tk:has([data-invite-success]:not([hidden])) .tk-stamp { animation: tk-stamp 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) 0.15s both; }
+  @keyframes tk-in { from { opacity: 0; } }
+  @keyframes tk-stamp { from { opacity: 0; transform: rotate(-8deg) scale(1.7); } }
+  @keyframes tk-wave { 0% { transform: rotate(0); } 20% { transform: rotate(-135deg); } 35% { transform: rotate(-105deg); } 50% { transform: rotate(-135deg); } 65% { transform: rotate(-105deg); } 80% { transform: rotate(-135deg); } 100% { transform: rotate(0); } }
+
+  @media (max-width: 767px) {
+    .tk-top { grid-template-columns: auto 1fr; padding: 24px 22px; column-gap: 16px; row-gap: 12px; }
+    .tk-weekly { grid-column: 2; justify-self: start; }
+    .tk-bot { padding: 26px 22px 24px; }
+    .tk-s { font-size: 22px; line-height: 1.5; }
+    .tk-w { display: block; margin-block: 6px 12px; }
+    .tk-f { width: 100%; min-width: 0; min-height: 44px; field-sizing: fixed; }
+    .tk-wd { display: flex; align-items: baseline; }
+    .tk-wd .tk-f { flex: 1; width: auto; }
+    .tk-w:has([aria-invalid='true']) { margin-bottom: 38px; }
+    .tk-err { white-space: normal; }
+    .tk-foot { flex-direction: column; align-items: stretch; margin-top: 22px; }
+    .tk-note { flex: none; max-width: none; }
+    .tk-btn { width: 100%; }
+    .tk-stamp { right: 16px; top: auto; bottom: 16px; font-size: 15px; }
+  }
+</style>

@@ -1,8 +1,10 @@
-import { labNightPhase, pillText } from './labnight';
+import { labNightPhase, pillText, tileParts } from './labnight';
 
 // Lab Night times and live mode, in the visitor's own zone. No-JS fallback is the static idle text in the markup.
 //   [data-ln-date]      "Thursday 22 October"
 //   [data-ln-local]     "00:30 your time"; value "sep" prefixes " · "
+//   [data-ln-local=tk]  invite ticket: " · 00:30 your time", empty when the visitor is on Rome time
+//   [data-ln-wd|day|mon] the ticket's calendar tile
 //   [data-ln-count]     days / hours / minutes boxes (d h m), hidden until JS
 //   [data-ln-timer]     hh:mm:ss until the start, during "tonight"
 //   [data-ln-show]      space-separated phases (idle | tonight | live); element is hidden in the others
@@ -16,8 +18,11 @@ export function initLabNight() {
     document.documentElement.dataset.lnPhase = phase;
     document.querySelectorAll('[data-ln-date]').forEach((el) => (el.textContent = date));
     document.querySelectorAll<HTMLElement>('[data-ln-local]').forEach((el) => {
+      if (el.dataset.lnLocal === 'tk') { el.textContent = local === pillText(start, 'en-GB', 'Europe/Rome').local ? '' : ` · ${local} your time`; return; }
       el.textContent = `${el.dataset.lnLocal === 'sep' ? ' · ' : ''}${local} your time`;
     });
+    const tile = tileParts(start);
+    (['wd', 'day', 'mon'] as const).forEach((k) => document.querySelectorAll(`[data-ln-${k}]`).forEach((el) => (el.textContent = tile[k])));
     document.querySelectorAll<HTMLElement>('[data-ln-show]').forEach((el) => {
       el.hidden = !el.dataset.lnShow!.split(' ').includes(phase);
     });
