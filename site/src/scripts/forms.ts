@@ -1,5 +1,6 @@
 import { announce, track } from '../lib/track';
 import { FORMS_LIVE } from '../lib/env';
+import { canMotion } from '../lib/motion';
 
 // Invite and partner forms. They post JSON to the form's action. Until the endpoints exist (Phase 5)
 // a 404 gets an honest "not open yet" message instead of a fake success.
@@ -8,6 +9,22 @@ const PREVIEW = {
   partner: 'This is a preview, so nothing was sent. Partner enquiries open when the site launches. Until then, say hello in the Discord.',
 };
 const FALLBACK = 'Sign-up opens with the live site. For now, join the Discord and say hello.';
+
+// Inline validation for forms marked data-inline-errors: a message under the blank, aria-invalid, nothing cleared.
+function validateInline(form: HTMLFormElement) {
+  let first: HTMLInputElement | HTMLTextAreaElement | null = null;
+  form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-pc]').forEach((el) => {
+    const err = document.getElementById(el.getAttribute('aria-describedby')!)!;
+    const bad = !el.checkValidity();
+    el.setAttribute('aria-invalid', String(bad));
+    err.hidden = !bad;
+    err.textContent = bad ? (el.validity.valueMissing ? el.dataset.need : el.dataset.bad) ?? '' : '';
+    if (bad && !first) first = el;
+    if (!el.dataset.pcBound) { el.dataset.pcBound = '1'; el.addEventListener('input', () => { if (el.checkValidity()) { el.setAttribute('aria-invalid', 'false'); err.hidden = true; } }); }
+  });
+  (first as HTMLElement | null)?.focus();
+  return !first;
+}
 
 document.querySelectorAll<HTMLFormElement>('form[data-invite-form], form[data-partner-form]').forEach((form) => {
   const kind = form.hasAttribute('data-invite-form') ? 'invite' : 'partner';
@@ -30,11 +47,11 @@ document.querySelectorAll<HTMLFormElement>('form[data-invite-form], form[data-pa
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!form.reportValidity()) return;
+    if (!(form.hasAttribute('data-inline-errors') ? validateInline(form) : form.reportValidity())) return;
     track(`${kind}_submitted`);
     const label = submit.textContent!;
     submit.disabled = true;
-    submit.textContent = 'Sending...';
+    submit.textContent = submit.dataset.sending ?? 'Sending...';
     note.hidden = true;
     try {
       // Preview (neither production nor PUBLIC_FORMS_LIVE=1): send and store nothing, and say so instead of faking a success.
@@ -50,7 +67,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-invite-form], form[data-pa
       if (res.status === 404 || res.status === 503) throw Object.assign(new Error('not-open'), { soft: true });
       if (!res.ok) throw new Error(String(res.status));
       track(`${kind}_success`);
-      if (success) { fields.hidden = true; success.hidden = false; success.focus?.(); } else { submit.textContent = 'Invite sent'; }
+      if (success) { if (fields.hasAttribute('data-fade') && canMotion()) { fields.classList.add('is-out'); await new Promise((r) => setTimeout(r, 200)); } fields.hidden = true; success.hidden = false; success.focus?.(); } else { submit.textContent = 'Invite sent'; }
       announce(success?.textContent ?? 'Done');
       form.dispatchEvent(new CustomEvent(`ik:${kind}-success`, { bubbles: true }));
     } catch (err) {

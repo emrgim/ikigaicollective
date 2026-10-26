@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import Button from '../components/Button.astro';
 import Principles from '../components/Principles.astro';
+import PartnerForm from '../components/PartnerForm.astro';
 import copy from '../content/site/copy.json';
 
 const ways = [
@@ -53,29 +54,16 @@ const pilot = [
 
   <Principles intro={copy.partnerIntro} items={copy.partnerPrinciples} />
 
-  <Section id="talk" theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-900) 60%, var(--paper) 100%)" color="var(--ink)" labelledby="h5" inner="flex flex-wrap items-start gap-16">
-    <div class="flex flex-[1_1_420px] flex-col gap-[22px]">
+  <Section id="talk" theme="ikigai-dawn" bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-900) 60%, var(--paper) 100%)" color="var(--ink)" labelledby="h5" inner="grid items-start gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
+    <div class="flex flex-col gap-[22px]">
       <h2 id="h5" class="t-lg">Our first partners<br /><span class="italic text-cu-200">will appear here.</span></h2>
       <p class="text-[19px] leading-[1.6]">We would rather show three real partners than a wall of logos. If you are building something that belongs here, tell us.</p>
     </div>
-    <form aria-labelledby="fh" data-partner-form method="post" action="/api/partner" class="flex flex-[1_1_420px] flex-col gap-3 bg-ink p-8 text-paper md:p-11" data-theme="ikigai-night">
-      <h3 id="fh" class="mb-1.5 font-display text-[30px] font-normal">Start a conversation</h3>
-      <div class="flex flex-col gap-2.5" data-partner-fields>
-        <label for="org" class="text-[15px]">Organisation</label>
-        <input id="org" name="org" type="text" required class="field" style="border-color:var(--muted);color:var(--paper)" />
-        <label for="kind" class="text-[15px]">You are a</label>
-        <select id="kind" name="kind" class="field" style="border-color:var(--muted);color:var(--paper)"><option>Community</option><option>AI tool</option><option>Institution</option></select>
-        <label for="pem" class="text-[15px]">Email</label>
-        <input id="pem" name="email" type="email" required class="field" style="border-color:var(--muted);color:var(--paper)" />
-        <label for="msg" class="text-[15px]">What would you like to try together?</label>
-        <textarea id="msg" name="message" rows="4" required class="field" style="border-color:var(--muted);color:var(--paper)"></textarea>
-        <button type="submit" class="btn btn-copper mt-2 min-h-[52px] w-full text-[17px]">Send</button>
-      </div>
-      <p data-partner-success hidden role="status" class="border border-[var(--success)] p-4 text-[17px] leading-[1.5] text-[var(--success)]">Thank you. We'll be in touch.</p>
-    </form>
+    <PartnerForm />
   </Section>
 
   <script>
     import '../scripts/forms';
+    import '../scripts/partner-form';
   </script>
 </Base>
