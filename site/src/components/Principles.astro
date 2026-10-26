@@ -1,0 +1,121 @@
+---
+// Partners page: "Our principles". Copy comes in as-is; title = first sentence, line = the rest.
+import P1 from './principles/P1Members.astro';
+import P2 from './principles/P2Voice.astro';
+import P3 from './principles/P3Door.astro';
+import P4 from './principles/P4Partner.astro';
+import P5 from './principles/P5Choose.astro';
+import P6 from './principles/P6Agent.astro';
+import P7 from './principles/P7Sprout.astro';
+import P8 from './principles/P8Money.astro';
+import P9 from './principles/P9Values.astro';
+interface Props { intro: string; items: string[] }
+const { intro, items } = Astro.props;
+const art = [P1, P2, P3, P4, P5, P6, P7, P8, P9];
+const words = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE'];
+const split = (t: string) => { const m = t.match(/^(.+?\.)\s+(.+)$/s); return m ? { title: m[1], line: m[2] } : { title: t, line: '' }; };
+---
+<section class="pr" data-bg-start="var(--copper-200)" data-bg-end="var(--copper-200)" aria-labelledby="h4">
+  <div class="wrap pr-wrap">
+    <span class="eyebrow pr-eyebrow">OUR PRINCIPLES</span>
+    <div class="pr-head">
+      <h2 id="h4" class="pr-h">What we will<br /><span class="pr-hi">and won't do</span></h2>
+      <p class="pr-quote"><span class="pr-qm" aria-hidden="true">&ldquo;</span>{intro}</p>
+    </div>
+    <ol class="pr-grid">
+      {items.map((t, i) => {
+        const { title, line } = split(t);
+        const Art = art[i];
+        return (
+          <li class="pr-it" data-pr>
+            <span class="pr-ghost" aria-hidden="true">{i + 1}</span>
+            <div class="pr-seal" aria-hidden="true">
+              <svg class="pr-ringsvg" viewBox="0 0 84 84"><circle class="pr-ring" pathLength="1" cx="42" cy="42" r="41" /></svg>
+              <Art />
+            </div>
+            <div class="pr-t"><span class="pr-no" aria-hidden="true">{words[i]}</span><p class="pr-title">{title}</p></div>
+            {line && <p class="pr-line">{line}</p>}
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<style is:global>
+  .pr { position: relative; overflow: hidden; color: var(--paper); background: radial-gradient(ellipse 60% 50% at 78% 18%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 70%), radial-gradient(ellipse 50% 60% at 10% 100%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%), var(--copper-200); }
+  .pr::before { content: ''; position: absolute; inset: 0; opacity: 0.12; mix-blend-mode: overlay; pointer-events: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .pr-wrap { position: relative; padding-block: 120px; }
+  .pr-eyebrow { color: var(--copper-800); }
+  .pr-head { display: grid; grid-template-columns: 1.25fr 1fr; gap: 64px; align-items: end; margin: 22px 0 56px; }
+  .pr-h { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 7.2vw, 104px); line-height: 0.95; letter-spacing: -0.01em; }
+  .pr-hi { font-style: italic; color: color-mix(in srgb, var(--copper-800) 60%, var(--copper-900)); }
+  .pr-quote { position: relative; margin: 0; padding-left: 4px; font-family: var(--font-display); font-size: 30px; line-height: 1.3; font-style: italic; color: color-mix(in srgb, var(--copper-900) 55%, var(--paper)); }
+  .pr-qm { position: absolute; left: -14px; top: -62px; font-size: 140px; line-height: 1; color: color-mix(in srgb, var(--copper-700) 35%, transparent); pointer-events: none; }
+
+  .pr-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 44px; margin: 0; padding: 0; list-style: none; }
+  .pr-it { position: relative; display: grid; grid-template-columns: 84px 1fr; column-gap: 22px; align-items: start; align-content: start; padding: 34px 8px 30px; overflow: hidden; }
+  .pr-it::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--copper-700) 55%, transparent), transparent); }
+  .pr-ghost { position: absolute; right: -6px; top: -18px; font-family: var(--font-display); font-size: 170px; line-height: 1; font-style: italic; color: color-mix(in srgb, var(--copper-700) 8%, transparent); pointer-events: none; transition: color 0.3s; }
+  .pr-seal { position: relative; grid-row: 1 / span 2; width: 84px; height: 84px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--copper-900) 14%, transparent), color-mix(in srgb, var(--accent) 4%, transparent) 70%); box-shadow: 0 0 24px color-mix(in srgb, var(--copper-700) 8%, transparent); transition: box-shadow 0.3s, background 0.3s; }
+  .pr-ringsvg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+  .pr-ring { fill: none; stroke: color-mix(in srgb, var(--copper-700) 40%, transparent); stroke-width: 1.2; transition: stroke 0.3s; }
+  .pr-svg { position: relative; display: block; width: 56px; height: 56px; overflow: visible; }
+  .pr-st, .pr-cu { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .pr-st { stroke: var(--paper); }
+  .pr-cu { stroke: var(--copper-700); }
+  .pr-cf { fill: var(--copper-700); }
+  .pr-mark { display: flex; align-items: center; justify-content: center; color: var(--paper); }
+  .pr-mark svg { width: 46px; height: 46px; }
+  .pr-ag .fs-st { stroke: var(--paper); stroke-width: calc(2px / var(--k)); }
+  .pr-ag rect.fs-st { fill: transparent; }
+  .pr-ag .fs-blink circle { fill: var(--paper); }
+  .pr-ag .fs-dot { fill: var(--copper-700); }
+  .pr-ag :is(.fs-blink, .fs-dot, .fs-bob), .pr-mark circle, .pr-rays, .pr-leaf, .pr-sprout { transform-box: fill-box; }
+  .pr-ag :is(.fs-blink, .fs-dot, .fs-bob), .pr-mark circle, .pr-rays { transform-origin: center; }
+  .pr-leaf { transform-origin: 0 50%; }
+  .pr-sprout { transform-origin: 50% 100%; }
+  html.motion .pr-ag :is(.fs-bob, .fs-blink, .fs-dot) { animation: none; }
+  .pr-d { stroke-dasharray: 1; }
+
+  .pr-t, .pr-line { position: relative; }
+  .pr-t { display: flex; flex-direction: column; gap: 8px; padding-top: 6px; }
+  .pr-no { align-self: flex-start; font-size: 13px; letter-spacing: 0.28em; color: var(--copper-900); }
+  .pr-title { margin: 0; font-size: 24px; line-height: 1.22; }
+  .pr-line { grid-column: 2; margin: 8px 0 0; font-size: 15.5px; line-height: 1.55; color: color-mix(in srgb, var(--paper) 84%, transparent); }
+
+  /* Hover: colour change always; the drawing plays once, only when motion is allowed. */
+  .pr-it:hover .pr-ring, .pr-it:focus-within .pr-ring { stroke: color-mix(in srgb, var(--copper-700) 85%, transparent); }
+  .pr-it:hover .pr-seal, .pr-it:focus-within .pr-seal { box-shadow: 0 0 40px color-mix(in srgb, var(--copper-700) 35%, transparent); background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--copper-900) 28%, transparent), color-mix(in srgb, var(--accent) 4%, transparent) 70%); }
+  .pr-it:hover .pr-ghost, .pr-it:focus-within .pr-ghost { color: color-mix(in srgb, var(--copper-700) 16%, transparent); }
+  html.motion .pr-it:is(:hover, :focus-within) :is(.pr-strike, .pr-tick) { animation: pr-redraw 0.8s ease both; }
+  html.motion .pr-it:is(:hover, :focus-within) .pr-leaf { animation: pr-swing 1s ease-in-out; }
+  html.motion .pr-it:is(:hover, :focus-within) .pr-sprout { animation: pr-grow 0.9s ease-out; }
+  html.motion .pr-it:is(:hover, :focus-within) .pr-ag .fs-blink { animation: pr-blink 1.4s ease-in-out; }
+  html.motion .pr-it:is(:hover, :focus-within) .pr-mark circle { animation: pr-pulse 0.7s ease-in-out 2; }
+  html.motion .pr-it:is(:hover, :focus-within) .pr-rays { animation: pr-pulse 0.7s ease-in-out 2; }
+  @keyframes pr-redraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes pr-swing { 50% { transform: scaleX(0.35); } }
+  @keyframes pr-grow { 0% { transform: scale(0.35); } 70% { transform: scale(1.08); } }
+  @keyframes pr-blink { 15%, 55% { transform: scaleY(0.1); } 35%, 75%, 100% { transform: scaleY(1); } }
+  @keyframes pr-pulse { 50% { transform: scale(1.35); } }
+
+  @media (max-width: 1023px) {
+    .pr-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 767px) {
+    .pr-wrap { padding-block: 72px; }
+    .pr-head { grid-template-columns: 1fr; gap: 40px; margin: 18px 0 32px; }
+    .pr-quote { font-size: 24px; margin-top: 18px; }
+    .pr-qm { font-size: 110px; top: -52px; }
+    .pr-grid { grid-template-columns: 1fr; }
+    .pr-it { grid-template-columns: 64px 1fr; column-gap: 16px; padding: 26px 0 24px; }
+    .pr-seal { grid-row: 1; width: 64px; height: 64px; }
+    .pr-svg { width: 42px; height: 42px; }
+    .pr-mark svg { width: 34px; height: 34px; }
+    .pr-t { padding-top: 2px; align-self: center; gap: 6px; }
+    .pr-title { font-size: 22px; }
+    .pr-line { grid-column: 1 / -1; margin-top: 14px; }
+    .pr-ghost { font-size: 110px; right: 0; top: -6px; }
+  }
+</style>
