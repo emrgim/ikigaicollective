@@ -6,6 +6,7 @@ import Button from '../components/Button.astro';
 import Mark from '../components/Mark.astro';
 import Faq from '../components/Faq.astro';
 import InviteForm from '../components/InviteForm.astro';
+import Horizon from '../components/Horizon.astro';
 import DiscordIcon from '../components/DiscordIcon.astro';
 import { SITE } from '../config';
 import NoteCover from '../components/NoteCover.astro';
@@ -14,7 +15,6 @@ import { homeLd } from '../lib/seo';
 import SpiralArchive from '../components/SpiralArchive.astro';
 import stats from '../content/site/stats.json';
 import faq from '../content/site/faq.json';
-import horizon from '../content/site/horizon.json';
 import copy from '../content/site/copy.json';
 
 const question = (await getEntry('site', 'question'))!.data;
@@ -190,31 +190,7 @@ const studioTimes = ['A designer · 2 days ago', 'A computational scientist · 5
   </Section>
 
   <!-- 10 Horizon -->
-  <Section bg="var(--copper-500)" color="var(--bg)" labelledby="hz-h" inner="flex flex-col gap-11">
-    <span class="eyebrow text-bg">THE HORIZON</span>
-    <h2 id="hz-h" class="font-display text-[clamp(40px,5vw,60px)] font-normal leading-[1.05]">Where this <span class="italic">is going</span></h2>
-    <div class="flex flex-wrap gap-6">
-      <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-3.5 border-2 p-8" style="border-style:solid;border-color:var(--bg)">
-        <span class="text-[13px] tracking-[0.24em]">NOW</span>
-        <p class="font-display text-[24px] leading-[1.4]">{horizon.now.summary}</p>
-      </div>
-      <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-5 border-2 p-8" style="border-style:dashed;border-color:var(--bg)">
-        <span class="text-[13px] tracking-[0.24em]">NEXT</span>
-        {horizon.next.items.map((it) => (
-          <div class="flex flex-col gap-1.5"><p class="font-display text-[24px] leading-[1.25]">{it.title}</p><p class="text-[16px] leading-[1.55]">{it.text}</p></div>
-        ))}
-      </div>
-      <div class="flex min-h-[240px] flex-[1_1_300px] flex-col gap-3.5 border-2 p-8" style="border-style:dotted;border-color:var(--bg)">
-        <span class="text-[13px] tracking-[0.24em]">HORIZON</span>
-        <p class="font-display text-[24px] leading-[1.25]">{horizon.horizon.title}</p>
-        <p class="text-[16px] leading-[1.55]">{horizon.horizon.text}</p>
-      </div>
-    </div>
-    <div class="flex flex-wrap gap-x-10 gap-y-4 text-[17px]">
-      <a href="/horizon" class="underline">Read the full horizon</a>
-      <a href="/partners" class="underline">Building something that belongs here? Partner with us</a>
-    </div>
-  </Section>
+  <Horizon />
 
   <!-- 11 FAQ -->
   <Section bg="linear-gradient(180deg, var(--copper-500) 0%, var(--copper-700) 100%)" color="var(--ink)" labelledby="faq-h" inner="flex flex-wrap gap-x-20 gap-y-12">

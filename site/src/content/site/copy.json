@@ -82,5 +82,6 @@
   "inviteTicket": {
     "button": "Add me to Thursday →",
     "stamp": "You’re in"
-  }
+  },
+  "horizonTurns": ["TURN 1", "TURN 2", "TURN 3"]
 }

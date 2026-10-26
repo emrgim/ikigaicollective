@@ -1,0 +1,142 @@
+---
+// Home "The Horizon": the ikigai mark's spiral as the timeline. NOW sits on the solid inner turns, NEXT on the dashed outer arc,
+// HORIZON is the mark's dot as a rising sun. Geometry is the master mark (viewBox 64) at x15, translated by (240, -60); never redrawn.
+// Motion lives in scripts/horizon.ts; without it this is the finished scene.
+import horizon from '../content/site/horizon.json';
+import copy from '../content/site/copy.json';
+
+const turns = copy.horizonTurns;
+// Stars: generated once at build from a fixed seed, so the scene never changes between builds.
+let seed = 7;
+const rnd = () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const stars = Array.from({ length: 130 }, (_, i) => ({ g: i % 3, x: +(rnd() * 1440).toFixed(1), y: +(rnd() * 820).toFixed(1), r: +(0.3 + rnd() * 1.3).toFixed(2), o: +(0.1 + rnd() * 0.5).toFixed(2) }));
+const SOLID = 'M615 525 A105 105 0 0 1 825 525 A165 165 0 0 1 495 525';
+const DASH = 'M495 525 A225 225 0 0 1 945 525';
+const STEM = 'M945 525 L945 315';
+---
+<section class="hz" data-bg-start="var(--copper-300)" data-bg-end="var(--copper-500)" aria-labelledby="hz-h">
+  <div class="hz-glow" aria-hidden="true"></div>
+  <div class="wrap hz-head">
+    <span class="eyebrow hz-eyebrow">THE HORIZON</span>
+    <h2 id="hz-h" class="hz-title">Where this <span class="hz-em">is going</span></h2>
+    <p class="hz-tag">{copy.archiveTagline}</p>
+  </div>
+  <div class="hz-stage">
+    <div class="hz-fig">
+      <svg viewBox="0 0 1440 820" role="img" aria-label="A spiral that starts at now, turns outward through what comes next, and rises to the horizon, drawn as a glowing sun." class="hz-svg">
+        <defs>
+          <radialGradient id="hz-sun" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fffaf2" /><stop offset=".18" stop-color="#fbe6cc" stop-opacity=".95" /><stop offset=".5" stop-color="#e8c39b" stop-opacity=".35" /><stop offset="1" stop-color="#c4956a" stop-opacity="0" /></radialGradient>
+          <filter id="hz-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+          <mask id="hz-m2" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="820"><path class="hz-reveal" d={DASH} pathLength="1" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" /></mask>
+          <mask id="hz-m3" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="820"><path class="hz-reveal" d={STEM} pathLength="1" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" /></mask>
+        </defs>
+        <g class="hz-px hz-px-stars">
+          {[0, 1, 2].map((g) => <g class={`hz-tw hz-tw${g}`} fill="#fff4e6">{stars.filter((s) => s.g === g).map((s) => <circle cx={s.x} cy={s.y} r={s.r} opacity={s.o} />)}</g>)}
+        </g>
+        <g class="hz-px hz-px-rings"><g class="hz-rot" fill="none">
+          {[105, 165, 225].map((r) => <circle cx="720" cy="525" r={r} stroke="rgba(255,244,230,0.12)" />)}
+          {[315, 435].map((r) => <circle cx="720" cy="525" r={r} stroke="rgba(255,244,230,0.08)" stroke-dasharray="2 6" />)}
+        </g></g>
+        <circle class="hz-halo" cx="945" cy="142.5" r="260" fill="url(#hz-sun)" />
+        <g filter="url(#hz-glow)" fill="none" stroke-linecap="round" stroke="#fff4e6">
+          <path class="hz-s1" d={SOLID} stroke-width="7" pathLength="1" />
+          <path d={DASH} stroke-width="5" stroke-dasharray="16 12" opacity=".9" mask="url(#hz-m2)" />
+          <path d={STEM} stroke-width="4" stroke-dasharray="2 12" opacity=".85" mask="url(#hz-m3)" />
+        </g>
+        <circle class="hz-sun" cx="945" cy="142.5" r="69" fill="#fffaf2" filter="url(#hz-glow)" />
+        <g class="hz-lead" fill="none" stroke="rgba(255,244,230,.35)" stroke-dasharray="3 5">
+          <path class="hz-ld hz-ld1" d="M639 535 L1015 595" /><path class="hz-ld hz-ld2" d="M483 525 L460 385" /><path class="hz-ld hz-ld3" d="M1015 162.5 L1055 182.5" />
+        </g>
+        <g class="hz-mk hz-mk1"><circle cx="615" cy="525" r="11" fill="#14110e" stroke="#fff4e6" stroke-width="3" /><circle cx="615" cy="525" r="24" fill="none" stroke="#fff4e6" stroke-opacity=".45" /></g>
+        <circle class="hz-mk hz-mk2" cx="495" cy="525" r="9" fill="#2c1e11" stroke="#fff4e6" stroke-width="3" />
+      </svg>
+    </div>
+    <div class="hz-cards">
+      <div class="hz-c hz-now">
+        <div class="hz-ch"><span class="hz-dot hz-dot1" aria-hidden="true"></span><span class="hz-l">NOW</span><span class="hz-t">{turns[0]}</span></div>
+        <p class="hz-nowtxt">{horizon.now.summary}</p>
+      </div>
+      <div class="hz-c hz-next">
+        <div class="hz-ch"><span class="hz-dot hz-dot2" aria-hidden="true"></span><span class="hz-l">NEXT</span><span class="hz-t">{turns[1]}</span></div>
+        {horizon.next.items.map((it) => <div class="hz-it"><p class="hz-it-t">{it.title}</p><p class="hz-body">{it.text}</p></div>)}
+      </div>
+      <div class="hz-c hz-hor">
+        <div class="hz-ch"><span class="hz-dot hz-dot3" aria-hidden="true"></span><span class="hz-l">HORIZON</span><span class="hz-t">{turns[2]}</span></div>
+        <p class="hz-hor-t">{horizon.horizon.title}</p>
+        <p class="hz-body">{horizon.horizon.text}</p>
+      </div>
+    </div>
+  </div>
+  <div class="wrap hz-links">
+    <a href="/horizon" class="underline">Read the full horizon</a>
+    <a href="/partners" class="underline">Building something that belongs here? Partner with us</a>
+  </div>
+</section>
+
+<style is:global>
+  /* Night: top blends from the section above (copper-300), bottom into the FAQ below (copper-500). */
+  .hz { position: relative; overflow: hidden; color: var(--paper); padding-block: 90px 100px; background: linear-gradient(180deg, var(--copper-300) 0%, transparent 14%), linear-gradient(0deg, var(--copper-500) 0%, transparent 14%), radial-gradient(ellipse 60% 70% at 65.6% 30%, var(--copper-400) 0%, var(--copper-200) 45%, var(--copper-100) 80%), var(--copper-100); }
+  .hz-glow { position: absolute; inset: 0; pointer-events: none; opacity: 0.5; background: radial-gradient(ellipse 38% 46% at 65.6% 32%, color-mix(in srgb, var(--copper-700) 55%, transparent), transparent 70%); }
+  .hz-head { position: relative; z-index: 2; display: flex; flex-direction: column; }
+  .hz-eyebrow { color: var(--copper-800); }
+  .hz-title { margin: 16px 0 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 5.8vw, 84px); line-height: 1; }
+  .hz-em { font-style: italic; color: var(--copper-900); }
+  .hz-tag { margin: 14px 0 0; font-size: 18px; color: color-mix(in srgb, var(--paper) 82%, transparent); }
+  .hz-stage { position: relative; }
+  .hz-svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .hz-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 16px 40px; font-size: 17px; }
+  .hz-reveal { stroke-dasharray: 1; }
+  .hz-dot { display: none; }
+
+  .hz-c { padding: 24px 26px; color: var(--paper); background: color-mix(in srgb, var(--ink) 42%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid color-mix(in srgb, var(--paper) 18%, transparent); border-radius: 22px; box-shadow: 0 30px 70px -30px rgb(0 0 0 / 0.7); }
+  .hz-now { border-color: color-mix(in srgb, var(--paper) 40%, transparent); }
+  .hz-hor { background: color-mix(in srgb, var(--paper) 14%, transparent); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
+  .hz-ch { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .hz-l { font-size: 12px; letter-spacing: 0.32em; color: var(--copper-800); }
+  .hz-t { margin-left: auto; font-size: 11px; letter-spacing: 0.24em; color: color-mix(in srgb, var(--paper) 78%, transparent); }
+  .hz-nowtxt { margin: 0; font-size: 21px; line-height: 1.4; }
+  .hz-it + .hz-it { margin-top: 14px; }
+  .hz-it-t { margin: 0 0 4px; font-size: 19px; }
+  .hz-hor-t { margin: 0 0 8px; font-size: 26px; font-style: italic; }
+  .hz-body { margin: 0; font-size: 14px; line-height: 1.55; color: color-mix(in srgb, var(--paper) 86%, transparent); }
+
+  /* Idle loops: only while the section is on screen (.hz-on from the observer). Transforms and opacity only. */
+  .hz-svg :is(.hz-halo, .hz-sun, .hz-rot) { transform-origin: 0 0; }
+  .hz-halo { transform-box: fill-box; transform-origin: center; }
+  .hz-rot { transform-origin: 720px 525px; }
+  html.motion .hz:not(.hz-on) * { animation-play-state: paused !important; }
+  html.motion .hz-tw0 { animation: hz-tw 5s ease-in-out infinite; }
+  html.motion .hz-tw1 { animation: hz-tw 7s ease-in-out -2s infinite; }
+  html.motion .hz-tw2 { animation: hz-tw 9s ease-in-out -4s infinite; }
+  html.motion .hz-rot { animation: hz-rot 360s linear infinite; }
+  html.motion .hz-halo { animation: hz-breathe 6s ease-in-out infinite; }
+  @keyframes hz-tw { 50% { opacity: 0.45; } }
+  @keyframes hz-rot { to { transform: rotate(360deg); } }
+  @keyframes hz-breathe { 50% { transform: scale(1.06); } }
+
+  @media (min-width: 1100px) {
+    .hz-stage { margin-top: -60px; }
+    .hz-svg { position: absolute; inset: 0; height: 100%; }
+    .hz-stage::before { content: ''; display: block; aspect-ratio: 1440 / 820; }
+    .hz-fig { display: contents; }
+    .hz-c { position: absolute; }
+    .hz-now { left: 70.49%; top: 66.46%; width: 25%; }
+    .hz-next { left: 4.44%; top: 27.44%; width: 27.08%; }
+    .hz-hor { left: 73.26%; top: 13.72%; width: 23.61%; }
+    .hz-links { margin-top: 10px; }
+  }
+  @media (max-width: 1099px) {
+    .hz { padding-block: 64px 72px; }
+    .hz-fig { position: relative; height: 430px; overflow: hidden; margin-top: 8px; -webkit-mask-image: linear-gradient(180deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(180deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+    .hz-svg { position: absolute; top: 8px; left: 50%; width: 850px; max-width: none; transform: translateX(-52.1%); }
+    .hz-lead { display: none; }
+    .hz-cards { display: flex; flex-direction: column; gap: 16px; max-width: 760px; margin: 0 auto; padding-inline: 24px; }
+    .hz-body { font-size: 15px; }
+    .hz-dot { display: inline-block; flex: none; width: 12px; height: 12px; margin-right: 10px; border-radius: 50%; }
+    .hz-dot1 { background: var(--ink); box-shadow: 0 0 0 2px var(--copper-900); }
+    .hz-dot2 { border: 2px solid var(--copper-900); background: var(--copper-100); }
+    .hz-dot3 { background: #fffaf2; box-shadow: 0 0 10px 2px color-mix(in srgb, var(--copper-800) 80%, transparent); }
+    .hz-l { margin-right: 0; }
+    .hz-links { margin-top: 28px; }
+  }
+</style>
