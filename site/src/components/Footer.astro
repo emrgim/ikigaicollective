@@ -70,7 +70,7 @@ const label = 'mb-2 text-[12px] tracking-[0.28em] text-copper';
   /* Community logos: 48px circles (a 44px+ tap area), hairline border, copper on hover and focus, name tooltip. */
   footer .fs-social { position: relative; display: inline-flex; width: 48px; height: 48px; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 9999px; color: var(--fg); text-decoration: none; transition: color .2s, border-color .2s, transform .2s; }
   footer .fs-social:hover, footer .fs-social:focus-visible { color: var(--accent); border-color: var(--accent); }
-  footer .fs-social::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 4px 10px; border-radius: 4px; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.4; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; }
+  footer .fs-social::after { content: attr(data-tip); position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 4px 10px; border-radius: 4px; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.4; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; }
   footer .fs-social:hover::after, footer .fs-social:focus-visible::after { opacity: 1; }
   @media (prefers-reduced-motion: no-preference) { footer .fs-social:hover, footer .fs-social:focus-visible { transform: translateY(-2px); } }
 </style>
