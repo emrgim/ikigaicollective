@@ -55,7 +55,9 @@ The Collective grows through invitation. If someone you know is a member, ask th
 
 ## License
 
-Content in this repository is shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Code is MIT licensed.
+Content (Lab Notes, prose and images) is shared under [CC BY-SA 4.0](LICENSE-CONTENT). Code is [MIT licensed](LICENSE). The Ikigai Collective logo and mark are excluded and remain the Collective's.
+
+Want to help? See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

@@ -1,0 +1,28 @@
+Ikigai Collective content license
+
+Copyright (c) 2026 [TO CONFIRM: David Orban]
+
+The content in this repository, meaning the Lab Notes, the site's prose and
+its images, is licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License (CC BY-SA 4.0).
+
+  Summary: https://creativecommons.org/licenses/by-sa/4.0/
+  Full legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+This covers, among others:
+  - site/src/content/notes/ (Lab Notes, including those imported from Substack)
+  - site/src/content/site/ and the prose of the site's pages
+  - images such as Lab Note covers (site/src/assets/covers/, site/public/lab-notes/)
+  - lab-notes/ (the original Lab Notes)
+
+Excluded: the Ikigai Collective name, logo and mark (for example
+ikigaicollective-logo.jpg and site/public/ikigaicollective-logo.jpg) are NOT
+licensed under CC BY-SA 4.0 or under the MIT License. They remain the
+Collective's, and all rights in them are reserved.
+
+Source code (for example the Astro site in site/, its scripts and API
+functions) is licensed separately under the MIT License; see LICENSE.
+
+Attribution: when you reuse content, credit "Ikigai Collective", link to
+https://ikigaicollective.org (or the specific Lab Note), name the license,
+and indicate whether you made changes.
