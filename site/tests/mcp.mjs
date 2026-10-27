@@ -11,7 +11,7 @@ const index = { notes: [
   { title: 'First draft of our values', slug: 'first-draft-of-our-values', week: 8, date: '2026-06-11T00:00:00.000Z', summary: 'Curiosity, agency and compassion.' },
 ] };
 const files = {
-  '/lab-notes/index.json': JSON.stringify(index),
+  '/lab-notes/notes.json': JSON.stringify(index),
   '/index.md': '<!-- Home | x -->\n\n# Home\n\nLab Night every Thursday.',
   '/how-it-works.md': '# How it works\n\nWe operate like an artist studio.',
   '/lab-notes/tsundoku.md': '<!-- Tsundoku | x -->\n\n# Tsundoku\n\nThe founder opened from Abu Dhabi, in a bookstore.',

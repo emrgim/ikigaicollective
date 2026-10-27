@@ -3,7 +3,7 @@
 `https://ikigaicollective.org/mcp` is a read-only [Model Context Protocol](https://modelcontextprotocol.io) server, so AI assistants and agents can look up the Lab Notes and the site's key pages and answer with a link to the source.
 
 - **Transport:** Streamable HTTP, stateless (no sessions, plain JSON responses). POST only.
-- **Content:** public only. The Lab Notes JSON index (`/lab-notes/index.json`), the key pages, and their markdown twins (`<url>.md`). Content is CC BY-SA 4.0.
+- **Content:** public only. The Lab Notes JSON index (`/lab-notes/notes.json`, also served at the old `/lab-notes/index.json`), the key pages, and their markdown twins (`<url>.md`). Content is CC BY-SA 4.0.
 - **No auth, no secrets.** Nothing is written anywhere.
 
 ## Tools

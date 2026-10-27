@@ -15,7 +15,7 @@ const parts = (s: string) => s.split('{address}');
 ---
 <Base title={page.title} description={page.description}>
   <Section bg="radial-gradient(ellipse 50% 60% at 78% 30%, rgba(196,149,106,.28), transparent 70%), linear-gradient(180deg, var(--bg) 0%, var(--copper-100) 100%)" labelledby="h1" pad="90px" inner="flex flex-col gap-14 max-md:gap-10">
-    <div class="grid items-start gap-16 lg:grid-cols-[1.1fr_1fr] max-lg:gap-10">
+    <div class="grid items-start gap-16 lg:grid-cols-[1fr_1.15fr] lg:gap-10 max-lg:gap-10">
       <div class="flex min-w-0 flex-col gap-[22px]">
         <span class="eyebrow">{page.eyebrow}</span>
         <h1 id="h1" class="font-display text-[clamp(44px,7vw,84px)] font-normal leading-[0.98]">{page.headline.plain}<br /><span class="italic text-cu-900">{page.headline.em}</span></h1>
@@ -77,9 +77,9 @@ const parts = (s: string) => s.split('{address}');
 <style>
   .cn-soft { color: rgba(242, 240, 236, 0.85); }
   .cn-quiet { color: rgba(242, 240, 236, 0.75); }
-  .cn-card { background: rgba(242, 240, 236, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(242, 240, 236, 0.18); border-radius: 26px; padding: 30px 32px; }
+  .cn-card { width: 100%; background: rgba(242, 240, 236, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(242, 240, 236, 0.18); border-radius: 26px; padding: 30px 28px; }
   .cn-pill { display: flex; align-items: center; gap: 10px; margin: 12px 0 26px; padding: 6px 6px 6px 18px; border-radius: 30px; background: rgba(10, 10, 10, 0.6); border: 1px solid rgba(242, 240, 236, 0.2); }
-  .cn-pill code { flex: 1; min-width: 0; overflow-wrap: anywhere; font-family: ui-monospace, Menlo, monospace; font-size: 16px; color: var(--paper); }
+  .cn-pill code { flex: 1; min-width: 0; overflow-wrap: anywhere; font-family: ui-monospace, Menlo, monospace; font-size: 15px; color: var(--paper); }
   .cn-copy { flex: none; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--copper-600); color: var(--ink); font: inherit; font-size: 15px; cursor: pointer; transition: background 0.2s; }
   .cn-copy:hover { background: var(--copper-700); }
   .cn-copy:focus-visible, .cn-tabs button:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }

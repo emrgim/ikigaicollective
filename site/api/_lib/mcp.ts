@@ -1,5 +1,5 @@
 // Read-only MCP server for the public site (8-week pilot). Stateless Streamable HTTP: a fresh server per request, no sessions, no secrets.
-// Content comes from the site's own public build output: /lab-notes/index.json plus the markdown twin of every page (<path>.md).
+// Content comes from the site's own public build output: /lab-notes/notes.json plus the markdown twin of every page (<path>.md).
 // Logging: one line per tool call with the tool name and the query only. No IPs, no headers, nothing stored.
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
@@ -42,7 +42,7 @@ export function loadDocs(o: Options): Promise<Doc[]> {
   const key = o.contentOrigin ?? ORIGIN, now = (o.now ?? Date.now)();
   if (cache && cache.key === key && now - cache.at < TTL) return cache.docs;
   const docs = (async () => {
-    const index = JSON.parse(await get(o, '/lab-notes/index.json')) as { notes: Note[] };
+    const index = JSON.parse(await get(o, '/lab-notes/notes.json')) as { notes: Note[] };
     const all: Doc[] = [
       ...o.pages.map((p) => ({ kind: 'page' as const, path: p.path, title: p.title, summary: p.about })),
       ...index.notes.map((n) => ({ kind: 'note' as const, path: `/lab-notes/${n.slug}`, title: n.title, summary: n.summary, date: n.date.slice(0, 10), week: n.week })),

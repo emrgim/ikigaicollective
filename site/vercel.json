@@ -303,6 +303,10 @@
       "destination": "/api/mcp"
     },
     {
+      "source": "/lab-notes/index.json",
+      "destination": "/lab-notes/notes.json"
+    },
+    {
       "source": "/:path((?!.*\\.).+)",
       "destination": "/:path.html"
     }

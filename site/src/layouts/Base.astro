@@ -36,7 +36,7 @@ const full = title ? `${title} | Ikigai Collective` : 'Ikigai Collective | Life 
     {!noindex && <link rel="canonical" href={canonical ?? self} />}
     {!noindex && <link rel="alternate" type="text/markdown" href={mdPath} />}
     <link rel="alternate" type="application/rss+xml" title="Ikigai Collective Lab Notes" href="/lab-notes/rss.xml" />
-    <link rel="alternate" type="application/json" title="Ikigai Collective Lab Notes (JSON)" href="/lab-notes/index.json" />
+    <link rel="alternate" type="application/json" title="Ikigai Collective Lab Notes (JSON)" href="/lab-notes/notes.json" />
     {(!IS_LIVE || noindex) && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href="/fonts/charter-regular.woff2" as="font" type="font/woff2" crossorigin />
