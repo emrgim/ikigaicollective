@@ -24,6 +24,7 @@ ${notes.map((n) => `- [${n.title}](${ORIGIN}/lab-notes/${n.slug}.md): Week ${n.w
 - [Lab Notes feed](${ORIGIN}/lab-notes/rss.xml)
 - [Lab Notes JSON index](${ORIGIN}/lab-notes/index.json): every note with title, date, summary, URL and markdown URL, newest first
 - [Sitemap](${ORIGIN}/sitemap.xml)
+- [MCP server](${ORIGIN}/mcp): read-only, Streamable HTTP, tools search and show_page over the Lab Notes and key pages
 - [Discord](https://discord.gg/4rM6FqjVDE): where the studio lives between Thursdays
 - [Substack](https://ikigaicollective.substack.com/)
 `;

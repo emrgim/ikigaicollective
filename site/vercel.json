@@ -299,6 +299,10 @@
   ],
   "rewrites": [
     {
+      "source": "/mcp",
+      "destination": "/api/mcp"
+    },
+    {
       "source": "/:path((?!.*\\.).+)",
       "destination": "/:path.html"
     }
