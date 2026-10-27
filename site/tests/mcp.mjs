@@ -1,6 +1,6 @@
 // MCP server: run with `node --experimental-strip-types tests/mcp.mjs`. No network: content is served from fixtures.
 import assert from 'node:assert/strict';
-const { handle, resetCache, LIMIT } = await import('../api/_lib/mcp.ts');
+const { handle, resetCache, LIMIT, clientOf } = await import('../api/_lib/mcp.ts');
 
 const pages = [
   { path: '/', title: 'Home', about: 'Life design through experimentation.' },
@@ -31,7 +31,7 @@ const rpc = async (method, params, ip = '10.0.0.1') => {
 const call = async (name, args) => (await rpc('tools/call', { name, arguments: args })).body.result.content[0].text;
 
 // initialize and tools/list
-const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 't', version: '1' } });
+const init = await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'test-agent', version: '1.2.3', title: 'Test Agent' } });
 assert.equal(init.status, 200);
 assert.equal(init.body.result.serverInfo.name, 'ikigai-collective');
 assert.ok(init.body.result.instructions.includes('read-only'));
@@ -79,9 +79,22 @@ const down = { ...opts, fetch: async () => new Response('', { status: 503 }) };
 const r = await handle(new Request('http://x.test/mcp', { method: 'POST', headers: { 'content-type': 'application/json', accept: 'application/json, text/event-stream' }, body: JSON.stringify({ jsonrpc: '2.0', id: 99, method: 'tools/call', params: { name: 'search', arguments: { query: 'values' } } }) }), down);
 assert.ok((await r.json()).result.content[0].text.includes('https://ikigaicollective.org/lab-notes'));
 
-// logging: tool name and query only
-assert.ok(logs.length > 0 && logs.every((l) => Object.keys(JSON.parse(l)).join() === 'mcp,query'));
+// logging: initialize logs the client app's name and version only; tool calls log the tool name and query only
+const parsed = logs.map((l) => JSON.parse(l));
+const inits = parsed.filter((l) => l.mcp === 'initialize');
+assert.deepEqual(inits, [{ mcp: 'initialize', client: { name: 'test-agent', version: '1.2.3' } }], 'one initialize line, name and version only');
+const toolLines = parsed.filter((l) => l.mcp !== 'initialize');
+assert.ok(toolLines.length > 0 && toolLines.every((l) => Object.keys(l).join() === 'mcp,query'));
 assert.ok(!logs.some((l) => l.includes('10.0.0.1')), 'no IPs in logs');
+// clientInfo is trimmed to short plain strings; missing or malformed clientInfo logs nothing
+assert.deepEqual(clientOf({ name: 'cursor', version: '2.0', title: 'x', websiteUrl: 'https://x', icons: [] }), { name: 'cursor', version: '2.0' });
+assert.deepEqual(clientOf({ name: 'a\nb'.padEnd(300, 'z') }), { name: 'ab'.padEnd(100, 'z') });
+assert.equal(clientOf({ name: '' }), undefined);
+assert.equal(clientOf({ name: 42 }), undefined);
+assert.equal(clientOf(undefined), undefined);
+const nInit = logs.length;
+await rpc('initialize', { protocolVersion: '2025-06-18', capabilities: {} });
+assert.equal(logs.length, nInit, 'invalid initialize (no clientInfo): not logged');
 
 // HTTP edges: GET/DELETE 405, OPTIONS preflight, bad JSON, rate limit
 assert.equal((await handle(new Request('http://x.test/mcp'), opts)).status, 405);
