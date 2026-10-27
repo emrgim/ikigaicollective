@@ -8,6 +8,7 @@ export const PAGES = [
   { path: '/how-it-works', title: 'How it works', about: 'We operate like an artist studio: three values, one loop, no assigned tasks.' },
   { path: '/horizon', title: 'Horizon', about: 'Where the Collective is going.' },
   { path: '/partners', title: 'Partners', about: 'Participants in the studio, not sponsors of it.' },
+  { path: '/connect', title: 'Connect your agent', about: 'Connect the AI you already use to the Collective: a read-only server that searches the Lab Notes and the site and answers with a link to the source.' },
   { path: '/join', title: 'Join', about: 'Three steps, free: get the Lab Night invite, join the Discord, introduce yourself.' },
   { path: '/terms', title: 'Terms of Use', about: 'Terms of use for ikigaicollective.org.' },
   { path: '/privacy', title: 'Privacy Policy', about: 'What this site collects, where it is stored, and how to be removed.' },

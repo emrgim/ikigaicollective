@@ -1,5 +1,6 @@
 ---
 import Button from './Button.astro';
+import AgentMini from './AgentMini.astro';
 import FooterScene from './footer/FooterScene.astro';
 import { SITE } from '../config';
 import copy from '../content/site/copy.json';
@@ -34,12 +35,13 @@ const label = 'mb-2 text-[12px] tracking-[0.28em] text-copper';
     </nav>
     <div class="flex flex-col">
       <span class={label}>{f.communityLabel}</span>
-      <div class="mt-1 flex gap-3">
+      <div class="mt-1 flex flex-wrap gap-3">
         {community.map(([href, text, aria, d]) => (
           <a href={href} target="_blank" rel="noopener" aria-label={aria} data-tip={text} class="fs-social">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={d} /></svg>
           </a>
         ))}
+        <a href="/connect" class="fs-pill"><AgentMini width={26} />{copy.connect.footerButton}</a>
       </div>
     </div>
   </div>
@@ -71,6 +73,9 @@ const label = 'mb-2 text-[12px] tracking-[0.28em] text-copper';
   footer .fs-social { position: relative; display: inline-flex; width: 48px; height: 48px; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 9999px; color: var(--fg); text-decoration: none; transition: color .2s, border-color .2s, transform .2s; }
   footer .fs-social:hover, footer .fs-social:focus-visible { color: var(--accent); border-color: var(--accent); }
   footer .fs-social::after { content: attr(data-tip); position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 4px 10px; border-radius: 4px; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.4; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; }
+  /* Connect pill: same height and hairline as the circles. */
+  footer .fs-pill { display: inline-flex; height: 48px; align-items: center; gap: 10px; padding: 0 18px 0 8px; border: 1px solid var(--border); border-radius: 9999px; color: var(--fg); font-size: 16px; text-decoration: none; transition: color .2s, border-color .2s, transform .2s; }
+  footer .fs-pill:hover, footer .fs-pill:focus-visible { color: var(--accent); border-color: var(--accent); }
   footer .fs-social:hover::after, footer .fs-social:focus-visible::after { opacity: 1; }
-  @media (prefers-reduced-motion: no-preference) { footer .fs-social:hover, footer .fs-social:focus-visible { transform: translateY(-2px); } }
+  @media (prefers-reduced-motion: no-preference) { footer .fs-social:hover, footer .fs-social:focus-visible, footer .fs-pill:hover, footer .fs-pill:focus-visible { transform: translateY(-2px); } }
 </style>

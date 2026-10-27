@@ -83,5 +83,85 @@
     "button": "Add me to Thursday →",
     "stamp": "You’re in"
   },
-  "horizonTurns": ["TURN 1", "TURN 2", "TURN 3"]
+  "horizonTurns": [
+    "TURN 1",
+    "TURN 2",
+    "TURN 3"
+  ],
+  "connect": {
+    "page": {
+      "title": "Connect your agent",
+      "description": "Connect the AI you already use to the Collective. A read-only server that searches the Lab Notes and the site, opens any page and answers with a link to the source.",
+      "eyebrow": "CONNECT YOUR AGENT · PILOT",
+      "headline": {
+        "plain": "Bring your",
+        "em": "own agent."
+      },
+      "intro": "Connect the AI you already use to the Collective. It can search the Lab Notes and the site, open any page, and answer with a link to the source. The conversation stays with your agent.",
+      "trust": [
+        "Read-only. Public content only.",
+        "We see the question and the app's name, never who you are."
+      ]
+    },
+    "setup": {
+      "addressLabel": "SERVER ADDRESS",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copiedAnnounce": "Copied to clipboard",
+      "copyFailed": "Could not copy. Select the text and copy it by hand.",
+      "tabsLabel": "Choose your app",
+      "tabs": [
+        {
+          "id": "claude",
+          "label": "Claude",
+          "steps": [
+            "Open **Customize → Connectors** in Claude.",
+            "Choose **Add custom connector**, name it Ikigai Collective, and paste the address above.",
+            "Ask something like *“What has the Collective written about agency?”*"
+          ],
+          "note": "On Team and Enterprise plans, an owner adds it under Organization settings → Connectors."
+        },
+        {
+          "id": "claude-code",
+          "label": "Claude Code",
+          "steps": [
+            "Run this in your terminal."
+          ],
+          "code": "claude mcp add --transport http ikigai-collective {address}"
+        },
+        {
+          "id": "cursor",
+          "label": "Cursor",
+          "steps": [
+            "Add this to **.cursor/mcp.json**"
+          ],
+          "code": "{\n  \"mcpServers\": {\n    \"ikigai-collective\": {\n      \"url\": \"{address}\"\n    }\n  }\n}"
+        },
+        {
+          "id": "other",
+          "label": "Other apps",
+          "steps": [
+            "Most apps that support remote MCP servers take the address directly. If yours only runs local servers, use:"
+          ],
+          "code": "npx mcp-remote {address}"
+        }
+      ]
+    },
+    "features": [
+      {
+        "title": "Search",
+        "text": "Finds the Lab Notes and pages that match your question, with a short passage from each."
+      },
+      {
+        "title": "Open a page",
+        "text": "Reads any Lab Note or page in full, and always gives you the link."
+      },
+      {
+        "title": "Honest when it doesn’t know",
+        "text": "If nothing on the site answers it, it says so and points you to the Lab Notes."
+      }
+    ],
+    "footerButton": "Connect your agent",
+    "archiveButton": "Ask your agent about the Lab Notes →"
+  }
 }

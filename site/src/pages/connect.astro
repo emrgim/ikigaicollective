@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import AgentMini from '../components/AgentMini.astro';
+import copy from '../content/site/copy.json';
+import { IS_LIVE } from '../lib/env';
+
+const { page, setup, features } = copy.connect;
+// Production address is fixed; elsewhere the build knows the deployment host, and scripts/connect.ts swaps in the live origin.
+const host = process.env.VERCEL_URL;
+const address = IS_LIVE ? 'https://ikigaicollective.org/mcp' : `${host ? `https://${host}` : Astro.url.origin}/mcp`;
+// Copy strings carry **bold** and *italic*; escape first, then mark up.
+const rich = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*(.+?)\*/g, '<i>$1</i>');
+const parts = (s: string) => s.split('{address}');
+---
+<Base title={page.title} description={page.description}>
+  <Section bg="radial-gradient(ellipse 50% 60% at 78% 30%, rgba(196,149,106,.28), transparent 70%), linear-gradient(180deg, var(--bg) 0%, var(--copper-100) 100%)" labelledby="h1" pad="90px" inner="flex flex-col gap-14 max-md:gap-10">
+    <div class="grid items-start gap-16 lg:grid-cols-[1.1fr_1fr] max-lg:gap-10">
+      <div class="flex min-w-0 flex-col gap-[22px]">
+        <span class="eyebrow">{page.eyebrow}</span>
+        <h1 id="h1" class="font-display text-[clamp(44px,7vw,84px)] font-normal leading-[0.98]">{page.headline.plain}<br /><span class="italic text-cu-900">{page.headline.em}</span></h1>
+        <p class="max-w-[520px] text-[20px] leading-[1.55] cn-soft">{page.intro}</p>
+        <div class="mt-2.5 flex items-center gap-4">
+          <AgentMini width={60} />
+          <p class="m-0 text-[15px] leading-[1.5] cn-quiet">{page.trust[0]}<br />{page.trust[1]}</p>
+        </div>
+      </div>
+
+      <div class="cn-card min-w-0">
+        <span class="text-[12px] tracking-[0.28em] text-cu-700" id="cn-label">{setup.addressLabel}</span>
+        <div class="cn-pill">
+          <code id="cn-address" aria-labelledby="cn-label"><span data-addr>{address}</span></code>
+          <button type="button" class="cn-copy" data-copy-from="cn-address" data-block="address">{setup.copy}</button>
+        </div>
+
+        <div role="tablist" aria-label={setup.tabsLabel} class="cn-tabs">
+          {setup.tabs.map((t, i) => (
+            <button type="button" role="tab" id={`tab-${t.id}`} data-tab={t.id} aria-controls={`panel-${t.id}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1}>{t.label}</button>
+          ))}
+        </div>
+
+        {setup.tabs.map((t, i) => (
+          <div role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} class={`cn-panel${i === 0 ? ' on' : ''}`}>
+            <h3 class="cn-ph">{t.label}</h3>
+            <ol class="cn-steps">
+              {t.steps.map((s, n) => (
+                <li><span class="cn-n" aria-hidden="true">{n + 1}</span><span set:html={rich(s)} /></li>
+              ))}
+            </ol>
+            {t.code && (
+              <div class="cn-code">
+                <button type="button" class="cn-copy cn-copy-sm" data-copy-from={`code-${t.id}`} data-block={t.id}>{setup.copy}</button>
+                <pre><code id={`code-${t.id}`}>{parts(t.code).map((p, k) => <>{k > 0 && <span data-addr>{address}</span>}{p}</>)}</code></pre>
+              </div>
+            )}
+            {t.note && <p class="cn-note">{t.note}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <ul class="m-0 grid list-none gap-4 p-0 md:grid-cols-3">
+      {features.map((f) => (
+        <li class="cn-feat">
+          <h3 class="mb-1.5 font-display text-[19px] font-normal">{f.title}</h3>
+          <p class="m-0 text-[15px] leading-[1.55]">{f.text}</p>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <script>
+    import '../scripts/connect';
+  </script>
+</Base>
+
+<style>
+  .cn-soft { color: rgba(242, 240, 236, 0.85); }
+  .cn-quiet { color: rgba(242, 240, 236, 0.75); }
+  .cn-card { background: rgba(242, 240, 236, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(242, 240, 236, 0.18); border-radius: 26px; padding: 30px 32px; }
+  .cn-pill { display: flex; align-items: center; gap: 10px; margin: 12px 0 26px; padding: 6px 6px 6px 18px; border-radius: 30px; background: rgba(10, 10, 10, 0.6); border: 1px solid rgba(242, 240, 236, 0.2); }
+  .cn-pill code { flex: 1; min-width: 0; overflow-wrap: anywhere; font-family: ui-monospace, Menlo, monospace; font-size: 16px; color: var(--paper); }
+  .cn-copy { flex: none; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--copper-600); color: var(--ink); font: inherit; font-size: 15px; cursor: pointer; transition: background 0.2s; }
+  .cn-copy:hover { background: var(--copper-700); }
+  .cn-copy:focus-visible, .cn-tabs button:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+  .cn-tabs { display: flex; gap: 8px; margin-bottom: 22px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+  .cn-tabs button { flex: none; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(242, 240, 236, 0.3); background: transparent; color: rgba(242, 240, 236, 0.85); font: inherit; font-size: 15px; cursor: pointer; white-space: nowrap; }
+  .cn-tabs button[aria-selected='true'] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .cn-ph { display: none; margin: 0 0 10px; font-family: var(--font-display); font-weight: 400; font-size: 18px; }
+  .cn-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .cn-steps li { display: flex; gap: 14px; font-size: 16px; line-height: 1.5; color: rgba(242, 240, 236, 0.85); }
+  .cn-steps :global(b) { font-weight: 400; color: var(--paper); }
+  .cn-steps :global(i) { color: var(--copper-900); }
+  .cn-n { flex: 0 0 26px; height: 26px; margin-top: 1px; border-radius: 50%; border: 1px solid var(--copper-600); color: var(--copper-700); font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .cn-code { margin-top: 14px; padding: 10px 12px 12px; border-radius: 16px; background: rgba(10, 10, 10, 0.6); border: 1px solid rgba(242, 240, 236, 0.2); }
+  .cn-code .cn-copy-sm { display: block; margin: 0 0 8px auto; min-height: 44px; padding: 0 16px; }
+  .cn-code pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: ui-monospace, Menlo, monospace; font-size: 14px; line-height: 1.6; color: var(--paper); }
+  .cn-note { margin: 16px 0 0; font-size: 14.5px; line-height: 1.55; color: rgba(242, 240, 236, 0.75); }
+  .cn-panel { display: block; }
+  :global(.js) .cn-panel { display: none; }
+  :global(.js) .cn-panel.on { display: block; }
+  :global(html:not(.js)) .cn-tabs { display: none; }
+  :global(html:not(.js)) .cn-ph { display: block; }
+  :global(html:not(.js)) .cn-panel + .cn-panel { margin-top: 24px; }
+  .cn-feat { padding: 22px 24px; border-radius: 18px; background: rgba(242, 240, 236, 0.06); border: 1px solid rgba(242, 240, 236, 0.14); }
+  .cn-feat p { color: rgba(242, 240, 236, 0.78); }
+  @media (max-width: 640px) {
+    .cn-card { padding: 22px 18px; }
+    .cn-pill code { font-size: 14px; }
+  }
+</style>

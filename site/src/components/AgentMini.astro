@@ -1,0 +1,11 @@
+---
+// The small Agent as a standalone icon (same capsule, eyes, smile and copper dot as the footer Agent). Width in px; height follows.
+interface Props { width?: number; class?: string }
+const { width = 26, class: cls } = Astro.props;
+---
+<svg width={width} height={width * 56 / 44} viewBox="0 0 44 56" aria-hidden="true" class={cls} style="flex:none">
+  <circle cx="30" cy="7" r="5" fill="var(--copper-500)" />
+  <rect x="5" y="16" width="32" height="38" rx="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.2" />
+  <circle cx="16" cy="31" r="2" fill="var(--ink)" /><circle cx="26" cy="31" r="2" fill="var(--ink)" />
+  <path d="M18 39 q3 3 6 0" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" />
+</svg>
