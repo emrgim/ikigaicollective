@@ -1,6 +1,7 @@
 // Read-only MCP server for the public site (8-week pilot). Stateless Streamable HTTP: a fresh server per request, no sessions, no secrets.
 // Content comes from the site's own public build output: /lab-notes/notes.json plus the markdown twin of every page (<path>.md).
-// Logging: one line per tool call with the tool name and the query only. No IPs, no headers, nothing stored.
+// Logging: one line per tool call with the tool name and the query, and one line per initialize with the client app's name and version
+// (clientInfo, e.g. "claude-code" / "1.2.3"), to count connected agents. Nothing about the person: no IPs, no headers, nothing stored.
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
 import { z } from 'zod';
@@ -169,6 +170,15 @@ const CORS = {
 const rpcError = (status: number, code: number, message: string, extra: Record<string, string> = {}) =>
   new Response(JSON.stringify({ jsonrpc: '2.0', error: { code, message }, id: null }), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store', ...CORS, ...extra } });
 
+// The client app's self-reported name and version, trimmed to short plain strings. Nothing else from clientInfo is kept.
+const short = (v: unknown, n: number) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, n) : '');
+export function clientOf(info: unknown): { name: string; version?: string } | undefined {
+  if (!info || typeof info !== 'object') return undefined;
+  const { name, version } = info as Record<string, unknown>;
+  const n = short(name, 100), v = short(version, 50);
+  return n ? (v ? { name: n, version: v } : { name: n }) : undefined;
+}
+
 export async function handle(req: Request, o: Options): Promise<Response> {
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
   // Stateless server: no SSE stream to resume and no session to delete.
@@ -185,6 +195,9 @@ export async function handle(req: Request, o: Options): Promise<Response> {
   await server.connect(transport);
   try {
     const res = await transport.handleRequest(req, { parsedBody: body });
+    // Stateless: clientInfo arrives only with initialize (set by the SDK once it has validated the request), never with later tool calls.
+    const client = clientOf(server.server.getClientVersion());
+    if (client) (o.log ?? ((l: string) => console.log(l)))(JSON.stringify({ mcp: 'initialize', client }));
     const headers = new Headers(res.headers);
     for (const [k, v] of Object.entries(CORS)) headers.set(k, v);
     headers.set('cache-control', 'no-store');

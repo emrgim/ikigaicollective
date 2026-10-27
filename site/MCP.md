@@ -17,6 +17,8 @@ Unknown pages don't fail: `show_page` answers "Not found", suggests the closest 
 
 ## Connect a client
 
+The [Connect your agent](https://ikigaicollective.org/connect) page on the site walks through this step by step.
+
 Most clients take a remote MCP server URL directly:
 
 ```json
@@ -45,7 +47,11 @@ Before the switchover, use the preview deployment's `/mcp` instead.
 ## Limits and logging
 
 - **Rate limit:** 60 requests per minute per client, counted in memory per serverless instance (no store, no secrets), so it's a soft limit. Over it: HTTP 429 with `Retry-After: 60`. The client key is the first `x-forwarded-for` address, held only in memory and never logged.
-- **Logging:** one line per tool call, `{"mcp":"<tool>","query":"<query>"}`. No IPs, headers or other request data.
+- **Logging:** two kinds of line, to count connected agents and see what people ask during the pilot:
+  - one per `initialize`: `{"mcp":"initialize","client":{"name":"<app>","version":"<version>"}}`, the client app's self-reported `clientInfo` name and version (e.g. `claude-code`, `cursor`), trimmed to short strings. It identifies the app, not the person.
+  - one per tool call: `{"mcp":"<tool>","query":"<query>"}`.
+
+  The server is stateless and MCP sends `clientInfo` only with `initialize`, so tool-call lines don't carry the client name. No IPs, headers (including `user-agent`) or other request data are logged.
 - **Caching:** the index and markdown are fetched from the same deployment and cached per instance for 5 minutes. `MCP_CONTENT_ORIGIN` (optional, not a secret) points the server at another origin.
 
 ## Code and tests
