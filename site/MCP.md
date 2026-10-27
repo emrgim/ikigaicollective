@@ -17,6 +17,8 @@ Unknown pages don't fail: `show_page` answers "Not found", suggests the closest 
 
 ## Connect a client
 
+The [Connect your agent](https://ikigaicollective.org/connect) page on the site walks through this step by step.
+
 Most clients take a remote MCP server URL directly:
 
 ```json
