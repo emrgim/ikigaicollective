@@ -44,6 +44,7 @@ Each member's journey is itself an experiment, documented and shared (with permi
 - **Google Drive** — Shared documents and resources
 - **GitHub** — Member profiles, projects, open lab notes
 - **Website** — [ikigaicollective.org](https://ikigaicollective.org)
+- **MCP server** — [ikigaicollective.org/mcp](site/MCP.md), read-only access to the Lab Notes for AI assistants
 
 ## Members
 

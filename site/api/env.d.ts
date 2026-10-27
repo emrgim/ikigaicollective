@@ -12,5 +12,6 @@ declare namespace NodeJS {
     DISCORD_GUILD_ID?: string;
     DISCORD_LOOP_CHANNEL_ID?: string;
     DISCORD_WEBSITE_TAG_ID?: string;
+    MCP_CONTENT_ORIGIN?: string;
   }
 }
